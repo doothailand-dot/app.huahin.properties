@@ -9,18 +9,19 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap');
-        body { font-family: 'Prompt', sans-serif; background-color: #f7f7f7; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Prompt', sans-serif; background-color: #f7f7f7; }
         .line-green { color: #00b900; }
         .line-bg-green { background-color: #00b900; }
         .loading-overlay { position: fixed; inset: 0; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
-        /* สไตล์เมื่อไมโครโฟนทำงาน */
+        .sidebar { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: white; z-index: 50; transition: 0.3s; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+        .sidebar.active { left: 0; }
         .mic-active { color: #ff0000 !important; animation: pulse 1s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
-<body class="pb-24">
+<body class="pb-24 overflow-x-hidden">
 
     <div id="loadingScreen" class="loading-overlay">
         <div class="animate-house line-green mb-4">
@@ -29,11 +30,18 @@
         <p class="text-xs font-medium text-gray-400">Huahin AI กำลังเตรียมข้อมูลให้คุณ...</p>
     </div>
 
+    <div id="sidebar" class="sidebar p-6 flex flex-col gap-4">
+        <button onclick="toggleSidebar()" class="self-end text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        <h3 class="font-bold text-lg line-green border-b pb-2">Menu</h3>
+        <a href="#" onclick="location.reload()" class="text-gray-600 font-medium">Home</a>
+        <a href="#" onclick="liff.closeWindow()" class="text-gray-600 font-medium">Close App</a>
+    </div>
+
     <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
-        <div class="w-8"></div>
+        <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
         <div class="text-center">
-            <span class="text-[10px] font-bold text-blue-800 leading-none uppercase">Huahin</span><br>
-            <span class="text-xs font-black text-blue-900 leading-none uppercase">Properties</span>
+            <span class="text-[10px] font-bold text-blue-800 leading-none">HUAHIN</span><br>
+            <span class="text-xs font-black text-blue-900 leading-none">PROPERTIES</span>
         </div>
         <button onclick="liff.closeWindow()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </header>
@@ -43,13 +51,9 @@
             <div class="relative flex-1">
                 <input type="text" id="searchInput" placeholder="Search location, beds, or speak..." 
                     class="w-full pl-10 pr-12 py-2 border-2 border-[#00b900] rounded-full text-sm focus:outline-none bg-gray-50/50">
-                <div class="absolute left-3.5 top-2.5 line-green">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                </div>
-                <button id="micBtn" onclick="startVoiceSearch()" class="absolute right-3.5 top-2 text-gray-400 hover:text-green-600 p-1 transition-colors">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0 5 5 0 01-10 0 1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"></path>
-                    </svg>
+                <div class="absolute left-3.5 top-2.5 line-green"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+                <button id="micBtn" onclick="startVoiceSearch()" class="absolute right-3.5 top-2 text-gray-400 hover:text-green-600 transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0 5 5 0 01-10 0 1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"></path></svg>
                 </button>
             </div>
             <button onclick="performAISearch()" class="line-bg-green text-white px-4 py-2 rounded-full text-xs font-bold shadow-md active:scale-95 transition">AI Search</button>
@@ -61,20 +65,16 @@
     </main>
 
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-30 shadow-lg">
-        <div onclick="location.reload()" class="flex flex-col items-center line-green cursor-pointer">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-            <span class="text-[9px] mt-0.5">Home</span>
-        </div>
-        <div onclick="liff.closeWindow()" class="flex flex-col items-center text-gray-400 cursor-pointer">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-            <span class="text-[9px] mt-0.5">พูดคุยปกติ</span>
-        </div>
+        <div onclick="location.reload()" class="flex flex-col items-center line-green cursor-pointer"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg><span class="text-[9px] mt-0.5">Home</span></div>
+        <div onclick="liff.closeWindow()" class="flex flex-col items-center text-gray-400 cursor-pointer"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg><span class="text-[9px] mt-0.5">พูดคุยปกติ</span></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbzdaZE_E9aSjPAdyPFVHFolc6i4ifDVMZEcgOVMu0ex2PiTJNEEQOOKX4DQBR7WMbJB/exec"; 
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbzSIftTmbDcwdw6naUIwMxxwDKv-HEu2YZ1NEef5_PirbRR9720PGVz1nJVi-WX1Vto/exec"; 
         const LIFF_ID = "2008909867-tJ76yUtj";
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
 
         async function initLiff() {
             try {
@@ -84,38 +84,22 @@
             } catch (err) { console.error(err); }
         }
 
-        // ฟังก์ชันสั่งการด้วยเสียง (Voice Search)
         function startVoiceSearch() {
             const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = 'th-TH'; // กำหนดเป็นภาษาไทย
-            const micBtn = document.getElementById('micBtn');
-            
-            recognition.onstart = () => {
-                micBtn.classList.add('mic-active');
-            };
-
+            recognition.lang = 'th-TH';
+            recognition.onstart = () => document.getElementById('micBtn').classList.add('mic-active');
             recognition.onresult = (event) => {
                 const text = event.results[0][0].transcript;
                 document.getElementById('searchInput').value = text;
-                performAISearch(text); // ค้นหาด้วย AI ทันทีเมื่อพูดจบ
+                performAISearch(text);
             };
-
-            recognition.onend = () => {
-                micBtn.classList.remove('mic-active');
-            };
-
-            recognition.onerror = (event) => {
-                console.error("Speech recognition error", event.error);
-                micBtn.classList.remove('mic-active');
-            };
-
+            recognition.onend = () => document.getElementById('micBtn').classList.remove('mic-active');
             recognition.start();
         }
 
         async function performAISearch(customQuery) {
             const query = customQuery !== undefined ? customQuery : document.getElementById('searchInput').value;
-            const loading = document.getElementById('loadingScreen');
-            loading.style.display = 'flex';
+            document.getElementById('loadingScreen').style.display = 'flex';
             
             try {
                 const res = await fetch(GAS_URL, {
@@ -127,7 +111,7 @@
             } catch (err) {
                 document.getElementById('app').innerHTML = `<p class="col-span-full text-center py-20 text-gray-400">Error connecting to AI. Please try again.</p>`;
             }
-            loading.style.display = 'none';
+            document.getElementById('loadingScreen').style.display = 'none';
         }
 
         function renderCards(properties) {
