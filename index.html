@@ -13,6 +13,8 @@
         .sidebar { transition: transform 0.3s ease-in-out; }
         .sidebar.closed { transform: translateX(-100%); }
         .gold-gradient { background: linear-gradient(135deg, #D4AF37 0%, #F9E29C 100%); }
+        /* ตกแต่ง Swiper Pagination ให้ดูหรู */
+        .swiper-pagination-bullet-active { background: #D4AF37 !important; }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -43,12 +45,12 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </button>
-        <h1 class="text-xl font-bold tracking-widest text-slate-800">HUAHIN <span class="text-yellow-600">PROPERTIES</span></h1>
+        <h1 class="text-xl font-bold tracking-widest text-slate-800 uppercase">HUAHIN <span class="text-yellow-600">PROPERTIES</span></h1>
         <div class="w-10"></div>
     </header>
 
-    <main id="app" class="p-4 space-y-6">
-        <div class="text-center py-10">กำลังโหลดข้อมูลสุดพรีเมียม...</div>
+    <main id="app" class="p-4 space-y-6 max-w-md mx-auto">
+        <div id="loading" class="text-center py-10">กำลังโหลดข้อมูลสุดพรีเมียม...</div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -56,39 +58,45 @@
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzdaZE_E9aSjPAdyPFVHFolc6i4ifDVMZEcgOVMu0ex2PiTJNEEQOOKX4DQBR7WMbJB/exec";
         let user = {};
 
-        // 1. Initialize LIFF
         async function initLiff() {
-            await liff.init({ liffId: "2008909867-tJ76yUtj" });
-            if (liff.isLoggedIn()) {
-                const profile = await liff.getProfile();
-                user = profile;
-                document.getElementById('userName').innerText = profile.displayName;
-                document.getElementById('userImg').src = profile.pictureUrl;
-            } else {
-                liff.login();
+            try {
+                await liff.init({ liffId: "2008909867-tJ76yUtj" });
+                if (liff.isLoggedIn()) {
+                    const profile = await liff.getProfile();
+                    user = profile;
+                    document.getElementById('userName').innerText = profile.displayName;
+                    document.getElementById('userImg').src = profile.pictureUrl;
+                } else {
+                    liff.login();
+                }
+                fetchProperties();
+            } catch (error) {
+                console.error("LIFF Init Error", error);
             }
-            fetchProperties();
         }
 
-        // 2. Fetch Data
         async function fetchProperties() {
-            const res = await fetch(https://script.google.com/macros/s/AKfycbzdaZE_E9aSjPAdyPFVHFolc6i4ifDVMZEcgOVMu0ex2PiTJNEEQOOKX4DQBR7WMbJB/exec);
-            const data = await res.json();
-            renderCards(data);
+            try {
+                const res = await fetch(GAS_URL);
+                const data = await res.json();
+                renderCards(data);
+            } catch (error) {
+                document.getElementById('app').innerHTML = `<p class="text-center text-red-500">ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่</p>`;
+            }
         }
 
-        // 3. Render UI
         function renderCards(properties) {
             const container = document.getElementById('app');
             container.innerHTML = properties.map(p => `
-                <div class="bg-white rounded-3xl overflow-hidden shadow-lg mb-6 group">
-                    <div class="swiper mySwiper h-64">
+                <div class="bg-white rounded-3xl overflow-hidden shadow-lg mb-6 border border-slate-100">
+                    <div class="swiper mySwiper h-64 relative">
                         <div class="swiper-wrapper">
                             ${p.ImageUrls.split(',').map(img => `
                                 <div class="swiper-slide"><img src="${img.trim()}" class="w-full h-full object-cover"></div>
                             `).join('')}
                         </div>
-                        <div class="absolute top-4 left-4 z-10 bg-red-600 text-white text-xs px-3 py-1 rounded-full uppercase font-bold">${p.Badge}</div>
+                        <div class="swiper-pagination"></div>
+                        <div class="absolute top-4 left-4 z-10 bg-red-600 text-white text-[10px] px-3 py-1 rounded-full uppercase font-bold shadow-md">${p.Badge}</div>
                     </div>
                     
                     <div class="p-5">
@@ -96,20 +104,24 @@
                         <p class="text-slate-500 text-sm mb-3">📍 ${p.Location}</p>
                         <p class="text-2xl font-bold text-yellow-600 mb-4">฿${Number(p.Price).toLocaleString()}</p>
                         
-                        <div class="grid grid-cols-2 gap-2">
-                            <a href="tel:${p.Phone}" class="flex items-center justify-center bg-slate-800 text-white py-3 rounded-xl gap-2 active:scale-95 transition">
+                        <div class="grid grid-cols-2 gap-3">
+                            <a href="tel:${p.Phone}" class="flex items-center justify-center bg-slate-800 text-white py-3 rounded-xl gap-2 active:scale-95 transition text-sm font-semibold">
                                 โทรหาเซลล์
                             </a>
-                            <button onclick="saveLead('${p.ID}')" class="gold-gradient text-slate-900 font-bold py-3 rounded-xl active:scale-95 transition">
+                            <button onclick="saveLead('${p.ID}')" class="gold-gradient text-slate-900 font-bold py-3 rounded-xl active:scale-95 transition text-sm">
                                 สนใจข้อมูล
                             </button>
                         </div>
-                        <button onclick="shareToChat('${p.Title}')" class="w-full mt-2 text-slate-500 text-sm py-2">แชร์ให้เพื่อน</button>
+                        <button onclick="shareToChat('${p.Title}')" class="w-full mt-3 text-slate-400 text-xs py-2 hover:text-slate-600 transition">แชร์ข้อมูลให้เพื่อน</button>
                     </div>
                 </div>
             `).join('');
 
-            new Swiper(".mySwiper", { pagination: { el: ".swiper-pagination" } });
+            // สั่งให้ Swiper ทำงานหลังจาก Render HTML เสร็จแล้ว
+            new Swiper(".mySwiper", { 
+                pagination: { el: ".swiper-pagination", clickable: true },
+                loop: true
+            });
         }
 
         function toggleSidebar() {
@@ -118,18 +130,23 @@
         }
 
         async function saveLead(propertyId) {
-            await fetch(GAS_URL, {
-                method: 'POST',
-                body: JSON.stringify({ ...user, propertyId })
-            });
-            alert("บันทึกความสนใจแล้ว เจ้าหน้าที่จะติดต่อกลับครับ");
+            try {
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // สำคัญ: เพื่อเลี่ยงปัญหา CORS ในการบันทึกข้อมูล
+                    body: JSON.stringify({ ...user, propertyId })
+                });
+                alert("ส่งข้อมูลสนใจแล้ว เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุดครับ");
+            } catch (err) {
+                alert("ขออภัย เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+            }
         }
 
         function shareToChat(title) {
             if (liff.isApiAvailable('shareTargetPicker')) {
                 liff.shareTargetPicker([{
                     "type": "text",
-                    "text": "ดูบ้านหลังนี้ที่หัวหินกันเถอะ: " + title
+                    "text": "บ้านสวยหัวหิน โครงการ: " + title + "\nดูเพิ่มเติมได้ที่: " + window.location.href
                 }]);
             }
         }
