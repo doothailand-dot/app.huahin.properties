@@ -12,152 +12,128 @@
         body { font-family: 'Prompt', sans-serif; background-color: #f7f7f7; }
         .line-green { color: #00b900; }
         .line-bg-green { background-color: #00b900; }
-        .loading-overlay { position: fixed; inset: 0; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: 0.5s; }
-        @keyframes bounce-house { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .animate-house { animation: bounce-house 1.5s infinite ease-in-out; }
-        .recording { color: red !important; animation: pulse 1s infinite; }
+        .loading-overlay { position: fixed; inset: 0; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .animate-house { animation: bounce 1.5s infinite ease-in-out; }
+        .mic-active { color: #ef4444 !important; animation: pulse 1s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        .swiper-pagination-bullet-active { background: #00b900 !important; }
     </style>
 </head>
-<body class="pb-24">
+<body class="overflow-x-hidden pb-24">
 
     <div id="loadingScreen" class="loading-overlay">
-        <div class="animate-house line-green mb-4"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
-        <p class="text-xs text-gray-400">Huahin AI is preparing luxury homes...</p>
+        <div class="animate-house line-green mb-4">
+            <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+        </div>
+        <p class="text-xs font-medium text-gray-400">Huahin AI is preparing luxury homes...</p>
     </div>
 
-    <header class="bg-white sticky top-0 z-30 border-b shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
-            <button class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
-            <div class="text-center"><span class="text-[10px] font-bold text-blue-800 leading-none">HUAHIN</span><br><span class="text-xs font-black text-blue-900 leading-none uppercase">PROPERTIES</span></div>
-            <button onclick="liff.closeWindow()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+    <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
+        <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+        <div class="text-center">
+            <span class="text-[10px] font-bold text-blue-800 leading-none">HUAHIN</span><br>
+            <span class="text-xs font-black text-blue-900 leading-none">PROPERTIES</span>
         </div>
+        <button onclick="liff.closeWindow()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </header>
 
-    <div class="bg-white sticky top-[49px] z-20 shadow-sm border-b">
-        <div class="max-w-3xl mx-auto px-4 py-3 flex gap-2">
+    <div class="bg-white px-4 py-3 sticky top-[49px] z-20 shadow-sm border-b">
+        <div class="max-w-3xl mx-auto flex gap-2">
             <div class="relative flex-1">
-                <input type="text" id="searchInput" placeholder="Search in English, ไทย, or 中文..." class="w-full pl-10 pr-10 py-2 border-2 border-[#00b900] rounded-full text-sm focus:outline-none bg-gray-50/50">
-                <div class="absolute left-3.5 top-2.5 line-green"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
-                <button id="voiceBtn" onclick="startVoiceSearch()" class="absolute right-3 top-2 text-gray-400"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0 5 5 0 01-10 0 1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"></path></svg></button>
+                <input type="text" id="searchInput" placeholder="Search location, beds, or speak..." 
+                    class="w-full pl-10 pr-10 py-2 border-2 border-[#00b900] rounded-full text-sm focus:outline-none bg-gray-50/50">
+                <div class="absolute left-3.5 top-2.5 line-green"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+                <button id="micBtn" onclick="startVoiceSearch()" class="absolute right-3 top-2 text-gray-400 hover:text-green-500 transition">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0 5 5 0 01-10 0 1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"></path></svg>
+                </button>
             </div>
-            <button onclick="aiSearch()" class="line-bg-green text-white px-4 py-2 rounded-full text-xs font-bold active:scale-90 transition">AI Search</button>
+            <button onclick="performAISearch()" class="line-bg-green text-white px-4 py-2 rounded-full text-xs font-bold shadow-md active:scale-95 transition">AI Search</button>
         </div>
     </div>
 
     <main class="max-w-7xl mx-auto px-4 py-6">
-        <div id="app" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="app" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
     </main>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t z-30 shadow-lg">
-        <div class="max-w-md mx-auto flex justify-around py-2">
-            <div onclick="location.reload()" class="flex flex-col items-center line-green cursor-pointer"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg><span class="text-[9px] mt-0.5">Home</span></div>
-            <div onclick="liff.closeWindow()" class="flex flex-col items-center text-gray-400 cursor-pointer"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg><span class="text-[9px] mt-0.5">พูดคุยปกติ</span></div>
-        </div>
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-30 shadow-lg">
+        <div onclick="location.reload()" class="flex flex-col items-center line-green"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg><span class="text-[9px] mt-0.5">Home</span></div>
+        <div onclick="liff.closeWindow()" class="flex flex-col items-center text-gray-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg><span class="text-[9px] mt-0.5">Chat</span></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbzdaZE_E9aSjPAdyPFVHFolc6i4ifDVMZEcgOVMu0ex2PiTJNEEQOOKX4DQBR7WMbJB/exec";
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbzdaZE_E9aSjPAdyPFVHFolc6i4ifDVMZEcgOVMu0ex2PiTJNEEQOOKX4DQBR7WMbJB/exec"; 
         const LIFF_ID = "2008909867-tJ76yUtj";
-        let userProfile = {};
 
         async function initLiff() {
             try {
                 await liff.init({ liffId: LIFF_ID });
                 if (!liff.isLoggedIn()) { liff.login(); }
-                userProfile = await liff.getProfile();
-                aiSearch(); // โหลดข้อมูลครั้งแรก
-            } catch (err) { console.error("LIFF Init Error", err); }
+                performAISearch(""); // Initial load
+            } catch (err) { console.error(err); }
         }
 
         function startVoiceSearch() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) { alert("เบราว์เซอร์ไม่รองรับระบบเสียง"); return; }
-            const recognition = new SpeechRecognition();
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
             recognition.lang = 'th-TH';
-            recognition.onstart = () => document.getElementById('voiceBtn').classList.add('recording');
-            recognition.onresult = (e) => { 
-                document.getElementById('searchInput').value = e.results[0][0].transcript; 
-                aiSearch(); 
+            recognition.onstart = () => document.getElementById('micBtn').classList.add('mic-active');
+            recognition.onresult = (event) => {
+                const text = event.results[0][0].transcript;
+                document.getElementById('searchInput').value = text;
+                performAISearch();
             };
-            recognition.onend = () => document.getElementById('voiceBtn').classList.remove('recording');
+            recognition.onend = () => document.getElementById('micBtn').classList.remove('mic-active');
             recognition.start();
         }
 
-        async function aiSearch() {
-            const query = document.getElementById('searchInput').value;
-            const loader = document.getElementById('loadingScreen');
-            loader.style.display = 'flex';
-            loader.style.opacity = '1';
+        async function performAISearch(customQuery) {
+            const query = customQuery !== undefined ? customQuery : document.getElementById('searchInput').value;
+            document.getElementById('loadingScreen').style.display = 'flex';
+            document.getElementById('loadingScreen').style.opacity = '1';
             
             try {
-                const res = await fetch(GAS_URL, { 
-                    method: 'POST', 
-                    body: JSON.stringify({ action: "aiSearch", query: query }) 
+                const res = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "aiSearch", query: query || "แสดงบ้านทั้งหมด" })
                 });
                 const data = await res.json();
                 renderCards(data);
-            } catch (err) { alert("AI search error. Please try again."); }
+            } catch (err) {
+                document.getElementById('app').innerHTML = `<p class="col-span-full text-center py-20 text-gray-400">No properties found.</p>`;
+            }
             
-            loader.style.opacity = '0';
-            setTimeout(() => loader.style.display = 'none', 500);
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.opacity = '0';
+                setTimeout(() => document.getElementById('loadingScreen').style.display = 'none', 500);
+            }, 800);
         }
 
-        function renderCards(props) {
+        function renderCards(properties) {
             const container = document.getElementById('app');
-            if (!props || props.length === 0) {
+            if (!properties || properties.length === 0) {
                 container.innerHTML = `<p class="col-span-full text-center py-20 text-gray-400">No properties found.</p>`;
                 return;
             }
-            container.innerHTML = props.map(p => `
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col">
+            container.innerHTML = properties.map(p => `
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col hover:shadow-md transition-shadow">
                     <div class="swiper mySwiper h-56 relative w-full">
-                        <div class="swiper-wrapper">
-                            ${p.ImageUrls.split(',').map(img => `<div class="swiper-slide"><img src="${img.trim()}" class="w-full h-full object-cover"></div>`).join('')}
-                        </div>
+                        <div class="swiper-wrapper">${p.ImageUrls.split(',').map(img => `<div class="swiper-slide"><img src="${img.trim()}" class="w-full h-full object-cover"></div>`).join('')}</div>
                         <div class="swiper-pagination"></div>
-                        <div class="absolute top-3 left-3 z-10 bg-red-500 text-white text-[9px] px-2 py-0.5 rounded shadow-sm font-bold uppercase">${p.Badge}</div>
+                        <div class="absolute top-3 left-3 z-10 bg-red-500 text-white text-[9px] px-2 py-0.5 rounded shadow-sm font-bold uppercase tracking-wider">${p.Badge}</div>
                     </div>
                     <div class="p-4 flex-1 flex flex-col">
                         <h2 class="text-base font-bold text-gray-800 mb-1 truncate">${p.Title}</h2>
-                        <p class="text-[11px] text-gray-400 mb-3 flex items-center gap-1">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
-                            ${p.Location}
-                        </p>
-                        <div class="mt-auto">
-                            <span class="text-xl font-black text-orange-600">฿${Number(p.Price).toLocaleString()}</span>
-                        </div>
+                        <p class="text-[11px] text-gray-400 mb-3 flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>${p.Location}</p>
+                        <div class="mt-auto flex items-baseline gap-1"><span class="text-xl font-black text-orange-600">฿${Number(p.Price).toLocaleString()}</span></div>
                         <div class="grid grid-cols-2 gap-3 mt-4">
-                            <a href="tel:${p.Phone}" class="text-xs font-semibold text-center py-2.5 border rounded-xl text-gray-600 active:bg-gray-50 transition">Call</a>
-                            <button onclick="saveLead('${p.ID}')" class="text-xs font-semibold text-center py-2.5 line-bg-green text-white rounded-xl shadow-md shadow-green-100 active:opacity-80 transition">Inquiry</button>
+                            <a href="tel:${p.Phone}" class="text-xs font-semibold text-center py-2.5 border border-gray-200 rounded-xl text-gray-600 active:bg-gray-50">Call</a>
+                            <button onclick="liff.sendMessages([{type:'text',text:'สนใจ: ${p.Title}'}])" class="text-xs font-semibold text-center py-2.5 line-bg-green text-white rounded-xl shadow-md shadow-green-100 active:opacity-80">Inquiry</button>
                         </div>
                     </div>
                 </div>
             `).join('');
-            
-            // Initialize Swiper for each card
-            new Swiper(".mySwiper", { 
-                pagination: { el: ".swiper-pagination", clickable: true },
-                loop: true 
-            });
-        }
-
-        async function saveLead(pId) {
-            try {
-                await fetch(GAS_URL, { 
-                    method: 'POST', 
-                    body: JSON.stringify({ 
-                        userId: userProfile.userId,
-                        displayName: userProfile.displayName,
-                        pictureUrl: userProfile.pictureUrl,
-                        propertyId: pId,
-                        action: "saveLead"
-                    }) 
-                });
-                alert("Sent! Our team will contact you soon.");
-            } catch (err) { alert("Failed to send inquiry."); }
+            new Swiper(".mySwiper", { pagination: { el: ".swiper-pagination", clickable: true }, loop: true });
         }
 
         initLiff();
