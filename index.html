@@ -3,64 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huahin Properties</title>
+    <title>Huahin Properties | Luxury Living</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap');
-        body { font-family: 'Prompt', sans-serif; background-color: #f8f9fa; }
-        .sidebar { transition: transform 0.3s ease-in-out; }
-        .sidebar.closed { transform: translateX(-100%); }
+        body { font-family: 'Prompt', sans-serif; background-color: #fcfcfc; color: #1e293b; }
+        .sidebar { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar.closed { transform: translateX(-100%); opacity: 0; }
         .gold-gradient { background: linear-gradient(135deg, #D4AF37 0%, #F9E29C 100%); }
-        /* ตกแต่ง Swiper Pagination ให้ดูหรู */
+        .glass-header { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
         .swiper-pagination-bullet-active { background: #D4AF37 !important; }
     </style>
 </head>
 <body class="overflow-x-hidden">
 
-    <div id="sidebar" class="sidebar closed fixed inset-y-0 left-0 w-64 bg-slate-900 text-white z-50 shadow-2xl">
-        <div class="p-6">
-            <div id="userProfile" class="flex items-center gap-3 mb-8">
-                <img id="userImg" src="https://via.placeholder.com/50" class="w-12 h-12 rounded-full border-2 border-gold-500">
-                <div>
-                    <p class="text-sm">ยินดีต้อนรับ</p>
-                    <p id="userName" class="font-bold">Guest</p>
+    <div id="sidebar" class="sidebar closed fixed inset-y-0 left-0 w-[280px] max-w-[80vw] bg-white text-slate-800 z-50 shadow-2xl border-r border-slate-100">
+        <div class="relative h-full flex flex-col">
+            <button onclick="toggleSidebar()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-800 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="p-8 pt-14 border-b border-slate-50 bg-slate-50/50">
+                <div id="userProfile" class="flex flex-col items-center text-center">
+                    <img id="userImg" src="https://via.placeholder.com/80" class="w-20 h-20 rounded-full border-4 border-white shadow-md mb-4 object-cover">
+                    <div>
+                        <p class="text-[10px] text-slate-400 uppercase tracking-[0.2em] mb-1">ยินดีต้อนรับ</p>
+                        <p id="userName" class="text-lg font-bold text-slate-800">Guest User</p>
+                    </div>
                 </div>
             </div>
-            <nav class="space-y-4">
-                <a href="#" class="block py-2 border-b border-slate-700 hover:text-yellow-400">หน้าแรก</a>
-                <a href="#" class="block py-2 border-b border-slate-700 hover:text-yellow-400">โครงการทั้งหมด</a>
-                <a href="#" class="block py-2 border-b border-slate-700 hover:text-yellow-400">โปรโมชั่นพิเศษ</a>
-                <a href="#" class="block py-2 border-b border-slate-700 hover:text-yellow-400">ติดต่อเรา</a>
+
+            <nav class="flex-1 px-4 py-8 space-y-2 overflow-y-auto">
+                <a href="#" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-slate-900 text-white shadow-lg shadow-slate-200 transition">
+                    <span class="text-sm font-medium">หน้าแรก</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl text-slate-600 hover:bg-slate-50 transition">
+                    <span class="text-sm font-medium">โครงการทั้งหมด</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl text-slate-600 hover:bg-slate-50 transition">
+                    <span class="text-sm font-medium">โปรโมชั่นพิเศษ</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl text-slate-600 hover:bg-slate-50 transition">
+                    <span class="text-sm font-medium">ติดต่อที่ปรึกษา</span>
+                </a>
             </nav>
+
+            <div class="p-6 border-t border-slate-50">
+                <p class="text-[10px] text-slate-300 text-center uppercase tracking-widest">Huahin Properties App</p>
+            </div>
         </div>
     </div>
 
-    <div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden z-40" onclick="toggleSidebar()"></div>
+    <div id="overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden z-40 transition-opacity" onclick="toggleSidebar()"></div>
 
-    <header class="bg-white p-4 shadow-sm sticky top-0 z-30 flex justify-between items-center">
-        <button onclick="toggleSidebar()" class="p-2 text-slate-800">
+    <header class="glass-header p-4 shadow-sm sticky top-0 z-30 flex justify-between items-center border-b border-slate-100">
+        <button onclick="toggleSidebar()" class="p-2 text-slate-800 active:scale-90 transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </button>
-        <h1 class="text-xl font-bold tracking-widest text-slate-800 uppercase">HUAHIN <span class="text-yellow-600">PROPERTIES</span></h1>
+        <h1 class="text-lg font-bold tracking-[0.15em] text-slate-800 uppercase">HUAHIN <span class="text-yellow-600">PROPERTIES</span></h1>
         <div class="w-10"></div>
     </header>
 
-    <main id="app" class="p-4 space-y-6 max-w-md mx-auto">
-        <div id="loading" class="text-center py-10">กำลังโหลดข้อมูลสุดพรีเมียม...</div>
+    <main id="app" class="p-4 space-y-8 max-w-md mx-auto">
+        <div id="loading" class="text-center py-20 text-slate-400 text-sm animate-pulse tracking-widest">กำลังเตรียมข้อมูลสุดพรีเมียม...</div>
     </main>
+
+    <div class="h-10"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzdaZE_E9aSjPAdyPFVHFolc6i4ifDVMZEcgOVMu0ex2PiTJNEEQOOKX4DQBR7WMbJB/exec";
+        const LIFF_ID = "2008909867-tJ76yUtj";
         let user = {};
 
         async function initLiff() {
             try {
-                await liff.init({ liffId: "2008909867-tJ76yUtj" });
+                await liff.init({ liffId: LIFF_ID });
                 if (liff.isLoggedIn()) {
                     const profile = await liff.getProfile();
                     user = profile;
@@ -70,9 +94,7 @@
                     liff.login();
                 }
                 fetchProperties();
-            } catch (error) {
-                console.error("LIFF Init Error", error);
-            }
+            } catch (err) { console.error(err); }
         }
 
         async function fetchProperties() {
@@ -80,47 +102,55 @@
                 const res = await fetch(GAS_URL);
                 const data = await res.json();
                 renderCards(data);
-            } catch (error) {
-                document.getElementById('app').innerHTML = `<p class="text-center text-red-500">ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่</p>`;
+            } catch (err) {
+                document.getElementById('app').innerHTML = `<p class="text-center text-red-400 py-10">ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่</p>`;
             }
         }
 
         function renderCards(properties) {
             const container = document.getElementById('app');
             container.innerHTML = properties.map(p => `
-                <div class="bg-white rounded-3xl overflow-hidden shadow-lg mb-6 border border-slate-100">
-                    <div class="swiper mySwiper h-64 relative">
+                <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-xl shadow-slate-200/50 mb-8 border border-slate-50 relative group">
+                    <div class="swiper mySwiper h-[320px] relative">
                         <div class="swiper-wrapper">
                             ${p.ImageUrls.split(',').map(img => `
                                 <div class="swiper-slide"><img src="${img.trim()}" class="w-full h-full object-cover"></div>
                             `).join('')}
                         </div>
                         <div class="swiper-pagination"></div>
-                        <div class="absolute top-4 left-4 z-10 bg-red-600 text-white text-[10px] px-3 py-1 rounded-full uppercase font-bold shadow-md">${p.Badge}</div>
+                        <div class="absolute top-6 left-6 z-10 bg-red-600 text-white text-[9px] px-4 py-1.5 rounded-full uppercase font-bold tracking-widest shadow-lg shadow-red-500/30">${p.Badge}</div>
                     </div>
                     
-                    <div class="p-5">
-                        <h2 class="text-xl font-bold text-slate-800 mb-1">${p.Title}</h2>
-                        <p class="text-slate-500 text-sm mb-3">📍 ${p.Location}</p>
-                        <p class="text-2xl font-bold text-yellow-600 mb-4">฿${Number(p.Price).toLocaleString()}</p>
+                    <div class="p-7">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-2 leading-tight">${p.Title}</h2>
+                        <p class="text-slate-400 text-sm mb-5 flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            ${p.Location}
+                        </p>
+                        <div class="flex items-end justify-between mb-8">
+                            <div>
+                                <p class="text-[10px] text-slate-300 uppercase tracking-widest mb-1">ราคาเริ่มต้น</p>
+                                <p class="text-3xl font-bold text-yellow-600">฿${Number(p.Price).toLocaleString()}</p>
+                            </div>
+                        </div>
                         
-                        <div class="grid grid-cols-2 gap-3">
-                            <a href="tel:${p.Phone}" class="flex items-center justify-center bg-slate-800 text-white py-3 rounded-xl gap-2 active:scale-95 transition text-sm font-semibold">
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="tel:${p.Phone}" class="flex items-center justify-center bg-slate-900 text-white py-4 rounded-2xl gap-2 active:scale-95 transition-all text-sm font-semibold shadow-lg shadow-slate-200">
                                 โทรหาเซลล์
                             </a>
-                            <button onclick="saveLead('${p.ID}')" class="gold-gradient text-slate-900 font-bold py-3 rounded-xl active:scale-95 transition text-sm">
+                            <button onclick="saveLead('${p.ID}')" class="gold-gradient text-slate-900 font-bold py-4 rounded-2xl active:scale-95 transition-all text-sm shadow-lg shadow-yellow-200/50">
                                 สนใจข้อมูล
                             </button>
                         </div>
-                        <button onclick="shareToChat('${p.Title}')" class="w-full mt-3 text-slate-400 text-xs py-2 hover:text-slate-600 transition">แชร์ข้อมูลให้เพื่อน</button>
+                        <button onclick="shareToChat('${p.Title}')" class="w-full mt-5 text-slate-300 text-[10px] py-2 uppercase tracking-widest hover:text-slate-500 transition">แชร์ให้เพื่อน</button>
                     </div>
                 </div>
             `).join('');
 
-            // สั่งให้ Swiper ทำงานหลังจาก Render HTML เสร็จแล้ว
             new Swiper(".mySwiper", { 
                 pagination: { el: ".swiper-pagination", clickable: true },
-                loop: true
+                loop: true,
+                speed: 800
             });
         }
 
@@ -133,20 +163,18 @@
             try {
                 await fetch(GAS_URL, {
                     method: 'POST',
-                    mode: 'no-cors', // สำคัญ: เพื่อเลี่ยงปัญหา CORS ในการบันทึกข้อมูล
+                    mode: 'no-cors',
                     body: JSON.stringify({ ...user, propertyId })
                 });
                 alert("ส่งข้อมูลสนใจแล้ว เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุดครับ");
-            } catch (err) {
-                alert("ขออภัย เกิดข้อผิดพลาดในการบันทึกข้อมูล");
-            }
+            } catch (err) { alert("เกิดข้อผิดพลาด กรุณาลองใหม่"); }
         }
 
         function shareToChat(title) {
             if (liff.isApiAvailable('shareTargetPicker')) {
                 liff.shareTargetPicker([{
                     "type": "text",
-                    "text": "บ้านสวยหัวหิน โครงการ: " + title + "\nดูเพิ่มเติมได้ที่: " + window.location.href
+                    "text": "แนะนำบ้านที่หัวหินครับ: " + title + "\nดูเพิ่มเติม: " + window.location.href
                 }]);
             }
         }
