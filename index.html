@@ -17,6 +17,7 @@
         .animate-house { animation: bounce-house 1.5s infinite ease-in-out; }
         .recording { color: red !important; animation: pulse 1s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .swiper-pagination-bullet-active { background: #00b900 !important; }
     </style>
 </head>
 <body class="pb-24">
@@ -51,8 +52,8 @@
 
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t z-30 shadow-lg">
         <div class="max-w-md mx-auto flex justify-around py-2">
-            <div onclick="location.reload()" class="flex flex-col items-center line-green"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg><span class="text-[9px] mt-0.5">Home</span></div>
-            <div onclick="liff.closeWindow()" class="flex flex-col items-center text-gray-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg><span class="text-[9px] mt-0.5">พูดคุยปกติ</span></div>
+            <div onclick="location.reload()" class="flex flex-col items-center line-green cursor-pointer"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg><span class="text-[9px] mt-0.5">Home</span></div>
+            <div onclick="liff.closeWindow()" class="flex flex-col items-center text-gray-400 cursor-pointer"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg><span class="text-[9px] mt-0.5">พูดคุยปกติ</span></div>
         </div>
     </div>
 
@@ -63,17 +64,19 @@
         let userProfile = {};
 
         async function initLiff() {
-            await liff.init({ liffId: LIFF_ID });
-            if (!liff.isLoggedIn()) { liff.login(); }
-            userProfile = await liff.getProfile();
-            aiSearch(""); // โหลดข้อมูลครั้งแรก
+            try {
+                await liff.init({ liffId: LIFF_ID });
+                if (!liff.isLoggedIn()) { liff.login(); }
+                userProfile = await liff.getProfile();
+                aiSearch(); // โหลดข้อมูลครั้งแรก
+            } catch (err) { console.error("LIFF Init Error", err); }
         }
 
         function startVoiceSearch() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) { alert("เบราว์เซอร์ไม่รองรับระบบเสียง"); return; }
             const recognition = new SpeechRecognition();
-            recognition.lang = 'th-TH'; //
+            recognition.lang = 'th-TH';
             recognition.onstart = () => document.getElementById('voiceBtn').classList.add('recording');
             recognition.onresult = (e) => { 
                 document.getElementById('searchInput').value = e.results[0][0].transcript; 
@@ -90,10 +93,13 @@
             loader.style.opacity = '1';
             
             try {
-                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "aiSearch", query: query }) });
+                const res = await fetch(GAS_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ action: "aiSearch", query: query }) 
+                });
                 const data = await res.json();
                 renderCards(data);
-            } catch (err) { alert("AI search error"); }
+            } catch (err) { alert("AI search error. Please try again."); }
             
             loader.style.opacity = '0';
             setTimeout(() => loader.style.display = 'none', 500);
@@ -101,26 +107,57 @@
 
         function renderCards(props) {
             const container = document.getElementById('app');
+            if (!props || props.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center py-20 text-gray-400">No properties found.</p>`;
+                return;
+            }
             container.innerHTML = props.map(p => `
                 <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col">
-                    <img src="${p.ImageUrls.split(',')[0]}" class="w-full h-56 object-cover">
-                    <div class="p-4 flex-1">
-                        <div class="text-red-500 text-[9px] font-bold uppercase mb-1">${p.Badge}</div>
+                    <div class="swiper mySwiper h-56 relative w-full">
+                        <div class="swiper-wrapper">
+                            ${p.ImageUrls.split(',').map(img => `<div class="swiper-slide"><img src="${img.trim()}" class="w-full h-full object-cover"></div>`).join('')}
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="absolute top-3 left-3 z-10 bg-red-500 text-white text-[9px] px-2 py-0.5 rounded shadow-sm font-bold uppercase">${p.Badge}</div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col">
                         <h2 class="text-base font-bold text-gray-800 mb-1 truncate">${p.Title}</h2>
-                        <p class="text-[11px] text-gray-400 mb-3">${p.Location}</p>
-                        <div class="text-xl font-black text-orange-600 mb-4">฿${Number(p.Price).toLocaleString()}</div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <a href="tel:${p.Phone}" class="text-xs font-semibold text-center py-2.5 border rounded-xl text-gray-600 active:bg-gray-50">Call</a>
-                            <button onclick="saveLead('${p.ID}')" class="text-xs font-semibold text-center py-2.5 line-bg-green text-white rounded-xl active:opacity-80">Inquiry</button>
+                        <p class="text-[11px] text-gray-400 mb-3 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                            ${p.Location}
+                        </p>
+                        <div class="mt-auto">
+                            <span class="text-xl font-black text-orange-600">฿${Number(p.Price).toLocaleString()}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mt-4">
+                            <a href="tel:${p.Phone}" class="text-xs font-semibold text-center py-2.5 border rounded-xl text-gray-600 active:bg-gray-50 transition">Call</a>
+                            <button onclick="saveLead('${p.ID}')" class="text-xs font-semibold text-center py-2.5 line-bg-green text-white rounded-xl shadow-md shadow-green-100 active:opacity-80 transition">Inquiry</button>
                         </div>
                     </div>
                 </div>
             `).join('');
+            
+            // Initialize Swiper for each card
+            new Swiper(".mySwiper", { 
+                pagination: { el: ".swiper-pagination", clickable: true },
+                loop: true 
+            });
         }
 
         async function saveLead(pId) {
-            await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ ...userProfile, propertyId: pId }) });
-            alert("Sent! Our team will contact you soon.");
+            try {
+                await fetch(GAS_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ 
+                        userId: userProfile.userId,
+                        displayName: userProfile.displayName,
+                        pictureUrl: userProfile.pictureUrl,
+                        propertyId: pId,
+                        action: "saveLead"
+                    }) 
+                });
+                alert("Sent! Our team will contact you soon.");
+            } catch (err) { alert("Failed to send inquiry."); }
         }
 
         initLiff();
