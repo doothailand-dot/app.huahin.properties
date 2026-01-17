@@ -10,12 +10,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; }
-        .line-green { color: #06C755; }
         .line-bg-green { background-color: #06C755; }
-        #sidebar { position: fixed; top: 0; left: -100%; width: 280px; height: 100%; background: #ffffff; z-index: 100; transition: 0.4s; box-shadow: 4px 0 15px rgba(0,0,0,0.1); }
-        #sidebar.active { left: 0; }
-        #sidebarOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 90; display: none; }
-        #sidebarOverlay.active { display: block; }
         #detailPage { display: none; position: fixed; inset: 0; background: white; z-index: 150; overflow-y: auto; }
         #lightbox { display: none; position: fixed; inset: 0; background: black; z-index: 200; align-items: center; justify-content: center; }
         .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
@@ -27,27 +22,12 @@
 
     <div id="loadingScreen" class="loading-overlay">
         <div class="animate-house text-white mb-4"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
-        <p id="loadingText" class="text-white font-medium">กำลังเตรียมข้อมูล...</p>
+        <p id="loadingText" class="text-white font-medium">กำลังเตรียมข้อมูลเพื่อคุณ...</p>
     </div>
 
-    <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
-    <nav id="sidebar" class="flex flex-col">
-        <div class="line-bg-green p-8 flex flex-col items-center gap-3">
-            <img id="userImg" src="https://via.placeholder.com/150" class="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover">
-            <h3 id="userName" class="text-white font-bold text-lg">ยินดีต้อนรับ</h3>
-        </div>
-        <div class="p-4 flex flex-col gap-1">
-            <button onclick="goToLineChat()" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
-                <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                <span class="font-semibold">หน้าแรก (ไปที่แชท)</span>
-            </button>
-        </div>
-    </nav>
-
-    <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
-        <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
-        <div class="text-center font-black text-blue-900 text-sm uppercase tracking-wider">HUAHIN PROPERTIES</div>
-        <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+    <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b">
+        <div class="font-black text-blue-900 text-sm uppercase">HUAHIN PROPERTIES</div>
+        <button onclick="liff.closeWindow()" class="text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </header>
 
     <main id="app" class="px-4 py-6 grid grid-cols-1 sm:grid-cols-2 gap-6"></main>
@@ -75,13 +55,6 @@
         const GAS_URL = "https://script.google.com/macros/s/AKfycbw1q-jxFZlTzLha-gis2bcVDdGQTenjzd6IpTj9XuvJbzBE5cL0_FN9i5myiRV5YGQY/exec"; 
         let allProperties = [];
 
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
-
-        function goToLineChat() {
-            if (liff.isInClient()) { liff.closeWindow(); return; }
-            window.location.href = "line://ti/p/@247uimvp";
-        }
-
         async function initLiff() {
             try {
                 await liff.init({ liffId: "2008909867-tJ76yUtj" });
@@ -90,12 +63,10 @@
         }
 
         async function loadData() {
-            try {
-                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "aiSearch" }) });
-                allProperties = await res.json();
-                renderCards(allProperties);
-                document.getElementById('loadingScreen').style.display = 'none';
-            } catch(e) { document.getElementById('loadingText').innerText = "เชื่อมต่อฐานข้อมูลไม่ได้..."; }
+            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "aiSearch" }) });
+            allProperties = await res.json();
+            renderCards(allProperties);
+            document.getElementById('loadingScreen').style.display = 'none';
         }
 
         function renderCards(properties) {
@@ -113,16 +84,14 @@
 
         async function showDetail(id) {
             const p = allProperties.find(item => item.ID == id);
-            const loading = document.getElementById('loadingScreen');
             const loadingText = document.getElementById('loadingText');
-            
             loadingText.innerText = "กำลังซิงค์รูปภาพจาก Drive " + id + "...";
-            loading.style.display = 'flex';
+            document.getElementById('loadingScreen').style.display = 'flex';
             
             try {
                 const imgRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getFolderImages", propertyId: id }) });
                 let imageUrls = await imgRes.json();
-                if (!imageUrls || imageUrls.length === 0) imageUrls = p.ImageUrls.split(',');
+                if (imageUrls.length === 0 || imageUrls.error) imageUrls = p.ImageUrls.split(',');
 
                 document.getElementById('detailPage').style.display = 'block';
                 document.body.style.overflow = 'hidden';
@@ -132,7 +101,7 @@
 
                 document.getElementById('detailContent').innerHTML = `
                     <div class="swiper detailSwiper h-[350px] bg-gray-100">${images}</div>
-                    <div class="p-6 bg-white -mt-6 rounded-t-[30px] relative z-10 shadow-inner">
+                    <div class="p-6 bg-white -mt-6 rounded-t-[30px] relative z-10 shadow-xl">
                         <h1 class="text-xl font-bold mb-2">${p.Title}</h1>
                         <p class="text-orange-600 text-2xl font-black mb-4">฿${Number(p.Price).toLocaleString()}</p>
                         <p class="text-gray-600 text-sm leading-relaxed mb-6">${p.Description || 'ข้อมูลซิงค์จากรหัส ' + id}</p>
@@ -143,8 +112,8 @@
                     </div>
                 `;
                 new Swiper(".detailSwiper", { pagination: true });
-            } catch(e) { alert("เกิดข้อผิดพลาดในการโหลดรูปภาพ"); }
-            loading.style.display = 'none';
+            } catch (e) { alert("เกิดข้อผิดพลาดในการดึงข้อมูล"); }
+            document.getElementById('loadingScreen').style.display = 'none';
         }
 
         async function handleCreateFolder() {
@@ -160,14 +129,12 @@
                 const result = await res.json();
                 
                 if (result.status === "success") {
-                    document.getElementById('loadingScreen').style.display = 'none';
-                    alert("สร้างโฟลเดอร์ " + id + " สำเร็จแล้ว!\nคุณสามารถเอารูปไปใส่ใน Drive ได้ทันทีครับ");
-                    location.reload();
-                } else { throw new Error(result.message); }
-            } catch (err) {
-                document.getElementById('loadingScreen').style.display = 'none';
-                alert("เกิดข้อผิดพลาด: " + err.message);
-            }
+                    alert("สร้างโฟลเดอร์รหัส " + id + " สำเร็จแล้ว!\nคุณสามารถเอารูปไปใส่ใน Drive ได้ทันทีครับ");
+                } else {
+                    alert("เกิดข้อผิดพลาด: กรุณายืนยันสิทธิ์เข้าใช้ Google Drive (Review Permissions)");
+                }
+            } catch (e) { alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้"); }
+            document.getElementById('loadingScreen').style.display = 'none';
         }
 
         function openLightbox() { document.getElementById('lightbox').style.display = 'flex'; new Swiper(".lightboxSwiper", { pagination: true }); }
