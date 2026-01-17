@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Smart All Online</title>
+    <title>Huahin Properties | Modern UI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
@@ -19,10 +19,34 @@
         .line-green { color: #06C755; }
         .line-bg-green { background-color: #06C755; }
         
-        #sidebar { position: fixed; top: 0; left: -100%; width: 280px; height: 100%; background: #ffffff; z-index: 100; transition: 0.4s; box-shadow: 4px 0 15px rgba(0,0,0,0.1); }
+        /* ปรับไซด์บาร์ให้แคบลงและมน */
+        #sidebar { 
+            position: fixed; top: 0; left: -100%; 
+            width: 210px; /* ความกว้างประมาณ 55% ของหน้าจอมือถือทั่วไป */
+            height: 100%; 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+            border-radius: 0 30px 30px 0; /* เพิ่มความมนที่มุมขวา */
+        }
         #sidebar.active { left: 0; }
-        #sidebarOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 90; display: none; }
+        #sidebarOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 90; display: none; }
         #sidebarOverlay.active { display: block; }
+
+        /* ปรับเมนูให้เป็นแผ่นมนๆ มีมิติ */
+        .sidebar-item {
+            margin: 10px 15px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 20px; /* มนเหมือนแบนเนอร์บ้าน */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* เพิ่มมิติเงาให้นูนขึ้น */
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .sidebar-item:active { transform: scale(0.95); background: #f0fdf4; }
 
         #detailPage { display: none; position: fixed; inset: 0; background: white; z-index: 150; overflow-y: auto; }
         .loading-overlay { position: fixed; inset: 0; background: #a0c4e8; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
@@ -32,7 +56,6 @@
         
         .suggested-scroll { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; }
         .suggested-item { flex: 0 0 calc(33.33% - 8px); }
-        .suggested-scroll::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="pb-24 overflow-x-hidden">
@@ -46,26 +69,28 @@
 
     <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <nav id="sidebar" class="flex flex-col">
-        <div class="line-bg-green p-8 flex flex-col items-center gap-3">
-            <img id="userImg" src="https://via.placeholder.com/150" class="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover">
-            <h3 id="userName" class="text-white font-bold text-lg">Huahin Properties</h3>
+        <div class="line-bg-green p-8 flex flex-col items-center gap-3" style="border-radius: 0 30px 0 0;">
+            <img id="userImg" src="https://via.placeholder.com/150" class="w-16 h-16 rounded-full border-4 border-white shadow-md object-cover">
+            <h3 id="userName" class="text-white font-bold text-base truncate w-full text-center">Mr. Somjed</h3>
         </div>
-        <div class="p-4 flex flex-col gap-1">
-            <button onclick="goToLineChat()" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
-                <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                <span class="font-semibold">กลับหน้าแชท</span>
-            </button>
-            <button onclick="toggleSidebar(); location.reload();" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
-                <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                <span class="font-semibold">รีเฟรชข้อมูลบ้าน</span>
-            </button>
+        
+        <div class="py-6 flex flex-col">
+            <div class="sidebar-item" onclick="goToLineChat()">
+                <svg class="w-5 h-5 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                <span class="text-sm font-semibold text-gray-700">กลับหน้าแชท</span>
+            </div>
+
+            <div class="sidebar-item" onclick="toggleSidebar(); location.reload();">
+                <svg class="w-5 h-5 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                <span class="text-sm font-semibold text-gray-700">รีเฟรชข้อมูล</span>
+            </div>
         </div>
     </nav>
 
-    <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b">
+    <header class="bg-white/80 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b">
         <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
         <div class="text-center"><span class="text-xs font-black text-blue-900 uppercase tracking-widest">HUAHIN PROPERTIES</span></div>
-        <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        <button onclick="goToLineChat()" class="p-1 text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </header>
 
     <main id="app" class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></main>
@@ -82,8 +107,10 @@
         let allProperties = [];
 
         function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('sidebarOverlay').classList.toggle('active');
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('sidebarOverlay');
+            sb.classList.toggle('active');
+            ov.classList.toggle('active');
         }
 
         function goToLineChat() {
@@ -110,14 +137,14 @@
                 const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getProperties" }) });
                 allProperties = await res.json();
                 renderCards(allProperties);
-            } catch (err) { alert("Error: ไม่สามารถดึงข้อมูลได้ กรุณาตรวจสอบการ Deploy ของคุณ"); }
+            } catch (err) { alert("Error: ไม่สามารถโหลดข้อมูลได้"); }
             document.getElementById('loadingScreen').style.display = 'none';
         }
 
         function renderCards(properties) {
             const container = document.getElementById('app');
             container.innerHTML = properties.map(p => `
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col border border-gray-100 hover:shadow-md transition-all">
+                <div class="bg-white rounded-[25px] overflow-hidden shadow-sm flex flex-col border border-gray-100 hover:shadow-md transition-all">
                     <img src="${p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : 'https://via.placeholder.com/400'}" class="h-52 w-full object-cover">
                     <div class="p-5 flex-1 flex flex-col">
                         <h2 class="text-[16px] font-bold text-gray-800 mb-2 truncate">${p.Title || 'ไม่มีชื่อโครงการ'}</h2>
@@ -140,7 +167,7 @@
             const suggestions = allProperties.filter(item => item.ID !== id).slice(0, 6);
             const suggestionHtml = suggestions.map(s => `
                 <div class="suggested-item" onclick="showDetail('${s.ID}')">
-                    <div class="bg-white rounded-lg overflow-hidden border border-gray-100 shadow-sm">
+                    <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
                         <img src="${s.ImageUrls ? s.ImageUrls.split(',')[0].trim() : 'https://via.placeholder.com/100'}" class="w-full aspect-square object-cover">
                         <div class="p-2"><p class="text-[10px] font-bold truncate text-gray-700">${s.Title}</p></div>
                     </div>
@@ -151,7 +178,7 @@
                 <div class="swiper detailSwiper h-[350px] w-full bg-gray-100">
                     <div class="swiper-wrapper">${images}</div><div class="swiper-pagination"></div>
                 </div>
-                <div class="p-6 bg-white -mt-4 rounded-t-3xl relative z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                <div class="p-6 bg-white -mt-8 rounded-t-[35px] relative z-10 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
                     <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">ID: ${p.ID}</span>
                     <h1 class="text-xl font-bold text-gray-900 mt-1 mb-4">${p.Title}</h1>
                     <div class="flex items-baseline gap-1 mb-6"><span class="text-2xl font-black text-[#06C755]">฿${Number(p.Price || 0).toLocaleString()}</span></div>
@@ -159,8 +186,8 @@
                     <div class="mb-20"><h3 class="font-bold text-[14px] mb-4 text-gray-700">อสังหาฯ แนะนำ</h3><div class="suggested-scroll">${suggestionHtml}</div></div>
                 </div>
                 <div class="fixed bottom-0 left-0 right-0 bg-white border-t p-3 flex gap-3 z-[200] shadow-2xl">
-                    <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border-2 border-gray-100 rounded-xl text-sm font-bold text-gray-500">โทรสอบถาม</a>
-                    <button onclick="liff.sendMessages([{type:'text',text:'สนใจ: ${p.Title}'}])" class="flex-[1.5] text-center py-3 line-bg-green text-white rounded-xl text-sm font-bold shadow-lg">แชทแอดมิน</button>
+                    <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border-2 border-gray-100 rounded-2xl text-sm font-bold text-gray-500">โทรสอบถาม</a>
+                    <button onclick="liff.sendMessages([{type:'text',text:'สนใจ: ${p.Title}'}])" class="flex-[1.5] text-center py-3 line-bg-green text-white rounded-2xl text-sm font-bold shadow-lg">แชทแอดมิน</button>
                 </div>
             `;
             new Swiper(".detailSwiper", { pagination: { el: ".swiper-pagination", clickable: true }, loop: true });
