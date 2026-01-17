@@ -66,7 +66,6 @@
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
 
-        // ฟังก์ชันหัวใจสำคัญ: ปลดล็อกแชทผ่าน Contact Admin
         function contactAdminAction() {
             if (liff.isInClient()) {
                 liff.sendMessages([{'type': 'text', 'text': 'Contact Admin'}]).then(() => {
@@ -79,7 +78,6 @@
 
         async function initLiff() {
             try {
-                // *** ใช้รหัสใหม่ของคุณที่นี่ ***
                 await liff.init({ liffId: "2008909867-PShTTRHj" }); 
                 if (liff.isLoggedIn()) {
                     liff.getProfile().then(p => { 
@@ -88,18 +86,32 @@
                     });
                 }
                 loadData();
-            } catch (err) { console.log(err); }
+            } catch (err) { 
+                console.error("LIFF Init Error:", err);
+                loadData(); // ทำงานต่อแม้ LIFF จะพลาด
+            }
         }
 
         async function loadData() {
-            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "aiSearch" }) });
-            allProperties = await res.json();
-            renderCards(allProperties);
-            document.getElementById('loadingScreen').style.display = 'none';
+            try {
+                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "aiSearch" }) });
+                if (!res.ok) throw new Error("Network response was not ok");
+                allProperties = await res.json();
+                renderCards(allProperties);
+            } catch (err) {
+                console.error("Load Data Error:", err);
+                alert("ไม่สามารถเชื่อมต่อข้อมูลได้ กรุณาตรวจสอบ URL หรือสิทธิ์การเข้าถึง");
+            } finally {
+                document.getElementById('loadingScreen').style.display = 'none';
+            }
         }
 
         function renderCards(properties) {
             const container = document.getElementById('app');
+            if(!properties || properties.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center text-white">ไม่พบข้อมูลอสังหาฯ</p>`;
+                return;
+            }
             container.innerHTML = properties.map(p => `
                 <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col border border-gray-50">
                     <img src="${p.ImageUrls.split(',')[0]}" class="h-44 w-full object-cover">
@@ -113,29 +125,37 @@
 
         async function showDetail(id) {
             const p = allProperties.find(item => item.ID == id);
+            const loading = document.getElementById('loadingScreen');
+            loading.style.display = 'flex';
             document.getElementById('detailPage').style.display = 'block';
             document.body.style.overflow = 'hidden';
 
-            const imgRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getFolderImages", propertyId: id }) });
-            let imageUrls = await imgRes.json();
-            if (imageUrls.length === 0) imageUrls = p.ImageUrls.split(',');
+            try {
+                const imgRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getFolderImages", propertyId: id }) });
+                let imageUrls = await imgRes.json();
+                if (!imageUrls || imageUrls.length === 0) imageUrls = p.ImageUrls.split(',');
 
-            const images = imageUrls.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full aspect-square object-cover"></div>`).join('');
+                const images = imageUrls.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full aspect-square object-cover"></div>`).join('');
 
-            document.getElementById('detailContent').innerHTML = `
-                <div class="swiper detailSwiper h-[380px] bg-gray-100">${images}<div class="swiper-pagination"></div></div>
-                <div class="p-6 bg-white -mt-8 rounded-t-[40px] relative z-10 shadow-2xl">
-                    <div class="flex items-center gap-2 mb-2"><span class="bg-orange-500 text-white text-[9px] px-2 py-0.5 rounded font-bold">PREMIUM</span><span class="text-[10px] text-gray-400">ID: ${p.ID}</span></div>
-                    <h1 class="text-xl font-bold text-gray-800 mb-2">${p.Title}</h1>
-                    <p class="text-[#06C755] text-2xl font-black mb-4">฿${Number(p.Price).toLocaleString()}</p>
-                    <p class="text-gray-500 text-[13px] leading-relaxed mb-8">${p.Description}</p>
-                </div>
-                <div class="fixed bottom-0 left-0 right-0 bg-white p-3 flex gap-3 z-30 shadow-2xl border-t">
-                    <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border-2 border-gray-100 rounded-2xl text-sm font-bold text-gray-400">โทรสอบถาม</a>
-                    <button onclick="contactAdminAction()" class="flex-[1.5] text-center py-3 line-bg-green text-white rounded-2xl text-sm font-bold shadow-lg">คุยกับแอดมิน</button>
-                </div>
-            `;
-            new Swiper(".detailSwiper", { pagination: { el: ".swiper-pagination", clickable: true }, loop: true });
+                document.getElementById('detailContent').innerHTML = `
+                    <div class="swiper detailSwiper h-[380px] bg-gray-100">${images}<div class="swiper-pagination"></div></div>
+                    <div class="p-6 bg-white -mt-8 rounded-t-[40px] relative z-10 shadow-2xl">
+                        <div class="flex items-center gap-2 mb-2"><span class="bg-orange-500 text-white text-[9px] px-2 py-0.5 rounded font-bold">PREMIUM</span><span class="text-[10px] text-gray-400">ID: ${p.ID}</span></div>
+                        <h1 class="text-xl font-bold text-gray-800 mb-2">${p.Title}</h1>
+                        <p class="text-[#06C755] text-2xl font-black mb-4">฿${Number(p.Price).toLocaleString()}</p>
+                        <p class="text-gray-500 text-[13px] leading-relaxed mb-8">${p.Description}</p>
+                    </div>
+                    <div class="fixed bottom-0 left-0 right-0 bg-white p-3 flex gap-3 z-30 shadow-2xl border-t">
+                        <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border-2 border-gray-100 rounded-2xl text-sm font-bold text-gray-400">โทรสอบถาม</a>
+                        <button onclick="contactAdminAction()" class="flex-[1.5] text-center py-3 line-bg-green text-white rounded-2xl text-sm font-bold shadow-lg">คุยกับแอดมิน</button>
+                    </div>
+                `;
+                new Swiper(".detailSwiper", { pagination: { el: ".swiper-pagination", clickable: true }, loop: true });
+            } catch (e) {
+                console.error("Image Sync Error:", e);
+            } finally {
+                loading.style.display = 'none';
+            }
         }
 
         function closeDetail() { document.getElementById('detailPage').style.display = 'none'; document.body.style.overflow = 'auto'; }
