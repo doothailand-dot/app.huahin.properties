@@ -3,121 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Smart Agent Pro</title>
+    <title>Huahin Properties</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap');
-        body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; }
-        .line-bg-green { background-color: #06C755; }
-        #sidebar { position: fixed; top: 0; left: -100%; width: 280px; height: 100%; background: #ffffff; z-index: 100; transition: 0.4s; box-shadow: 4px 0 15px rgba(0,0,0,0.1); }
-        #sidebar.active { left: 0; }
-        #sidebarOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 90; display: none; }
-        #sidebarOverlay.active { display: block; }
-        #detailPage { display: none; position: fixed; inset: 0; background: white; z-index: 150; overflow-y: auto; }
+        body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; }
         .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .animate-house { animation: bounce 1.5s infinite ease-in-out; }
     </style>
 </head>
 <body class="pb-24">
-
     <div id="loadingScreen" class="loading-overlay">
-        <div class="animate-house text-white mb-4"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
-        <p id="loadingText" class="text-white font-medium text-sm">กำลังเตรียมข้อมูลเพื่อคุณ...</p>
+        <div class="text-white mb-4 animate-bounce"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
+        <p class="text-white font-medium text-sm">กำลังเตรียมข้อมูลเพื่อคุณ...</p>
     </div>
 
-    <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
-    <nav id="sidebar" class="flex flex-col">
-        <div class="line-bg-green p-8 flex flex-col items-center gap-3">
-            <img id="userImg" src="https://via.placeholder.com/150" class="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover">
-            <h3 id="userName" class="text-white font-bold text-lg">Huahin Properties</h3>
-        </div>
-        <div class="p-4 flex flex-col gap-1">
-            <button onclick="toggleSidebar(); location.reload();" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
-                <svg class="w-6 h-6 text-[#06C755]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                <span class="font-semibold text-[15px]">หน้าแรก</span>
-            </button>
-            <button onclick="toggleSidebar(); contactAdminAction();" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
-                <svg class="w-6 h-6 text-[#06C755]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                <span class="font-semibold text-[15px]">คุยกับแอดมิน</span>
-            </button>
-        </div>
-    </nav>
-
-    <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
-        <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 text-[#06C755]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
-        <div class="text-center font-black text-blue-900 text-sm uppercase leading-none tracking-tighter">HUAHIN PROPERTIES</div>
-        <button onclick="contactAdminAction()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+    <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+        <div class="font-black text-blue-900 text-sm">HUAHIN PROPERTIES</div>
+        <button onclick="contactAdminAction()" class="p-1 text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </header>
 
-    <main id="app" class="px-4 py-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></main>
+    <main id="app" class="px-4 py-6 grid grid-cols-1 sm:grid-cols-2 gap-6"></main>
 
-    <div id="detailPage">
-        <button onclick="closeDetail()" class="fixed top-4 left-4 z-[160] bg-black/30 rounded-full p-2 text-white shadow-lg"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+    <div id="detailPage" class="hidden fixed inset-0 bg-white z-[150] overflow-y-auto">
+        <button onclick="closeDetail()" class="fixed top-4 left-4 z-[160] bg-black/30 rounded-full p-2 text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
         <div id="detailContent"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbzfR8HdRFnfF5TVcXbyfD0QlIUzNXDbv8LSZpacfsoOPw3rsvIzaGh0CjxCHl1SxGu4/exec"; 
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbx3bugngrbXWPAR5u99E2EMpeGT1szKTDorsld8TWR2ZHOJtwvU53x_CYavzMFAuCQ/exec"; 
         let allProperties = [];
-
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
 
         function contactAdminAction() {
             if (liff.isInClient()) {
-                liff.sendMessages([{'type': 'text', 'text': 'Contact Admin'}]).then(() => {
-                    liff.closeWindow(); 
-                }).catch(() => window.location.href = "https://line.me/R/ti/p/@247uimvp");
+                liff.sendMessages([{'type': 'text', 'text': 'Contact Admin'}]).then(() => liff.closeWindow());
             } else {
-                window.location.href = "https://line.me/R/ti/p/@247uimvp";
+                // แก้ไขลิงก์แชทให้เปิดได้ทั้ง PC และมือถือ ไม่ขึ้น 404
+                window.open("https://page.line.me/247uimvp", "_blank");
             }
         }
 
         async function initLiff() {
             try {
-                await liff.init({ liffId: "2008909867-PShTTRHj" }); 
-                if (liff.isLoggedIn()) {
-                    liff.getProfile().then(p => { 
-                        document.getElementById('userName').innerText = p.displayName; 
-                        document.getElementById('userImg').src = p.pictureUrl; 
-                    });
-                }
+                await liff.init({ liffId: "2008909867-PShTTRHj" });
                 loadData();
-            } catch (err) { 
-                console.error("LIFF Init Error:", err);
-                loadData(); // ทำงานต่อแม้ LIFF จะพลาด
-            }
+            } catch (err) { console.error(err); document.getElementById('loadingScreen').style.display = 'none'; }
         }
 
         async function loadData() {
             try {
                 const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "aiSearch" }) });
-                if (!res.ok) throw new Error("Network response was not ok");
                 allProperties = await res.json();
                 renderCards(allProperties);
-            } catch (err) {
-                console.error("Load Data Error:", err);
-                alert("ไม่สามารถเชื่อมต่อข้อมูลได้ กรุณาตรวจสอบ URL หรือสิทธิ์การเข้าถึง");
-            } finally {
-                document.getElementById('loadingScreen').style.display = 'none';
-            }
+            } catch (err) { alert("เกิดข้อผิดพลาดในการดึงข้อมูลจาก Sheets: " + err); }
+            document.getElementById('loadingScreen').style.display = 'none';
         }
 
         function renderCards(properties) {
-            const container = document.getElementById('app');
-            if(!properties || properties.length === 0) {
-                container.innerHTML = `<p class="col-span-full text-center text-white">ไม่พบข้อมูลอสังหาฯ</p>`;
-                return;
-            }
-            container.innerHTML = properties.map(p => `
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col border border-gray-50">
+            document.getElementById('app').innerHTML = properties.map(p => `
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-50">
                     <img src="${p.ImageUrls.split(',')[0]}" class="h-44 w-full object-cover">
                     <div class="p-4 flex justify-between items-center">
-                        <div><h2 class="font-bold text-[13px] truncate w-32 text-gray-800">${p.Title}</h2><p class="text-[#06C755] font-black text-sm">฿${Number(p.Price).toLocaleString()}</p></div>
-                        <button onclick="showDetail('${p.ID}')" class="bg-gray-100 px-4 py-2 rounded-full text-[10px] font-bold text-gray-500">ดูรายละเอียด</button>
+                        <div><h2 class="font-bold text-[13px] text-gray-800">${p.Title}</h2><p class="text-[#06C755] font-black">฿${Number(p.Price).toLocaleString()}</p></div>
+                        <button onclick="showDetail('${p.ID}')" class="bg-gray-100 px-4 py-2 rounded-full text-[10px] font-bold">ดูรายละเอียด</button>
                     </div>
                 </div>
             `).join('');
@@ -127,38 +77,35 @@
             const p = allProperties.find(item => item.ID == id);
             const loading = document.getElementById('loadingScreen');
             loading.style.display = 'flex';
-            document.getElementById('detailPage').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-
+            
             try {
                 const imgRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getFolderImages", propertyId: id }) });
                 let imageUrls = await imgRes.json();
                 if (!imageUrls || imageUrls.length === 0) imageUrls = p.ImageUrls.split(',');
+
+                document.getElementById('detailPage').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
 
                 const images = imageUrls.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full aspect-square object-cover"></div>`).join('');
 
                 document.getElementById('detailContent').innerHTML = `
                     <div class="swiper detailSwiper h-[380px] bg-gray-100">${images}<div class="swiper-pagination"></div></div>
                     <div class="p-6 bg-white -mt-8 rounded-t-[40px] relative z-10 shadow-2xl">
-                        <div class="flex items-center gap-2 mb-2"><span class="bg-orange-500 text-white text-[9px] px-2 py-0.5 rounded font-bold">PREMIUM</span><span class="text-[10px] text-gray-400">ID: ${p.ID}</span></div>
-                        <h1 class="text-xl font-bold text-gray-800 mb-2">${p.Title}</h1>
+                        <h1 class="text-xl font-bold text-gray-800">${p.Title}</h1>
                         <p class="text-[#06C755] text-2xl font-black mb-4">฿${Number(p.Price).toLocaleString()}</p>
                         <p class="text-gray-500 text-[13px] leading-relaxed mb-8">${p.Description}</p>
                     </div>
-                    <div class="fixed bottom-0 left-0 right-0 bg-white p-3 flex gap-3 z-30 shadow-2xl border-t">
-                        <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border-2 border-gray-100 rounded-2xl text-sm font-bold text-gray-400">โทรสอบถาม</a>
-                        <button onclick="contactAdminAction()" class="flex-[1.5] text-center py-3 line-bg-green text-white rounded-2xl text-sm font-bold shadow-lg">คุยกับแอดมิน</button>
+                    <div class="fixed bottom-0 left-0 right-0 bg-white p-3 flex gap-3 z-30 border-t">
+                        <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border border-gray-100 rounded-2xl text-sm font-bold text-gray-400">โทรสอบถาม</a>
+                        <button onclick="contactAdminAction()" class="flex-[1.5] py-3 bg-[#06C755] text-white rounded-2xl text-sm font-bold shadow-lg">คุยกับแอดมิน</button>
                     </div>
                 `;
-                new Swiper(".detailSwiper", { pagination: { el: ".swiper-pagination", clickable: true }, loop: true });
-            } catch (e) {
-                console.error("Image Sync Error:", e);
-            } finally {
-                loading.style.display = 'none';
-            }
+                new Swiper(".detailSwiper", { pagination: { el: ".swiper-pagination" }, loop: true });
+            } catch (e) { alert("Error: " + e); }
+            loading.style.display = 'none';
         }
 
-        function closeDetail() { document.getElementById('detailPage').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function closeDetail() { document.getElementById('detailPage').classList.add('hidden'); document.body.style.overflow = 'auto'; }
         initLiff();
     </script>
 </body>
