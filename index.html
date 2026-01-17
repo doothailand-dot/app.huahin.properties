@@ -9,7 +9,17 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap');
-        body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
+        
+        /* ปรับพื้นหลังให้เป็นโทนสีฟ้า-เขียวแบบ LINE */
+        body { 
+            font-family: 'Prompt', sans-serif; 
+            /* ใช้การไล่ระดับสีแบบ Linear Gradient */
+            background: linear-gradient(135deg, #c3e0f7 0%, #d8f2e1 100%);
+            /* หรือถ้าต้องการสีพื้นเรียบๆ สามารถใช้สีฟ้าอ่อนของ LINE ได้ เช่น #8cabd9 หรือ #a0c4e8 */
+            /* background-color: #a0c4e8; */
+            -webkit-tap-highlight-color: transparent; 
+        }
+
         .line-green { color: #06C755; }
         .line-bg-green { background-color: #06C755; }
         
@@ -19,7 +29,10 @@
         #sidebarOverlay.active { display: block; }
 
         #detailPage { display: none; position: fixed; inset: 0; background: white; z-index: 150; overflow-y: auto; }
-        .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
+        
+        /* ปรับสีพื้นหลังของ Loading Screen ให้เข้ากัน */
+        .loading-overlay { position: fixed; inset: 0; background: #a0c4e8; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
+        
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
         
@@ -55,7 +68,7 @@
         </div>
     </nav>
 
-    <header class="bg-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
+    <header class="bg-white/90 backdrop-blur-sm px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
         <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
         <div class="text-center">
             <span class="text-xs font-black text-blue-900 uppercase tracking-widest">HUAHIN PROPERTIES</span>
@@ -112,13 +125,13 @@
         function renderCards(properties) {
             const container = document.getElementById('app');
             container.innerHTML = properties.map(p => `
-                <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col border border-gray-100">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col border border-gray-100 hover:shadow-md transition-shadow duration-300">
                     <img src="${p.ImageUrls.split(',')[0].trim()}" class="h-52 w-full object-cover">
                     <div class="p-5 flex-1 flex flex-col">
                         <h2 class="text-[16px] font-bold text-gray-800 mb-2 truncate">${p.Title}</h2>
                         <div class="mt-auto flex justify-between items-end">
                             <span class="text-lg font-black text-[#06C755]">฿${Number(p.Price).toLocaleString()}</span>
-                            <button onclick="showDetail('${p.ID}')" class="text-[11px] font-bold px-5 py-2 bg-blue-50 text-blue-600 rounded-full">ดูรายละเอียด</button>
+                            <button onclick="showDetail('${p.ID}')" class="text-[11px] font-bold px-5 py-2 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors">ดูรายละเอียด</button>
                         </div>
                     </div>
                 </div>
@@ -135,9 +148,9 @@
             const suggestions = allProperties.filter(item => item.ID !== id).slice(0, 6);
             const suggestionHtml = suggestions.map(s => `
                 <div class="suggested-item" onclick="showDetail('${s.ID}')">
-                    <div class="bg-white rounded-lg overflow-hidden border border-gray-100">
+                    <div class="bg-white rounded-lg overflow-hidden border border-gray-100 shadow-sm">
                         <img src="${s.ImageUrls.split(',')[0].trim()}" class="w-full aspect-square object-cover">
-                        <div class="p-1.5"><p class="text-[9px] font-bold truncate">${s.Title}</p></div>
+                        <div class="p-2"><p class="text-[10px] font-bold truncate text-gray-700">${s.Title}</p></div>
                     </div>
                 </div>
             `).join('');
@@ -146,24 +159,13 @@
                 <div class="swiper detailSwiper h-[350px] w-full bg-gray-100">
                     <div class="swiper-wrapper">${images}</div><div class="swiper-pagination"></div>
                 </div>
-                <div class="p-6 bg-white -mt-4 rounded-t-3xl relative z-10">
+                <div class="p-6 bg-white -mt-4 rounded-t-3xl relative z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
                     <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">ID: ${p.ID}</span>
                     <h1 class="text-xl font-bold text-gray-900 mt-1 mb-4">${p.Title}</h1>
                     <div class="flex items-baseline gap-1 mb-6"><span class="text-2xl font-black text-[#06C755]">฿${Number(p.Price).toLocaleString()}</span></div>
-                    <div class="border-t border-gray-50 pt-5 mb-8"><h3 class="font-bold text-sm mb-2 text-gray-400 uppercase">รายละเอียด</h3><p class="text-[14px] text-gray-600 leading-relaxed">${p.Description || '-'}</p></div>
-                    <div class="mb-20"><h3 class="font-bold text-[14px] mb-4">อสังหาฯ แนะนำ</h3><div class="suggested-scroll">${suggestionHtml}</div></div>
+                    <div class="border-t border-gray-50 pt-5 mb-8"><h3 class="font-bold text-sm mb-3 text-gray-700 uppercase">รายละเอียด</h3><p class="text-[14px] text-gray-600 leading-relaxed">${p.Description || '-'}</p></div>
+                    <div class="mb-20"><h3 class="font-bold text-[14px] mb-4 text-gray-700">อสังหาฯ แนะนำ</h3><div class="suggested-scroll">${suggestionHtml}</div></div>
                 </div>
-                <div class="fixed bottom-0 left-0 right-0 bg-white border-t p-3 flex gap-3 z-[200] shadow-2xl">
-                    <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border-2 border-gray-100 rounded-xl text-sm font-bold text-gray-500">โทรสอบถาม</a>
-                    <button onclick="liff.sendMessages([{type:'text',text:'สนใจ: ${p.Title}'}])" class="flex-[1.5] text-center py-3 line-bg-green text-white rounded-xl text-sm font-bold shadow-lg">แชทแอดมิน</button>
-                </div>
-            `;
-            new Swiper(".detailSwiper", { pagination: { el: ".swiper-pagination", clickable: true }, loop: true });
-            document.getElementById('detailPage').scrollTop = 0;
-        }
-
-        function closeDetail() { document.getElementById('detailPage').style.display = 'none'; document.body.style.overflow = 'auto'; }
-        initLiff();
-    </script>
-</body>
-</html>
+                <div class="fixed bottom-0 left-0 right-0 bg-white border-t p-3 flex gap-3 z-[200] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+                    <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border-2 border-gray-100 rounded-xl text-sm font-bold text-gray-500 hover:bg-gray-50 transition-colors">โทรสอบถาม</a>
+                    <button onclick="liff.sendMessages([{type:'text',text:'สนใจ: ${p.Title}'}])" class="flex-[1.5] text-center py-3 line-bg-green text-white rounded-xl text-sm font-bold shadow-lg hover:bg-[#05b34c] transition-colors">
