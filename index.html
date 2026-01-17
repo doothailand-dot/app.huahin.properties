@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | All Online Pro</title>
+    <title>Huahin Properties | Smart Folder Sync</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
@@ -13,21 +13,21 @@
         .line-bg-green { background-color: #06C755; }
         #detailPage { display: none; position: fixed; inset: 0; background: white; z-index: 150; overflow-y: auto; }
         #lightbox { display: none; position: fixed; inset: 0; background: black; z-index: 200; align-items: center; justify-content: center; }
-        .suggested-scroll { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; }
-        .suggested-item { flex: 0 0 calc(33.33% - 7px); }
         .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
+        .suggested-scroll { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; }
+        .suggested-item { flex: 0 0 calc(33.33% - 7px); }
     </style>
 </head>
-<body class="pb-24">
+<body class="pb-24 overflow-x-hidden">
 
     <div id="loadingScreen" class="loading-overlay">
         <div class="animate-house text-white mb-4"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
-        <p class="text-white">กำลังโหลดข้อมูล 15 รูป...</p>
+        <p class="text-white">กำลังซิงค์รูปภาพจาก Drive...</p>
     </div>
 
-    <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
+    <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b">
         <div class="font-black text-blue-900 text-sm">HUAHIN PROPERTIES</div>
         <button onclick="liff.closeWindow()" class="text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </header>
@@ -46,11 +46,11 @@
         </div>
     </div>
 
-    <div class="bg-white p-6 mt-10 border-t border-gray-200">
-        <h3 class="font-bold mb-4">ส่วนแอดมิน: อัปโหลดรูปบ้าน (สูงสุด 15 รูป)</h3>
+    <div class="bg-white p-6 mt-10 border-t">
+        <h3 class="font-bold mb-4">ส่วนแอดมิน: เตรียมโฟลเดอร์สำหรับรูปภาพ</h3>
         <input type="text" id="adminPropId" placeholder="ใส่รหัสบ้าน (เช่น P001)" class="w-full mb-3 p-2 border rounded">
-        <input type="file" id="adminFiles" multiple accept="image/*" class="text-sm">
-        <button onclick="handleAdminUpload()" class="mt-4 w-full line-bg-green text-white p-3 rounded-xl font-bold">เริ่มอัปโหลดเข้า Google Drive</button>
+        <button onclick="handleCreateFolder()" class="w-full line-bg-green text-white p-3 rounded-xl font-bold shadow-md">1. สร้างโฟลเดอร์ใน Drive</button>
+        <p class="text-[10px] text-gray-400 mt-2">*เมื่อกดแล้ว ให้ไปอัปโหลดรูป 15 รูปเข้าในโฟลเดอร์ชื่อรหัสนั้นใน Drive ของคุณได้เลยครับ</p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -61,13 +61,11 @@
         async function initLiff() {
             try {
                 await liff.init({ liffId: "2008909867-tJ76yUtj" });
-                if (!liff.isLoggedIn()) liff.login();
                 loadData();
             } catch (err) { console.log(err); }
         }
 
         async function loadData() {
-            document.getElementById('loadingScreen').style.display = 'flex';
             const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "aiSearch" }) });
             allProperties = await res.json();
             renderCards(allProperties);
@@ -77,76 +75,59 @@
         function renderCards(properties) {
             const container = document.getElementById('app');
             container.innerHTML = properties.map(p => `
-                <div class="bg-white rounded-2xl overflow-hidden shadow-md flex flex-col">
-                    <img src="${p.ImageUrls.split(',')[0]}" class="h-52 w-full object-cover">
-                    <div class="p-5">
-                        <h2 class="font-bold text-lg mb-2">${p.Title}</h2>
-                        <div class="flex justify-between items-center">
-                            <span class="text-orange-600 font-black text-xl">฿${Number(p.Price).toLocaleString()}</span>
-                            <button onclick="showDetail('${p.ID}')" class="bg-gray-100 px-4 py-2 rounded-full text-xs font-bold">ดูรายละเอียด</button>
-                        </div>
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md">
+                    <img src="${p.ImageUrls.split(',')[0]}" class="h-48 w-full object-cover">
+                    <div class="p-4 flex justify-between items-center">
+                        <div><h2 class="font-bold text-sm">${p.Title}</h2><p class="text-orange-600 font-black">฿${Number(p.Price).toLocaleString()}</p></div>
+                        <button onclick="showDetail('${p.ID}')" class="bg-gray-100 px-4 py-2 rounded-full text-xs font-bold">ดูรายละเอียด</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function showDetail(id) {
+        async function showDetail(id) {
             const p = allProperties.find(item => item.ID == id);
-            if (!p) return;
+            document.getElementById('loadingScreen').style.display = 'flex';
+            
+            // ดึงรูปแบบ Real-time จากโฟลเดอร์
+            const imgRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getFolderImages", propertyId: id }) });
+            let imageUrls = await imgRes.json();
+            if (imageUrls.length === 0) imageUrls = p.ImageUrls.split(','); // Fallback ไปที่ลิงก์ในชีต
+
             document.getElementById('detailPage').style.display = 'block';
             document.body.style.overflow = 'hidden';
 
-            const imageUrls = p.ImageUrls.split(',');
-            const images = imageUrls.map(url => `<div class="swiper-slide" onclick="openLightbox()"><img src="${url.trim()}" class="w-full aspect-square object-cover shadow-lg"></div>`).join('');
-            document.getElementById('lightboxWrapper').innerHTML = imageUrls.map(url => `<div class="swiper-slide flex items-center justify-center"><img src="${url.trim()}" class="max-w-full max-h-full"></div>`).join('');
-
-            const suggestions = allProperties.filter(item => item.ID != id).slice(0, 6);
-            const suggestionHtml = suggestions.map(s => `<div class="suggested-item" onclick="showDetail('${s.ID}')"><div class="bg-white rounded-lg overflow-hidden border border-gray-100"><img src="${s.ImageUrls.split(',')[0]}" class="w-full aspect-square object-cover"><div class="p-1.5"><p class="text-[9px] font-bold truncate">${s.Title}</p></div></div></div>`).join('');
+            const images = imageUrls.map(url => `<div class="swiper-slide" onclick="openLightbox()"><img src="${url}" class="w-full aspect-square object-cover"></div>`).join('');
+            document.getElementById('lightboxWrapper').innerHTML = imageUrls.map(url => `<div class="swiper-slide flex items-center justify-center"><img src="${url}" class="max-w-full"></div>`).join('');
 
             document.getElementById('detailContent').innerHTML = `
-                <div class="swiper detailSwiper h-[400px] bg-gray-100">${images}</div>
-                <div class="p-6 bg-white -mt-6 rounded-t-[40px] relative z-10">
-                    <h1 class="text-2xl font-bold mb-2">${p.Title}</h1>
-                    <p class="text-orange-600 text-3xl font-black mb-6">฿${Number(p.Price).toLocaleString()}</p>
-                    <h3 class="font-bold border-b pb-2 mb-2">รายละเอียดโครงการ</h3>
-                    <p class="text-gray-600 text-sm mb-10 leading-relaxed">${p.Description || 'พบกับบ้านหรูคุณภาพเยี่ยมที่หัวหิน'}</p>
-                    <h3 class="font-bold mb-4">อสังหาฯ อื่นๆ ที่น่าสนใจ</h3>
-                    <div class="suggested-scroll">${suggestionHtml}</div>
+                <div class="swiper detailSwiper h-[350px] bg-gray-100">${images}</div>
+                <div class="p-6 bg-white -mt-6 rounded-t-[30px] relative z-10">
+                    <h1 class="text-xl font-bold mb-2">${p.Title}</h1>
+                    <p class="text-orange-600 text-2xl font-black mb-4">฿${Number(p.Price).toLocaleString()}</p>
+                    <p class="text-gray-600 text-sm mb-6">${p.Description || 'โหลดข้อมูลจากโฟลเดอร์ ' + id}</p>
+                    <h3 class="font-bold text-sm mb-3">บ้านแนะนำอื่นๆ</h3>
+                    <div class="suggested-scroll">${allProperties.slice(0,6).map(s => `<div class="suggested-item" onclick="showDetail('${s.ID}')"><img src="${s.ImageUrls.split(',')[0]}" class="w-full aspect-square object-cover rounded-lg"></div>`).join('')}</div>
                 </div>
             `;
-            new Swiper(".detailSwiper", { pagination: true, loop: true });
-            document.getElementById('detailPage').scrollTop = 0;
+            new Swiper(".detailSwiper", { pagination: true });
+            document.getElementById('loadingScreen').style.display = 'none';
         }
 
-        function openLightbox() {
-            document.getElementById('lightbox').style.display = 'flex';
-            new Swiper(".lightboxSwiper", { pagination: true, loop: true });
-        }
-
-        function closeDetail() { document.getElementById('detailPage').style.display = 'none'; document.body.style.overflow = 'auto'; }
-
-        // --- ระบบอัปโหลด 15 รูป (Admin Logic) ---
-        async function handleAdminUpload() {
-            const propId = document.getElementById('adminPropId').value;
-            const files = document.getElementById('adminFiles').files;
-            if (!propId || files.length === 0) return alert("กรุณาใส่รหัสบ้านและเลือกรูป");
-            if (files.length > 15) return alert("อัปโหลดได้สูงสุด 15 รูปครับ");
-
+        async function handleCreateFolder() {
+            const id = document.getElementById('adminPropId').value;
+            if (!id) return alert("กรุณาใส่รหัสบ้าน");
             document.getElementById('loadingScreen').style.display = 'flex';
-            const filePromises = Array.from(files).map(file => {
-                return new Promise(resolve => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve({ name: file.name, mimeType: file.type, data: e.target.result.split(',')[1] });
-                    reader.readAsDataURL(file);
-                });
-            });
-
-            const processedFiles = await Promise.all(filePromises);
-            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "uploadImages", propertyId: propId, files: processedFiles }) });
+            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "createFolder", propertyId: id }) });
             const result = await res.json();
-            if (result.status === "success") { alert("อัปโหลด 15 รูปและบันทึกลิงก์ลง Sheet สำเร็จ!"); location.reload(); }
+            if (result.status === "success") {
+                alert("สร้างโฟลเดอร์รหัส " + id + " สำเร็จ! เชิญอัปโหลดรูปใน Drive ได้เลยครับ");
+                location.reload();
+            }
         }
 
+        function openLightbox() { document.getElementById('lightbox').style.display = 'flex'; new Swiper(".lightboxSwiper", { pagination: true }); }
+        function closeDetail() { document.getElementById('detailPage').style.display = 'none'; document.body.style.overflow = 'auto'; }
         initLiff();
     </script>
 </body>
