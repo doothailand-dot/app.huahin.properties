@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Smart Detail Pro</title>
+    <title>Huahin Properties | Smart Agent Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
@@ -16,15 +16,12 @@
         #sidebarOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 90; display: none; }
         #sidebarOverlay.active { display: block; }
         #detailPage { display: none; position: fixed; inset: 0; background: white; z-index: 150; overflow-y: auto; }
-        #lightbox { display: none; position: fixed; inset: 0; background: black; z-index: 200; align-items: center; justify-content: center; }
         .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
-        .suggested-scroll { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; }
-        .suggested-item { flex: 0 0 calc(33.33% - 7px); }
     </style>
 </head>
-<body class="pb-24 overflow-x-hidden">
+<body class="pb-24">
 
     <div id="loadingScreen" class="loading-overlay">
         <div class="animate-house text-white mb-4"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
@@ -38,17 +35,21 @@
             <h3 id="userName" class="text-white font-bold text-lg">Huahin Properties</h3>
         </div>
         <div class="p-4 flex flex-col gap-1">
-            <button onclick="goToLineChat()" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
+            <button onclick="toggleSidebar(); location.reload();" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
                 <svg class="w-6 h-6 text-[#06C755]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                <span class="font-semibold text-[15px]">หน้าแรก (ไปที่แชท)</span>
+                <span class="font-semibold text-[15px]">หน้าแรก</span>
+            </button>
+            <button onclick="toggleSidebar(); contactAdminAction();" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
+                <svg class="w-6 h-6 text-[#06C755]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                <span class="font-semibold text-[15px]">คุยกับแอดมิน</span>
             </button>
         </div>
     </nav>
 
     <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
         <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 text-[#06C755]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
-        <div class="text-center font-black text-blue-900 text-sm uppercase">HUAHIN PROPERTIES</div>
-        <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        <div class="text-center font-black text-blue-900 text-sm uppercase leading-none tracking-tighter">HUAHIN PROPERTIES</div>
+        <button onclick="contactAdminAction()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </header>
 
     <main id="app" class="px-4 py-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></main>
@@ -58,24 +59,6 @@
         <div id="detailContent"></div>
     </div>
 
-    <div id="lightbox" onclick="this.style.display='none'">
-        <div class="swiper lightboxSwiper w-full h-full">
-            <div class="swiper-wrapper" id="lightboxWrapper"></div>
-            <div class="swiper-pagination"></div>
-        </div>
-    </div>
-
-    <div class="bg-white p-6 mt-10 border-t shadow-inner">
-        <h3 class="font-bold mb-4 text-gray-700">เครื่องมือแอดมิน: จองพื้นที่รูปภาพ</h3>
-        <input type="text" id="adminPropId" placeholder="ใส่รหัสบ้าน (เช่น P015)" class="w-full mb-3 p-3 border-2 border-gray-100 rounded-xl text-sm focus:border-[#06C755] outline-none">
-        <button onclick="handleCreateFolder()" class="w-full line-bg-green text-white p-3 rounded-xl font-bold shadow-lg active:scale-95 transition">สร้างโฟลเดอร์ใน Drive</button>
-    </div>
-
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-30 shadow-2xl">
-        <div onclick="location.reload()" class="flex flex-col items-center line-green cursor-pointer"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg><span class="text-[9px] mt-0.5 font-semibold">หน้าแรก</span></div>
-        <div onclick="goToLineChat()" class="flex flex-col items-center text-gray-400 cursor-pointer"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg><span class="text-[9px] mt-0.5 font-semibold">แชทปกติ</span></div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbx4vQJeagoJOdWOCD_lSIs4Gi5XXskmm-T-rOkuGCjN7U0K1H88HJvJ9IFb-HieiVye/exec"; 
@@ -83,26 +66,27 @@
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
 
-        function goToLineChat() {
-            const lineId = "@247uimvp";
-            if (liff.isInClient()) { liff.closeWindow(); return; }
-            window.location.href = `line://ti/p/${lineId}`;
-            setTimeout(() => { if(confirm("เปิดแชทผ่านหน้าเว็บหรือไม่?")) window.location.href = `https://line.me/R/ti/p/${lineId}`; }, 2500);
-        }
-
-        // ฟังก์ชันหัวใจสำคัญ: กดแล้วส่ง Contact Admin เข้าแชททันที
+        // ฟังก์ชันหัวใจสำคัญ: ปลดล็อกแชทผ่าน Contact Admin
         function contactAdminAction() {
             if (liff.isInClient()) {
-                liff.sendMessages([{'type': 'text', 'text': 'Contact Admin'}]).then(() => liff.closeWindow());
+                liff.sendMessages([{'type': 'text', 'text': 'Contact Admin'}]).then(() => {
+                    liff.closeWindow(); 
+                }).catch(() => window.location.href = "https://line.me/R/ti/p/@247uimvp");
             } else {
-                goToLineChat();
+                window.location.href = "https://line.me/R/ti/p/@247uimvp";
             }
         }
 
         async function initLiff() {
             try {
-                await liff.init({ liffId: "2008909867-tJ76yUtj" });
-                liff.getProfile().then(p => { document.getElementById('userName').innerText = p.displayName; document.getElementById('userImg').src = p.pictureUrl; }).catch(() => {});
+                // *** ใช้รหัสใหม่ของคุณที่นี่ ***
+                await liff.init({ liffId: "2008909867-PShTTRHj" }); 
+                if (liff.isLoggedIn()) {
+                    liff.getProfile().then(p => { 
+                        document.getElementById('userName').innerText = p.displayName; 
+                        document.getElementById('userImg').src = p.pictureUrl; 
+                    });
+                }
                 loadData();
             } catch (err) { console.log(err); }
         }
@@ -129,55 +113,31 @@
 
         async function showDetail(id) {
             const p = allProperties.find(item => item.ID == id);
-            const loading = document.getElementById('loadingScreen');
-            const loadingText = document.getElementById('loadingText');
-            loadingText.innerText = "กำลังซิงค์รูปภาพจาก Drive " + id + "...";
-            loading.style.display = 'flex';
-            
-            try {
-                const imgRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getFolderImages", propertyId: id }) });
-                let imageUrls = await imgRes.json();
-                if (imageUrls.length === 0 || imageUrls.error) imageUrls = p.ImageUrls.split(',');
+            document.getElementById('detailPage').style.display = 'block';
+            document.body.style.overflow = 'hidden';
 
-                document.getElementById('detailPage').style.display = 'block';
-                document.body.style.overflow = 'hidden';
+            const imgRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getFolderImages", propertyId: id }) });
+            let imageUrls = await imgRes.json();
+            if (imageUrls.length === 0) imageUrls = p.ImageUrls.split(',');
 
-                const images = imageUrls.map(url => `<div class="swiper-slide" onclick="openLightbox()"><img src="${url}" class="w-full aspect-square object-cover"></div>`).join('');
-                document.getElementById('lightboxWrapper').innerHTML = imageUrls.map(url => `<div class="swiper-slide flex items-center justify-center"><img src="${url}" class="max-w-full max-h-full"></div>`).join('');
+            const images = imageUrls.map(url => `<div class="swiper-slide"><img src="${url}" class="w-full aspect-square object-cover"></div>`).join('');
 
-                document.getElementById('detailContent').innerHTML = `
-                    <div class="swiper detailSwiper h-[380px] bg-gray-100">${images}<div class="swiper-pagination"></div></div>
-                    <div class="p-6 bg-white -mt-8 rounded-t-[40px] relative z-10 shadow-2xl">
-                        <div class="flex items-center gap-2 mb-2"><span class="bg-orange-500 text-white text-[9px] px-2 py-0.5 rounded font-bold">PREMIUM</span><span class="text-[10px] text-gray-400">ID: ${p.ID}</span></div>
-                        <h1 class="text-xl font-bold text-gray-800 mb-2">${p.Title}</h1>
-                        <p class="text-[#06C755] text-2xl font-black mb-4">฿${Number(p.Price).toLocaleString()}</p>
-                        <p class="text-gray-500 text-[13px] leading-relaxed mb-8">${p.Description || 'ข้อมูลซิงค์จาก Drive ' + id}</p>
-                    </div>
-                    <div class="fixed bottom-0 left-0 right-0 bg-white p-3 flex gap-3 z-30 shadow-2xl border-t">
-                        <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border-2 border-gray-100 rounded-2xl text-sm font-bold text-gray-400">โทรสอบถาม</a>
-                        <button onclick="contactAdminAction()" class="flex-[1.5] text-center py-3 line-bg-green text-white rounded-2xl text-sm font-bold shadow-lg">คุยกับแอดมิน</button>
-                    </div>
-                `;
-                new Swiper(".detailSwiper", { pagination: { el: ".swiper-pagination", clickable: true }, loop: true });
-            } catch (e) { alert("Error: ไม่สามารถโหลดรูปภาพได้"); }
-            loading.style.display = 'none';
+            document.getElementById('detailContent').innerHTML = `
+                <div class="swiper detailSwiper h-[380px] bg-gray-100">${images}<div class="swiper-pagination"></div></div>
+                <div class="p-6 bg-white -mt-8 rounded-t-[40px] relative z-10 shadow-2xl">
+                    <div class="flex items-center gap-2 mb-2"><span class="bg-orange-500 text-white text-[9px] px-2 py-0.5 rounded font-bold">PREMIUM</span><span class="text-[10px] text-gray-400">ID: ${p.ID}</span></div>
+                    <h1 class="text-xl font-bold text-gray-800 mb-2">${p.Title}</h1>
+                    <p class="text-[#06C755] text-2xl font-black mb-4">฿${Number(p.Price).toLocaleString()}</p>
+                    <p class="text-gray-500 text-[13px] leading-relaxed mb-8">${p.Description}</p>
+                </div>
+                <div class="fixed bottom-0 left-0 right-0 bg-white p-3 flex gap-3 z-30 shadow-2xl border-t">
+                    <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border-2 border-gray-100 rounded-2xl text-sm font-bold text-gray-400">โทรสอบถาม</a>
+                    <button onclick="contactAdminAction()" class="flex-[1.5] text-center py-3 line-bg-green text-white rounded-2xl text-sm font-bold shadow-lg">คุยกับแอดมิน</button>
+                </div>
+            `;
+            new Swiper(".detailSwiper", { pagination: { el: ".swiper-pagination", clickable: true }, loop: true });
         }
 
-        async function handleCreateFolder() {
-            const id = document.getElementById('adminPropId').value;
-            if (!id) return alert("กรุณาใส่รหัสบ้าน");
-            const loadingText = document.getElementById('loadingText');
-            loadingText.innerText = "กำลังสร้างโฟลเดอร์ " + id + " ในไดรฟ์...";
-            document.getElementById('loadingScreen').style.display = 'flex';
-            try {
-                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "createFolder", propertyId: id }) });
-                const result = await res.json();
-                if (result.status === "success") { alert("จองพื้นที่รหัส " + id + " สำเร็จ! เชิญอัปโหลดรูปใน Drive ครับ"); }
-            } catch (e) { alert("Error: กรุณาตรวจสอบการ Deploy เพื่อยืนยันสิทธิ์"); }
-            document.getElementById('loadingScreen').style.display = 'none';
-        }
-
-        function openLightbox() { document.getElementById('lightbox').style.display = 'flex'; new Swiper(".lightboxSwiper", { pagination: { el: ".swiper-pagination", type: "fraction" }, loop: true }); }
         function closeDetail() { document.getElementById('detailPage').style.display = 'none'; document.body.style.overflow = 'auto'; }
         initLiff();
     </script>
