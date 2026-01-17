@@ -41,16 +41,12 @@
                 <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                 <span class="font-semibold">หน้าแรก (ไปที่แชท)</span>
             </button>
-            <button onclick="goToLineChat()" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
-                <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
-                <span class="font-semibold">ติดต่อแอดมิน</span>
-            </button>
         </div>
     </nav>
 
-    <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b">
+    <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
         <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
-        <div class="text-center font-black text-blue-900 text-sm uppercase">HUAHIN PROPERTIES</div>
+        <div class="text-center font-black text-blue-900 text-sm uppercase tracking-wider">HUAHIN PROPERTIES</div>
         <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </header>
 
@@ -81,29 +77,25 @@
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
 
-        // ระบบนำทางกลับแชท (Mobile/PC)
         function goToLineChat() {
             if (liff.isInClient()) { liff.closeWindow(); return; }
             window.location.href = "line://ti/p/@247uimvp";
-            setTimeout(() => { if(confirm("เปิดแชทผ่านหน้าเว็บหรือไม่?")) window.location.href = "https://line.me/R/ti/p/@247uimvp"; }, 2500);
         }
 
         async function initLiff() {
             try {
                 await liff.init({ liffId: "2008909867-tJ76yUtj" });
-                liff.getProfile().then(p => {
-                    document.getElementById('userName').innerText = p.displayName;
-                    document.getElementById('userImg').src = p.pictureUrl;
-                }).catch(() => {});
                 loadData();
             } catch (err) { console.log(err); }
         }
 
         async function loadData() {
-            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "aiSearch" }) });
-            allProperties = await res.json();
-            renderCards(allProperties);
-            document.getElementById('loadingScreen').style.display = 'none';
+            try {
+                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "aiSearch" }) });
+                allProperties = await res.json();
+                renderCards(allProperties);
+                document.getElementById('loadingScreen').style.display = 'none';
+            } catch(e) { document.getElementById('loadingText').innerText = "เชื่อมต่อฐานข้อมูลไม่ได้..."; }
         }
 
         function renderCards(properties) {
@@ -127,30 +119,31 @@
             loadingText.innerText = "กำลังซิงค์รูปภาพจาก Drive " + id + "...";
             loading.style.display = 'flex';
             
-            // ดึงรูปแบบ Real-time จาก Drive
-            const imgRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getFolderImages", propertyId: id }) });
-            let imageUrls = await imgRes.json();
-            if (imageUrls.length === 0) imageUrls = p.ImageUrls.split(','); // Fallback หากไม่มีรูปในโฟลเดอร์
+            try {
+                const imgRes = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getFolderImages", propertyId: id }) });
+                let imageUrls = await imgRes.json();
+                if (!imageUrls || imageUrls.length === 0) imageUrls = p.ImageUrls.split(',');
 
-            document.getElementById('detailPage').style.display = 'block';
-            document.body.style.overflow = 'hidden';
+                document.getElementById('detailPage').style.display = 'block';
+                document.body.style.overflow = 'hidden';
 
-            const images = imageUrls.map(url => `<div class="swiper-slide" onclick="openLightbox()"><img src="${url}" class="w-full aspect-square object-cover"></div>`).join('');
-            document.getElementById('lightboxWrapper').innerHTML = imageUrls.map(url => `<div class="swiper-slide flex items-center justify-center"><img src="${url}" class="max-w-full"></div>`).join('');
+                const images = imageUrls.map(url => `<div class="swiper-slide" onclick="openLightbox()"><img src="${url}" class="w-full aspect-square object-cover"></div>`).join('');
+                document.getElementById('lightboxWrapper').innerHTML = imageUrls.map(url => `<div class="swiper-slide flex items-center justify-center"><img src="${url}" class="max-w-full"></div>`).join('');
 
-            document.getElementById('detailContent').innerHTML = `
-                <div class="swiper detailSwiper h-[350px] bg-gray-100">${images}</div>
-                <div class="p-6 bg-white -mt-6 rounded-t-[30px] relative z-10">
-                    <h1 class="text-xl font-bold mb-2">${p.Title}</h1>
-                    <p class="text-orange-600 text-2xl font-black mb-4">฿${Number(p.Price).toLocaleString()}</p>
-                    <p class="text-gray-600 text-sm leading-relaxed mb-6">${p.Description || 'ข้อมูลซิงค์จากรหัส ' + id}</p>
-                    <div class="fixed bottom-0 left-0 right-0 bg-white p-3 flex gap-3 z-30 shadow-2xl">
-                        <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border-2 rounded-xl text-sm font-bold text-gray-600">โทรสอบถาม</a>
-                        <button onclick="liff.sendMessages([{type:'text',text:'สนใจ: ${p.Title}'}])" class="flex-[1.5] text-center py-3 line-bg-green text-white rounded-xl text-sm font-bold">สอบถามแอดมิน</button>
+                document.getElementById('detailContent').innerHTML = `
+                    <div class="swiper detailSwiper h-[350px] bg-gray-100">${images}</div>
+                    <div class="p-6 bg-white -mt-6 rounded-t-[30px] relative z-10 shadow-inner">
+                        <h1 class="text-xl font-bold mb-2">${p.Title}</h1>
+                        <p class="text-orange-600 text-2xl font-black mb-4">฿${Number(p.Price).toLocaleString()}</p>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-6">${p.Description || 'ข้อมูลซิงค์จากรหัส ' + id}</p>
+                        <div class="fixed bottom-0 left-0 right-0 bg-white p-3 flex gap-3 z-30 shadow-2xl">
+                            <a href="tel:${p.Phone}" class="flex-1 text-center py-3 border-2 rounded-xl text-sm font-bold text-gray-600">โทรสอบถาม</a>
+                            <button onclick="liff.sendMessages([{type:'text',text:'สนใจ: ${p.Title}'}])" class="flex-[1.5] text-center py-3 line-bg-green text-white rounded-xl text-sm font-bold">สอบถามแอดมิน</button>
+                        </div>
                     </div>
-                </div>
-            `;
-            new Swiper(".detailSwiper", { pagination: true });
+                `;
+                new Swiper(".detailSwiper", { pagination: true });
+            } catch(e) { alert("เกิดข้อผิดพลาดในการโหลดรูปภาพ"); }
             loading.style.display = 'none';
         }
 
@@ -162,13 +155,18 @@
             loadingText.innerText = "กำลังสร้างโฟลเดอร์ " + id + " ในไดรฟ์...";
             document.getElementById('loadingScreen').style.display = 'flex';
 
-            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "createFolder", propertyId: id }) });
-            const result = await res.json();
-            
-            if (result.status === "success") {
+            try {
+                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "createFolder", propertyId: id }) });
+                const result = await res.json();
+                
+                if (result.status === "success") {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    alert("สร้างโฟลเดอร์ " + id + " สำเร็จแล้ว!\nคุณสามารถเอารูปไปใส่ใน Drive ได้ทันทีครับ");
+                    location.reload();
+                } else { throw new Error(result.message); }
+            } catch (err) {
                 document.getElementById('loadingScreen').style.display = 'none';
-                alert("สร้างโฟลเดอร์ " + id + " สำเร็จแล้ว!\nคุณสามารถเอารูปไปใส่ใน Drive ได้ทันทีครับ");
-                location.reload();
+                alert("เกิดข้อผิดพลาด: " + err.message);
             }
         }
 
