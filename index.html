@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Smart All Online</title>
+    <title>Huahin Properties | All Online Style</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap');
         
+        /* ธีมสีฟ้า LINE Chat และฟองสบู่ข้อความ */
         body { 
             font-family: 'Prompt', sans-serif; 
             background-color: #8cabd9; /* สีฟ้าพื้นหลังแชท LINE */
@@ -19,11 +20,11 @@
         .line-green { color: #06C755; }
         .line-bg-green { background-color: #06C755; }
         
-        /* Sidebar Styles */
+        /* Sidebar สไตล์ Rich Menu พร้อมรูปโปรไฟล์ */
         #sidebar { 
             position: fixed; top: 0; left: -100%; width: 280px; height: 100%; 
             background: #ffffff; z-index: 100; transition: 0.4s; 
-            box-shadow: 4px 0 15px rgba(0,0,0,0.1); 
+            box-shadow: 4px 0 15px rgba(0,0,0,0.2); 
         }
         #sidebar.active { left: 0; }
         #sidebarOverlay { 
@@ -32,11 +33,10 @@
         }
         #sidebarOverlay.active { display: block; }
 
-        /* Card สไตล์แชท */
         .property-card {
             background: white;
-            border-radius: 18px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .loading-overlay { 
@@ -47,8 +47,6 @@
         
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
-        .mic-active { color: #ff0000 !important; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body class="pb-24 overflow-x-hidden">
@@ -57,14 +55,14 @@
         <div class="animate-house text-white mb-4">
             <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
         </div>
-        <p class="text-sm font-medium text-white opacity-80 uppercase">Huahin AI Properties</p>
+        <p class="text-sm font-medium text-white opacity-90 tracking-wide">กำลังเข้าสู่ Huahin Properties...</p>
     </div>
 
     <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <nav id="sidebar" class="flex flex-col">
         <div class="line-bg-green p-8 flex flex-col items-center gap-3">
             <div class="relative">
-                <img id="userImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" class="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover">
+                <img id="userImg" src="https://via.placeholder.com/150?text=Profile" class="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover">
                 <div class="absolute bottom-1 right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></div>
             </div>
             <h3 id="userName" class="text-white font-bold text-lg">Mr. Somjed</h3>
@@ -86,16 +84,6 @@
                 <span class="font-semibold text-[15px]">แผนที่โครงการ (Map)</span>
             </button>
 
-            <button class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition">
-                <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span class="font-semibold text-[15px]">นัดหมายชมบ้าน</span>
-            </button>
-
-            <button class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition">
-                <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                <span class="font-semibold text-[15px]">รายการที่บันทึกไว้</span>
-            </button>
-
             <button onclick="goToLineChat()" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition">
                 <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
                 <span class="font-semibold text-[15px]">ติดต่อแอดมิน</span>
@@ -113,7 +101,7 @@
     <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
         <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
         <div class="text-center">
-            <span class="text-[10px] font-bold text-blue-800 leading-none uppercase tracking-widest">Huahin</span><br>
+            <span class="text-[10px] font-bold text-blue-800 leading-none tracking-widest uppercase">Huahin</span><br>
             <span class="text-xs font-black text-blue-900 leading-none uppercase">Properties</span>
         </div>
         <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
@@ -127,9 +115,6 @@
                 <div class="absolute left-3.5 top-2.5 line-green">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-                <button id="micBtn" onclick="startVoiceSearch()" class="absolute right-3.5 top-2 text-gray-400 p-1">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0 5 5 0 01-10 0 1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"></path></svg>
-                </button>
             </div>
             <button onclick="performAISearch()" class="line-bg-green text-white px-5 py-2 rounded-full text-xs font-bold shadow-md active:scale-95 transition">AI Search</button>
         </div>
@@ -160,9 +145,15 @@
             document.getElementById('sidebarOverlay').classList.toggle('active');
         }
 
-        // ฟังก์ชันเปิดหน้าแชทหลักของ LINE OA
+        // ฟังก์ชันไปหน้าแชทที่ดีที่สุดสำหรับ LIFF
         function goToLineChat() {
-            window.location.href = "https://line.me/R/ti/p/@247uimvp";
+            // หากเปิดในแอป LINE การปิด LIFF คือการกลับไปหน้าแชทที่เปิดแอปมาทันที
+            if (liff.isInClient()) {
+                liff.closeWindow();
+            } else {
+                // หากเปิดในเบราว์เซอร์ภายนอก (กัน 404) จะใช้ลิงก์ที่ปลอดภัยกว่า
+                window.location.href = "https://line.me/R/oaMessage/@247uimvp/";
+            }
         }
 
         async function initLiff() {
@@ -170,29 +161,16 @@
                 await liff.init({ liffId: LIFF_ID });
                 if (!liff.isLoggedIn()) { liff.login(); }
                 
-                // ดึงข้อมูลโปรไฟล์แบบปลอดภัยเพื่อเลี่ยง Error
+                // ดึงข้อมูลโปรไฟล์แบบป้องกัน Error (Fallback to Guest)
                 liff.getProfile().then(profile => {
                     document.getElementById('userName').innerText = profile.displayName;
                     document.getElementById('userImg').src = profile.pictureUrl;
                 }).catch(() => {
-                    console.log("Profile access restricted");
+                    document.getElementById('userName').innerText = "Mr. Somjed (Guest)";
                 });
 
                 performAISearch(""); 
             } catch (err) { console.error(err); }
-        }
-
-        function startVoiceSearch() {
-            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = 'th-TH';
-            recognition.onstart = () => document.getElementById('micBtn').classList.add('mic-active');
-            recognition.onresult = (event) => {
-                const text = event.results[0][0].transcript;
-                document.getElementById('searchInput').value = text;
-                performAISearch(text);
-            };
-            recognition.onend = () => document.getElementById('micBtn').classList.remove('mic-active');
-            recognition.start();
         }
 
         async function performAISearch(customQuery) {
@@ -208,7 +186,7 @@
                 const data = await res.json();
                 renderCards(data);
             } catch (err) {
-                document.getElementById('app').innerHTML = `<p class="col-span-full text-center py-20 text-white font-medium">ขออภัย ไม่พบข้อมูลในทำเลนี้</p>`;
+                document.getElementById('app').innerHTML = `<p class="col-span-full text-center py-20 text-white font-medium">ไม่พบข้อมูลในทำเลนี้</p>`;
             }
             loading.style.display = 'none';
         }
