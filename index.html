@@ -16,12 +16,10 @@
         #sidebar.active { left: 0; }
         #sidebarOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 90; display: none; }
         #sidebarOverlay.active { display: block; }
-        .property-card { background: white; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .property-card { background: white; border-radius: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
-        .mic-active { color: #ff0000 !important; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body class="pb-24 overflow-x-hidden">
@@ -36,11 +34,8 @@
     <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <nav id="sidebar" class="flex flex-col">
         <div class="line-bg-green p-8 flex flex-col items-center gap-3">
-            <div class="relative">
-                <img id="userImg" src="https://via.placeholder.com/150" class="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover">
-                <div class="absolute bottom-1 right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></div>
-            </div>
-            <h3 id="userName" class="text-white font-bold text-lg">Mr. Somjed</h3>
+            <img id="userImg" src="https://via.placeholder.com/150" class="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover">
+            <h3 id="userName" class="text-white font-bold text-lg tracking-wide">Mr. Somjed</h3>
         </div>
         <div class="p-4 flex flex-col gap-1 overflow-y-auto">
             <button onclick="goToLineChat()" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
@@ -50,10 +45,6 @@
             <button onclick="toggleSidebar(); performAISearch('');" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
                 <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                 <span class="font-semibold text-[15px]">รายการอสังหาฯ</span>
-            </button>
-            <button class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
-                <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
-                <span class="font-semibold text-[15px]">แผนที่โครงการ (Map)</span>
             </button>
             <button onclick="goToLineChat()" class="flex items-center gap-4 p-4 text-gray-700 hover:bg-gray-50 rounded-2xl transition text-left">
                 <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
@@ -70,7 +61,7 @@
     <header class="bg-white px-3 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
         <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
         <div class="text-center">
-            <span class="text-[10px] font-bold text-blue-800 leading-none uppercase tracking-widest">Huahin</span><br>
+            <span class="text-[10px] font-bold text-blue-800 leading-none tracking-widest uppercase">Huahin</span><br>
             <span class="text-xs font-black text-blue-900 leading-none uppercase">Properties</span>
         </div>
         <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
@@ -79,11 +70,8 @@
     <div class="bg-white/95 backdrop-blur-md px-4 py-3 sticky top-[49px] z-20 shadow-sm border-b">
         <div class="max-w-3xl mx-auto flex gap-2">
             <div class="relative flex-1">
-                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อทำเล หรือสั่งด้วยเสียง..." class="w-full pl-10 pr-12 py-2 border-2 border-[#06C755] rounded-full text-sm focus:outline-none bg-gray-50">
+                <input type="text" id="searchInput" placeholder="พิมพ์ชื่อทำเล หรือสิ่งที่ต้องการค้นหา..." class="w-full pl-10 pr-4 py-2 border-2 border-[#06C755] rounded-full text-sm focus:outline-none bg-gray-50">
                 <div class="absolute left-3.5 top-2.5 line-green"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
-                <button id="micBtn" onclick="startVoiceSearch()" class="absolute right-3.5 top-2 text-gray-400 p-1">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0 5 5 0 01-10 0 1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"></path></svg>
-                </button>
             </div>
             <button onclick="performAISearch()" class="line-bg-green text-white px-5 py-2 rounded-full text-xs font-bold shadow-md active:scale-95 transition">AI Search</button>
         </div>
@@ -96,17 +84,17 @@
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-30 shadow-2xl">
         <div onclick="location.reload()" class="flex flex-col items-center line-green cursor-pointer">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-            <span class="text-[9px] mt-0.5 font-medium">หน้าแรก</span>
+            <span class="text-[9px] mt-0.5 font-semibold">หน้าแรก</span>
         </div>
         <div onclick="goToLineChat()" class="flex flex-col items-center text-gray-400 cursor-pointer">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-            <span class="text-[9px] mt-0.5 font-medium">แชทปกติ</span>
+            <span class="text-[9px] mt-0.5 font-semibold">แชทปกติ</span>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        const GAS_URL = ""; https://script.google.com/macros/s/AKfycbzSIftTmbDcwdw6naUIwMxxwDKv-HEu2YZ1NEef5_PirbRR9720PGVz1nJVi-WX1Vto/exec
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbw1q-jxFZlTzLha-gis2bcVDdGQTenjzd6IpTj9XuvJbzBE5cL0_FN9i5myiRV5YGQY/exec"; 
         const LIFF_ID = "2008909867-tJ76yUtj";
 
         function toggleSidebar() {
@@ -114,19 +102,20 @@
             document.getElementById('sidebarOverlay').classList.toggle('active');
         }
 
-        // --- ระบบเปิดหน้าแชท (รองรับมือถือ และ PC) ---
+        // --- ระบบเปิดหน้าแชท (รองรับมือถือ และ LINE PC) ---
         function goToLineChat() {
-            const lineId = "@247uimvp";
+            const lineOaId = "@247uimvp"; //
+            
             if (liff.isInClient()) {
-                liff.closeWindow(); // กลับเข้าห้องแชทในมือถือทันที
-                return;
+                liff.closeWindow(); // ปิดแอปเพื่อกลับเข้าห้องแชทเดิมทันที (มือถือ)
+            } else {
+                // พยายามเรียกเปิด LINE PC ผ่าน Protocol Link
+                window.location.href = `line://ti/p/${lineOaId}`;
+                setTimeout(() => {
+                    const cf = confirm("หากไม่พบโปรแกรม LINE PC ท่านต้องการเปิดหน้าเว็บแอดมินหรือดาวน์โหลดโปรแกรมหรือไม่?");
+                    if (cf) window.location.href = `https://line.me/R/ti/p/${lineOaId}`;
+                }, 2500);
             }
-            // พยายามเปิด LINE PC
-            window.location.href = `line://ti/p/${lineId}`;
-            setTimeout(() => {
-                const conf = confirm("ต้องการเข้าแชทผ่านเว็บบราวเซอร์ หรือดาวน์โหลดโปรแกรม LINE หรือไม่?");
-                if (conf) window.location.href = `https://line.me/R/ti/p/${lineId}`;
-            }, 2500);
         }
 
         async function initLiff() {
@@ -136,34 +125,34 @@
                 liff.getProfile().then(p => {
                     document.getElementById('userName').innerText = p.displayName;
                     document.getElementById('userImg').src = p.pictureUrl;
-                }).catch(() => { document.getElementById('userName').innerText = "Guest"; });
+                }).catch(() => { /* Silent Fail for Profile Access */ });
+                
+                // โหลดข้อมูลเริ่มต้น
                 performAISearch(""); 
-            } catch (err) { console.error(err); }
-        }
-
-        function startVoiceSearch() {
-            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = 'th-TH';
-            recognition.onstart = () => document.getElementById('micBtn').classList.add('mic-active');
-            recognition.onresult = (e) => {
-                const text = e.results[0][0].transcript;
-                document.getElementById('searchInput').value = text;
-                performAISearch(text);
-            };
-            recognition.onend = () => document.getElementById('micBtn').classList.remove('mic-active');
-            recognition.start();
+            } catch (err) {
+                console.error("LIFF Init Error:", err);
+                document.getElementById('loadingScreen').innerHTML = `<p class="text-white">กรุณาเปิดแอปผ่าน LINE เพื่อใช้งาน</p>`;
+            }
         }
 
         async function performAISearch(customQuery) {
             const query = customQuery !== undefined ? customQuery : document.getElementById('searchInput').value;
             const loading = document.getElementById('loadingScreen');
+            const container = document.getElementById('app');
+            
             loading.style.display = 'flex';
+            
             try {
-                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "aiSearch", query: query }) });
+                const res = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "aiSearch", query: query })
+                });
+                if (!res.ok) throw new Error("Network error");
                 const data = await res.json();
                 renderCards(data);
             } catch (err) {
-                document.getElementById('app').innerHTML = `<p class="col-span-full text-center py-20 text-white font-medium">ขออภัย ไม่พบข้อมูลโครงการ</p>`;
+                console.error("Search Error:", err);
+                container.innerHTML = `<p class="col-span-full text-center py-20 text-white font-medium">ไม่สามารถเชื่อมต่อข้อมูลได้ กรุณาตรวจสอบ URL เว็บแอปของคุณ</p>`;
             }
             loading.style.display = 'none';
         }
@@ -186,16 +175,20 @@
                         <p class="text-[11px] text-gray-500 mb-3 flex items-center gap-1">
                             <svg class="w-3 h-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>${p.Location}
                         </p>
-                        <div class="mt-auto flex items-baseline gap-1"><span class="text-lg font-black text-[#06C755]">฿${Number(p.Price).toLocaleString()}</span></div>
+                        <div class="mt-auto flex items-baseline gap-1">
+                            <span class="text-xs text-gray-400 font-medium tracking-tight">ราคา</span>
+                            <span class="text-lg font-black text-[#06C755]">฿${Number(p.Price).toLocaleString()}</span>
+                        </div>
                         <div class="grid grid-cols-2 gap-3 mt-4">
-                            <a href="tel:${p.Phone}" class="text-xs font-bold text-center py-2.5 border border-gray-100 rounded-xl text-gray-600 active:bg-gray-100">Call</a>
-                            <button onclick="liff.sendMessages([{type:'text',text:'สนใจโครงการ: ${p.Title}'}])" class="text-xs font-bold text-center py-2.5 line-bg-green text-white rounded-xl shadow-md active:opacity-80 transition">Inquiry</button>
+                            <a href="tel:${p.Phone}" class="text-xs font-bold text-center py-2.5 border border-gray-100 rounded-xl text-gray-600 bg-gray-50 active:bg-gray-100 transition">โทรสอบถาม</a>
+                            <button onclick="liff.sendMessages([{type:'text',text:'สนใจโครงการ: ${p.Title}'}])" class="text-xs font-bold text-center py-2.5 line-bg-green text-white rounded-xl shadow-md active:opacity-80 transition">สนใจข้อมูล</button>
                         </div>
                     </div>
                 </div>
             `).join('');
             new Swiper(".mySwiper", { pagination: { el: ".swiper-pagination", clickable: true }, loop: true });
         }
+
         initLiff();
     </script>
 </body>
