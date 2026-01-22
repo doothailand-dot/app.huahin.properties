@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Display Update</title>
+    <title>Huahin Properties | Premium Display</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; }
-        .line-green { color: #06C755; }
-        .line-bg-green { background-color: #06C755; }
-        .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+        .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
         .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
@@ -21,6 +19,10 @@
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 5px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; }
         .share-btn span { font-size: 8px; font-weight: 800; text-transform: uppercase; color: white; }
+        
+        /* สไตล์ป้าย Code และ Plot ตามรูปตัวอย่าง */
+        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; z-index: 10; border: 1px solid rgba(255,255,255,0.2); }
+        .badge-plot { background-color: #06C755; color: white; padding: 6px 16px; border-radius: 25px; font-size: 13px; font-weight: 800; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
@@ -62,7 +64,7 @@
             if (s.includes("under construction") || s.includes("under const")) return { bg: "bg-[#9333ea]", text: "text-[#9333ea]", display: "Under Const" };
             if (s.includes("sold out")) return { bg: "bg-[#ef4444]", text: "text-[#ef4444]", display: "Sold out" };
             if (s.includes("empty space")) return { bg: "bg-white border border-gray-200", text: "text-black", display: "Empty space" };
-            return { bg: "bg-gray-100", text: "text-gray-400", display: status || "-" };
+            return { bg: "bg-gray-100", text: "text-gray-400", display: status || "UNDEFINED" };
         }
 
         function renderCards(properties) {
@@ -70,25 +72,20 @@
             container.innerHTML = properties.map(p => {
                 const statusInfo = getStatusInfo(p.Status);
                 const shareUrl = encodeURIComponent(`https://liff.line.me/${LIFF_ID}`);
-                const shareTxt = encodeURIComponent(`Interested in Plot: ${p.ID}`);
+                const shareTxt = encodeURIComponent(`Interested in Plot: ${p.Plot}`);
 
                 return `
                 <div class="property-bubble">
-                    <div class="relative">
-                        <img src="${p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : ''}" class="w-full h-64 object-cover">
-                        <div class="absolute top-4 left-4 bg-[#06C755] text-black px-3 py-1 rounded-lg text-[10px] font-black shadow-sm">
-                            Code: ${p.ID || '-'}
-                        </div>
-                    </div>
+                    <div class="badge-code">Code: ${p.ID || '-'}</div>
+                    
+                    <img src="${p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : ''}" class="w-full h-64 object-cover">
                     
                     <div class="p-6">
-                        <div class="flex justify-between items-start gap-2 mb-4">
-                            <div class="bg-[#06C755] px-4 py-2 rounded-2xl text-white text-[12px] font-black shadow-sm">
-                                Plot : ${p.Plot || '-'}
-                            </div>
-                            <div class="flex gap-1">
-                                <span class="${statusInfo.bg} px-2 py-1 rounded-lg text-[8px] font-bold uppercase text-white shadow-sm">${statusInfo.display}</span>
-                                <span class="${statusInfo.text} px-2 py-1 rounded-lg bg-gray-50 text-[8px] font-black uppercase border border-gray-100">${p.Badge || ''}</span>
+                        <div class="flex justify-between items-center gap-2 mb-4">
+                            <div class="badge-plot">Plot : ${p.Plot || '-'}</div>
+                            <div class="flex gap-1.5 items-center">
+                                <span class="${statusInfo.bg} px-2.5 py-1 rounded-full text-[9px] font-bold uppercase text-white shadow-sm">${statusInfo.display}</span>
+                                <span class="${statusInfo.text} text-[9px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
                             </div>
                         </div>
 
@@ -125,7 +122,7 @@
                             <a href="https://twitter.com/intent/tweet?text=${shareTxt}&url=${shareUrl}" target="_blank" class="share-btn bg-black"><span>X</span></a>
                             <a href="https://t.me/share/url?url=${shareUrl}&text=${shareTxt}" target="_blank" class="share-btn bg-[#0088cc]"><span>Tele</span></a>
                             <a href="mailto:?subject=${shareTxt}&body=${shareUrl}" class="share-btn bg-gray-600"><span>Mail</span></a>
-                            <div onclick="navigator.clipboard.writeText('${p.ID}: ${shareUrl}'); alert('Link Copied!');" class="share-btn bg-orange-500"><span>Link</span></div>
+                            <div onclick="navigator.clipboard.writeText('${p.Plot}: ${shareUrl}'); alert('Link Copied!');" class="share-btn bg-orange-500"><span>Link</span></div>
                         </div>
                     </div>
                 </div>
