@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Perfect Display</title>
+    <title>Huahin Properties | Perfect Thumbnail</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
@@ -16,13 +16,13 @@
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
         
         /* ส่วนแสดงรูป Thumbnail เป็นพื้นหลัง */
-        .thumbnail-container { position: relative; width: 100%; height: 250px; background-color: #f3f4f6; overflow: hidden; }
-        .thumbnail-img { width: 100%; height: 100%; object-cover: cover; display: block; }
+        .thumbnail-container { position: relative; width: 100%; height: 260px; background-color: #f3f4f6; overflow: hidden; }
+        .thumbnail-img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        /* ป้าย Code บนรูปภาพ */
-        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        /* ป้าย Code ลอยอยู่บนรูปภาพ */
+        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
         
-        /* ปรับขนาดป้าย Plot ให้เท่ากับ Status (Sold Out) */
+        /* ป้าย Plot ขนาดเท่ากับ Status */
         .badge-mini { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; height: fit-content; display: flex; align-items: center; justify-content: center; }
         .bg-plot-green { background-color: #06C755; color: white; }
 
@@ -83,15 +83,15 @@
                 const shareUrl = encodeURIComponent(`https://liff.line.me/${LIFF_ID}`);
                 const shareTxt = encodeURIComponent(`Interested in Plot: ${p.Plot}`);
                 
-                // แก้ไขการดึงรูปภาพจากคอลัมน์ Thumbnail (F) หรือ ImageUrls
-                const rawImg = p.Thumbnail || p.ImageUrls || "";
-                const firstImg = rawImg.split(',')[0].trim() || 'https://via.placeholder.com/400x250?text=No+Image';
+                // แก้ไขการดึงรูปภาพจากคอลัมน์ Thumbnail (F)
+                // หากคอลัมน์ Thumbnail ว่าง จะไปดึงรูปแรกจาก ImageUrls มาแทนครับ
+                const displayImg = (p.Thumbnail && p.Thumbnail.trim() !== "") ? p.Thumbnail.trim() : (p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : 'https://via.placeholder.com/400x260?text=No+Thumbnail');
 
                 return `
                 <div class="property-bubble">
                     <div class="thumbnail-container">
                         <div class="badge-code">Code: ${p.ID || '-'}</div>
-                        <img src="${firstImg}" class="thumbnail-img" style="object-fit: cover;">
+                        <img src="${displayImg}" class="thumbnail-img">
                     </div>
                     
                     <div class="p-6">
