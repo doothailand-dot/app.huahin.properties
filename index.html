@@ -3,35 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Live Data Sync</title>
+    <title>Huahin Properties | Full Details & Multi-Share</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
+        
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; }
         .line-green { color: #06C755; }
         .line-bg-green { background-color: #06C755; }
-        #sidebar { position: fixed; top: 0; left: -100%; width: 140px; height: 100%; background: rgba(255, 255, 255, 0.98); z-index: 1000; transition: 0.4s; box-shadow: 10px 0 25px rgba(0,0,0,0.08); border-radius: 0 45px 45px 0; }
+        
+        /* ไซด์บาร์แคบ 140px ตามที่คุณ Somjet ต้องการ */
+        #sidebar { 
+            position: fixed; top: 0; left: -100%; width: 140px; height: 100%; 
+            background: rgba(255, 255, 255, 0.98); z-index: 1000; transition: 0.4s; 
+            box-shadow: 10px 0 25px rgba(0,0,0,0.08); border-radius: 0 45px 45px 0;
+        }
         #sidebar.active { left: 0; }
         #sidebarOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.25); z-index: 900; display: none; }
         #sidebarOverlay.active { display: block; }
-        .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+
+        .property-bubble {
+            background-color: #ffffff; border-radius: 35px; overflow: hidden; 
+            margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+        }
+
+        /* ตารางรายละเอียดพร้อมไอคอน */
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .info-item { display: flex; items-center; gap: 8px; color: #6b7280; font-size: 11px; }
+        .info-icon { width: 15px; height: 15px; color: #9ca3af; flex-shrink: 0; }
+
         .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
+
+        /* Multi-Share Grid 8 ปุ่ม */
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 10px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; }
+        .share-btn:active { transform: scale(0.92); opacity: 0.8; }
         .share-btn span { font-size: 8px; font-weight: 800; text-transform: uppercase; color: white; }
-        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .info-item { display: flex; items-center; gap: 6px; color: #6b7280; font-size: 11px; }
-        .info-icon { width: 14px; height: 14px; color: #9ca3af; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
 
     <div id="loadingScreen" class="loading-overlay">
         <div class="animate-house text-white mb-4"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
-        <p class="text-xs font-bold text-white opacity-90 uppercase tracking-widest text-center">ดึงข้อมูลจริงจาก Google Sheets...</p>
+        <p class="text-xs font-bold text-white opacity-90 uppercase tracking-widest text-center">กำลังจัดระเบียบข้อมูลไอคอน...</p>
     </div>
 
     <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -46,7 +63,7 @@
         </div>
     </nav>
 
-    <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b">
+    <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
         <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
         <div class="text-center font-black text-blue-900 text-[10px] uppercase tracking-widest leading-none">HUAHIN<br>PROPERTIES</div>
         <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
@@ -62,6 +79,7 @@
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
         function goToLineChat() { window.location.href = `https://line.me/R/ti/p/@247uimvp`; }
 
+        // Logic สีสถานะและตัวหนังสือ Badge
         function getStatusInfo(status) {
             const s = (status || "").toLowerCase().trim();
             if (s.includes("ready to move in")) return { bg: "bg-[#06C755]", text: "text-[#06C755]" };
@@ -94,7 +112,7 @@
 
         function copyLink(title, id) {
             const url = `https://liff.line.me/${LIFF_ID}`;
-            navigator.clipboard.writeText(`สนใจบ้านแปลง: ${id} (${title}) ดูเพิ่มเติม: ${url}`).then(() => alert("คัดลอกลิงก์เรียบร้อย!"));
+            navigator.clipboard.writeText(`สนใจบ้านแปลง: ${id} (${title}) ดูเพิ่มเติม: ${url}`).then(() => alert("คัดลอกลิงก์สำเร็จ!"));
         }
 
         function renderCards(properties) {
@@ -108,29 +126,51 @@
                 <div class="property-bubble">
                     <img src="${p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : ''}" class="w-full h-64 object-cover">
                     <div class="p-6">
+                        
                         <div class="flex justify-between items-center gap-2 mb-4 overflow-hidden">
                             <h2 class="text-2xl font-black text-gray-800 leading-none truncate flex-1">${p.ID || '-'}</h2>
-                            <span class="${statusInfo.bg} px-3 py-1.5 rounded-full text-[9px] font-bold uppercase whitespace-nowrap text-white">${p.Status || 'Status'}</span>
-                            <span class="${statusInfo.text} text-[9px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
+                            <span class="${statusInfo.bg} px-3 py-1.5 rounded-full text-[9px] font-bold uppercase whitespace-nowrap text-white">
+                                ${p.Status || 'Status'}
+                            </span>
+                            <span class="${statusInfo.text} text-[9px] font-black uppercase whitespace-nowrap">
+                                ${p.Badge || ''}
+                            </span>
                         </div>
 
                         <div class="bg-gray-50 rounded-[25px] p-5 mb-5 border border-gray-100">
-                            <h3 class="text-base font-bold text-gray-800 mb-3">${p.Title || ''}</h3>
-                            <p class="text-[13px] text-gray-500 mb-5 leading-relaxed">${p.Description || '-'}</p>
+                            <p class="text-[13px] text-gray-500 mb-5 leading-relaxed font-normal">${p.Description || 'Luxury living with smart home system'}</p>
                             
                             <div class="info-grid border-t pt-4">
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path></svg> Bed: ${p.Bed || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.535 5.343a1 1 0 011.414 0 3.394 3.394 0 004.242 0 1 1 0 011.414 1.414 5.394 5.394 0 01-7.07 0 1 1 0 010-1.414z" clip-rule="evenodd"></path></svg> Bath: ${p.Bath || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"></path></svg> House: ${p.House || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 100 4v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2a2 2 0 100-4V6z"></path></svg> Pool: ${p.Pool || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> Car: ${p.Car || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg> Elec: ${p.Elec || '-'}</div>
+                                <div class="info-item">
+                                    <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path></svg>
+                                    Bed: <span class="text-gray-800 font-normal">${p.Bed || '-'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.535 5.343a1 1 0 011.414 0 3.394 3.394 0 004.242 0 1 1 0 011.414 1.414L10 16z" clip-rule="evenodd"></path></svg>
+                                    Bath: <span class="text-gray-800 font-normal">${p.Bath || '-'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                                    Land: <span class="text-gray-800 font-normal">${p.Land || '-'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"></path></svg>
+                                    House: <span class="text-gray-800 font-normal">${p.House || '-'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 100 4v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2a2 2 0 100-4V6z"></path></svg>
+                                    Pool: <span class="text-gray-800 font-normal">${p.Pool || '-'}</span>
+                                </div>
+                                <div class="info-item">
+                                    <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                    Car: <span class="text-gray-800 font-normal">${p.Car || '-'}</span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="flex justify-between items-center mb-6">
                             <span class="text-[#06C755] font-black text-xl">฿${Number(p.Price || 0).toLocaleString()}</span>
-                            <button onclick="window.open('${p.MorePictures}', '_blank')" class="bg-blue-50 text-blue-600 px-6 py-2 rounded-full font-bold text-[10px] shadow-sm active:scale-95 transition-all">ดูรูปเพิ่มเติม ></button>
+                            <button onclick="window.open('${p.MorePictures}', '_blank')" class="bg-blue-50 text-blue-600 px-6 py-2.5 rounded-full font-bold text-[10px] shadow-sm active:scale-95 transition-all">ดูรูปเพิ่มเติม ></button>
                         </div>
 
                         <div class="share-grid">
