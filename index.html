@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Mobile Optimized</title>
+    <title>Huahin Properties | Plot ID Fixed</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
@@ -31,7 +31,6 @@
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
 
-        /* Multi-Share Grid สวยงามไม่รก */
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 10px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; }
         .share-btn:active { transform: scale(0.9); opacity: 0.8; }
@@ -42,7 +41,7 @@
 
     <div id="loadingScreen" class="loading-overlay">
         <div class="animate-house text-white mb-4"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
-        <p class="text-xs font-bold text-white opacity-90 uppercase tracking-widest text-center">กำลังจัดเตรียมหน้าจอที่สะอาดตาที่สุด...</p>
+        <p class="text-xs font-bold text-white opacity-90 uppercase tracking-widest text-center">กำลังจัดระเบียบชื่อแปลงของคุณ...</p>
     </div>
 
     <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -83,7 +82,6 @@
 
         function goToLineChat() { window.location.href = `https://line.me/R/ti/p/@247uimvp`; }
 
-        // กำหนดสีตามสถานะ
         function getStatusInfo(status) {
             const s = (status || "").toLowerCase().trim();
             if (s.includes("ready to move in")) return { bg: "bg-[#06C755]", text: "text-[#06C755]" };
@@ -132,7 +130,9 @@
                     <div class="p-6">
                         
                         <div class="flex justify-between items-center gap-2 mb-4 overflow-hidden">
-                            <h2 class="text-xl font-black text-gray-800 leading-none truncate flex-1">${p.Title || 'Property'}</h2>
+                            <h2 class="text-xl font-black text-gray-800 leading-none truncate flex-1">
+                                ${p.ID || 'Plot'}
+                            </h2>
                             
                             <span class="${statusInfo.bg} px-3 py-1.5 rounded-full text-[9px] font-bold uppercase whitespace-nowrap text-white">
                                 ${p.Status || 'Status'}
@@ -170,7 +170,7 @@
                         </div>
                     </div>
                 </div>
-            `;
+                `;
             }).join('');
         }
 
