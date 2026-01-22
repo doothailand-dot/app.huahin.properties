@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Jumbo UI | Huahin Properties</title>
+    <title>Admin Management | Huahin Properties</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Prompt', sans-serif; background-color: #ffffff; color: #000; }
         label { display: block; font-size: 32px; color: #000; font-weight: 700; margin-bottom: 15px; margin-top: 60px; }
         
-        /* รักษาขนาดช่องกรอกและความสูงที่คุณพอใจ (Jumbo UI) */
+        /* คงความสูงและขนาดตัวอักษรจัมโบ้ที่คุณพอใจไว้ */
         input, select, textarea { 
             width: 100%; 
             padding: 40px 25px; 
             border: 4px solid #000; 
             border-radius: 25px; 
-            font-size: 60px; /* ตัวหนังสือพิมพ์จริงขนาดใหญ่ 3-4 เท่า */
+            font-size: 60px; 
             font-weight: 800;
             background-color: #fff;
             color: #000;
             appearance: none;
             outline: none;
+            line-height: 1;
         }
+
         input::placeholder, textarea::placeholder { font-size: 60px; color: #ccc; font-weight: 400; }
-        
+        input:focus { border-color: #2563eb; }
+
         select {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23000000'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
             background-repeat: no-repeat;
@@ -33,22 +36,24 @@
         }
 
         .bottom-bar {
-            position: fixed; bottom: 0; left: 0; right: 0; background: white;
-            border-top: 4px solid #f3f4f6; display: flex; padding: 40px; gap: 30px; z-index: 100;
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: white; border-top: 4px solid #f3f4f6;
+            display: flex; justify-content: space-between; padding: 40px; gap: 30px; z-index: 100;
         }
-        .btn-action { flex: 1; padding: 35px; font-size: 40px; font-weight: 900; border-radius: 25px; text-transform: uppercase; }
+        .btn-action { flex: 1; padding: 35px; font-size: 40px; font-weight: 900; border-radius: 25px; text-transform: uppercase; border: 4px solid #eee; }
         .btn-save { background-color: #2563eb; color: white; border: none; }
     </style>
 </head>
 <body class="pb-96 px-10 max-w-5xl mx-auto">
 
-    <div class="pt-16 pb-10 border-b-8 border-gray-100 flex items-center gap-10">
-        <h1 class="text-5xl font-black uppercase">Backend Management</h1>
+    <div class="pt-16 pb-10 border-b-8 border-gray-100 flex items-center gap-10 sticky top-0 bg-white z-50">
+        <button onclick="location.reload()" class="text-7xl text-gray-300">✕</button>
+        <h1 class="text-5xl font-black uppercase">Admin Dashboard</h1>
     </div>
 
     <div class="mt-16 p-12 bg-blue-50 rounded-[40px] border-4 border-blue-200">
-        <label style="margin-top: 0; font-size: 40px; color: #1e40af;">SELECT TO EDIT</label>
-        <select id="editSelector" onchange="loadSelectedData()" style="font-size: 50px; padding: 45px 30px; background-color: white;">
+        <label style="margin-top: 0; font-size: 40px; color: #1e40af;">SELECT PLOT TO EDIT</label>
+        <select id="editSelector" onchange="loadSelectedData()" style="font-size: 50px; border-color: #1e40af; background-color: white; padding: 45px 30px;">
             <option value="">-- CLICK TO START --</option>
         </select>
     </div>
@@ -57,7 +62,7 @@
         <label>ID (รหัสแปลง)</label><input type="text" id="ID" required placeholder="Ex: M23">
         <label>Plot Number</label><input type="text" id="Plot" placeholder="Ex: 14">
         <label>Type (ประเภท)</label><input type="text" id="Type" placeholder="Ex: House">
-        <label>Status (สถานะ)</label>
+        <label>Status</label>
         <select id="Status">
             <option value="Ready to move in">Ready to move in</option>
             <option value="Under Const">Under Const</option>
@@ -65,13 +70,12 @@
             <option value="Empty space">Empty space</option>
         </select>
         <label>Badge</label><input type="text" id="Badge" placeholder="Ex: HOT DEAL">
-        <label>ImageUrls (รูปหลัก)</label><textarea id="ImageUrls" rows="3" placeholder="url1.jpg, url2.jpg"></textarea>
-        <label>Description</label><textarea id="Description" rows="5" style="font-size: 45px;" placeholder="Details..."></textarea>
+        <label>ImageUrls (หลัก)</label><textarea id="ImageUrls" rows="3" style="font-size: 30px;"></textarea>
+        <label>Description</label><textarea id="Description" rows="5" style="font-size: 45px;"></textarea>
         
         <label>Bed Room</label><input type="text" id="BedRoom" placeholder="Ex: 3">
         <label>Bath Room</label><input type="text" id="BathRoom" placeholder="Ex: 2">
-        <label>Pa Vilion (ศาลา)</label>
-        <select id="PaVilion"><option value="Yes">Yes</option><option value="No">No</option></select>
+        <label>Pa Vilion</label><select id="PaVilion"><option value="Yes">Yes</option><option value="No">No</option></select>
         
         <label>Land sq.m</label><input type="text" id="LandSqM" placeholder="Ex: 220">
         <label>Land sq.w</label><input type="text" id="LandSqW" placeholder="Ex: 55">
@@ -80,14 +84,10 @@
         <label>Pool Deep</label><input type="text" id="PoolDeep" placeholder="Ex: 1.5">
         <label>Car park</label><input type="text" id="CarPark" placeholder="Ex: 2">
         
-        <label>Electrical</label>
-        <select id="Electrical"><option value="3-Phase">3-Phase</option><option value="Single Phase">Single Phase</option></select>
-        
-        <label>Furniture</label>
-        <select id="Furniture"><option value="Full">Full</option><option value="Partial">Partial</option><option value="No">No</option></select>
-        
-        <label>Price (ราคา)</label><input type="number" id="Price" placeholder="Ex: 4700000">
-        <label>FB Link</label><input type="text" id="FBLink" placeholder="Facebook Link">
+        <label>Electrical</label><select id="Electrical"><option value="3-Phase">3-Phase</option><option value="Single Phase">Single Phase</option></select>
+        <label>Furniture</label><select id="Furniture"><option value="Full">Full Furnished</option><option value="Partial">Partial</option><option value="No">No</option></select>
+        <label>Price</label><input type="number" id="Price" placeholder="Ex: 4700000">
+        <label>FB Link</label><input type="text" id="FBLink" placeholder="Ex: http://...">
 
         <div class="bottom-bar">
             <button type="button" onclick="location.reload()" class="btn-action bg-gray-50 text-gray-500">CANCEL</button>
@@ -96,8 +96,8 @@
     </form>
 
     <script>
-        // *** สำคัญ: เปลี่ยน GAS_URL เป็นลิงก์ Web App ของคุณ Somjet ***
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbxm8AVQvJ_E6DuDouk1oUpfFuxFWdXRtC8alwy8fJ8yopv-ghbPP5TiPnY08oi5r6I-/exec"; 
+        // แก้ไขลิงก์ GAS_URL เป็นของคุณ Somjet ครับ
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxm8AVQvJ_E6DuDouk1oUpfFuxFWdXRtC8alwy8fJ8yopv-ghbPP5TiPnY08oi5r6I-/exec";
         let fullData = [];
 
         window.onload = async () => {
@@ -111,14 +111,14 @@
                     opt.text = `EDIT: ${row[0]} - ${row[1] || ''}`;
                     select.add(opt);
                 });
-            } catch (e) { alert("Fetch Failed"); }
+            } catch (err) { alert("ดึงข้อมูลไม่สำเร็จ: " + err); }
         };
 
+        // ดึงข้อมูลแต่ละคอลัมน์มาใส่ในช่องกรอกให้ถูกต้อง
         function loadSelectedData() {
             const index = document.getElementById('editSelector').value;
             if (index === "") { document.getElementById('propertyForm').reset(); return; }
             const row = fullData[index];
-            // Mapping ข้อมูล 20 คอลัมน์ตามลำดับจริง
             document.getElementById('ID').value = row[0];
             document.getElementById('Plot').value = row[1];
             document.getElementById('Type').value = row[2];
@@ -145,6 +145,8 @@
         async function handleSave() {
             const btn = document.getElementById('submitBtn');
             btn.innerText = "SAVING...";
+            btn.disabled = true;
+
             const formData = {
                 ID: document.getElementById('ID').value,
                 Plot: document.getElementById('Plot').value,
@@ -168,9 +170,11 @@
                 FBLink: document.getElementById('FBLink').value
             };
 
-            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "save", data: formData }) });
-            alert(await res.text());
-            location.reload();
+            try {
+                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "save", data: formData }) });
+                alert(await res.text());
+                location.reload();
+            } catch (err) { alert("Error: " + err); btn.disabled = false; btn.innerText = "SAVE DATA"; }
         }
     </script>
 </body>
