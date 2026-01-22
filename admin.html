@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Jumbo | Huahin Properties</title>
+    <title>Admin Link Mode | Huahin Properties</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -11,142 +11,101 @@
         body { font-family: 'Prompt', sans-serif; background-color: #ffffff; color: #000; padding-bottom: 300px; }
         label { display: block; font-size: 32px; color: #000; font-weight: 700; margin-bottom: 15px; margin-top: 60px; }
         input, select, textarea { width: 100%; padding: 40px 25px; border: 4px solid #000; border-radius: 25px; font-size: 50px; font-weight: 800; background-color: #fff; outline: none; }
-        .upload-zone { border: 6px dashed #cbd5e1; padding: 60px; text-align: center; border-radius: 35px; background: #f8fafc; cursor: pointer; }
-        .preview-box { width: 100%; height: 450px; object-fit: cover; border-radius: 25px; margin-top: 30px; display: none; border: 5px solid #06C755; }
+        .preview-container { margin-top: 20px; border-radius: 25px; overflow: hidden; border: 4px solid #eee; height: 400px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; }
+        #imagePreview { width: 100%; height: 100%; object-fit: cover; display: none; }
         .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 4px solid #eee; display: flex; padding: 40px; gap: 30px; z-index: 100; }
-        .btn-action { flex: 1; padding: 35px; font-size: 40px; font-weight: 900; border-radius: 25px; text-transform: uppercase; border: 4px solid #eee; }
-        .btn-save { background-color: #2563eb; color: white; border: none; }
+        .btn-save { flex: 2; padding: 35px; font-size: 40px; font-weight: 900; border-radius: 25px; background-color: #2563eb; color: white; border: none; }
     </style>
 </head>
 <body class="px-10">
 
     <div class="pt-16 pb-8 border-b-8 sticky top-0 bg-white z-50"><h1 class="text-5xl font-black">ADMIN MANAGEMENT</h1></div>
 
-    <div class="mt-16 p-10 bg-blue-50 rounded-[40px] border-4 border-blue-200">
-        <label style="margin-top:0; font-size:40px; color:#1e40af;">SELECT TO EDIT</label>
-        <select id="editSelector" onchange="loadSelectedData()" style="font-size:45px;"></select>
-    </div>
-
     <form id="propertyForm">
-        <label>ID (รหัสแปลง)</label><input type="text" id="ID" required>
+        <label>SELECT PLOT</label>
+        <select id="editSelector" onchange="loadSelectedData()" style="background-color:#eff6ff;"></select>
+
+        <label>ID (รหัส)</label><input type="text" id="ID" required>
+        
+        <label>Thumbnail Link (วางลิงก์รูปภาพ)</label>
+        <input type="text" id="Thumbnail" placeholder="วางลิงก์รูปที่นี่..." oninput="updatePreview()">
+        <div class="preview-container">
+            <p id="placeholderText" style="font-size:30px; color:#ccc;">IMAGE PREVIEW</p>
+            <img id="imagePreview">
+        </div>
+
         <label>Plot Number</label><input type="text" id="Plot">
-        <label>Type</label><input type="text" id="Type">
         <label>Status</label>
         <select id="Status">
             <option value="Ready to move in">Ready to move in</option>
             <option value="Under Const">Under Const</option>
             <option value="Sold Out">Sold Out</option>
-            <option value="Empty space">Empty space</option>
         </select>
-        <label>Badge</label><input type="text" id="Badge">
-
-        <label>Thumbnail (UPLOAD PHOTO)</label>
-        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
-            <p id="uploadText" style="font-size: 45px;">📸 TAB TO UPLOAD</p>
-            <img id="imagePreview" class="preview-box">
-            <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="previewFile()">
-        </div>
-
-        <label>Description</label><textarea id="Description" rows="4"></textarea>
-        <label>Bed Room</label><input type="text" id="BedRoom">
-        <label>Bath Room</label><input type="text" id="BathRoom">
-        <label>Pa Vilion</label><select id="PaVilion"><option value="Yes">Yes</option><option value="No">No</option></select>
-        <label>Land sq.m</label><input type="text" id="LandSqM">
-        <label>Land sq.w</label><input type="text" id="LandSqW">
-        <label>House Size</label><input type="text" id="HouseSize">
-        <label>Pool Size</label><input type="text" id="PoolSize">
-        <label>Pool Deep</label><input type="text" id="PoolDeep">
-        <label>Car park</label><input type="text" id="CarPark">
-        <label>Electrical</label><select id="Electrical"><option value="3-Phase">3-Phase</option><option value="Single Phase">Single Phase</option></select>
-        <label>Furniture</label><select id="Furniture"><option value="Full">Full</option><option value="Partial">Partial</option><option value="No">No</option></select>
         <label>Price</label><input type="number" id="Price">
-        <label>FB Link</label><input type="text" id="FBLink">
-
         <div class="bottom-bar">
-            <button type="button" onclick="location.reload()" class="btn-action">CANCEL</button>
-            <button type="button" onclick="handleSave()" id="submitBtn" class="btn-action btn-save">SAVE DATA</button>
+            <button type="button" onclick="location.reload()" style="flex:1; font-size:30px;">CANCEL</button>
+            <button type="button" onclick="handleSave()" id="submitBtn" class="btn-save">SAVE DATA</button>
         </div>
     </form>
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec";
-        const LIFF_ID = "2008909867-tJ76yUtj";
-        let fullData = [], base64Image = "", fileName = "", fileType = "";
+        let fullData = [];
+
+        // ฟังก์ชันแปลงลิงก์ Google Drive ให้แสดงผลได้จริง
+        function fixDriveLink(url) {
+            if (url.includes('drive.google.com')) {
+                const id = url.match(/[-\w]{25,}/);
+                return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : url;
+            }
+            return url;
+        }
+
+        function updatePreview() {
+            const url = fixDriveLink(document.getElementById('Thumbnail').value);
+            const img = document.getElementById('imagePreview');
+            const txt = document.getElementById('placeholderText');
+            if (url) { img.src = url; img.style.display = 'block'; txt.style.display = 'none'; }
+        }
 
         window.onload = async () => {
-            try {
-                await liff.init({ liffId: LIFF_ID });
-                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getProperties" }) });
-                fullData = await res.json();
-                const select = document.getElementById('editSelector');
-                select.innerHTML = '<option value="">-- NEW ENTRY --</option>';
-                fullData.forEach((row, index) => {
-                    const opt = document.createElement('option');
-                    opt.value = index;
-                    opt.text = `EDIT: ${row.ID} - ${row.Plot || ''}`;
-                    select.add(opt);
-                });
-            } catch (err) { alert("Load Error: " + err); }
+            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getProperties" }) });
+            fullData = await res.json();
+            const select = document.getElementById('editSelector');
+            select.innerHTML = '<option value="">-- NEW ENTRY --</option>';
+            fullData.forEach((row, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.text = `EDIT: ${row.ID} - ${row.Plot || ''}`;
+                select.add(opt);
+            });
         };
-
-        function previewFile() {
-            const file = document.getElementById('fileInput').files[0];
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                base64Image = reader.result; fileName = file.name; fileType = file.type;
-                document.getElementById('imagePreview').src = reader.result;
-                document.getElementById('imagePreview').style.display = 'block';
-                document.getElementById('uploadText').style.display = 'none';
-            };
-            if (file) reader.readAsDataURL(file);
-        }
 
         function loadSelectedData() {
             const index = document.getElementById('editSelector').value;
-            if (index === "") { document.getElementById('propertyForm').reset(); return; }
+            if (index === "") return;
             const p = fullData[index];
             document.getElementById('ID').value = p.ID || "";
+            document.getElementById('Thumbnail').value = p.Thumbnail || "";
             document.getElementById('Plot').value = p.Plot || "";
-            document.getElementById('Type').value = p.Type || "";
-            document.getElementById('Status').value = p.Status || "";
-            document.getElementById('Badge').value = p.Badge || "";
-            document.getElementById('Description').value = p.Description || "";
-            document.getElementById('BedRoom').value = p["Bed Room"] || "";
-            document.getElementById('BathRoom').value = p["Bath Room"] || "";
-            document.getElementById('PaVilion').value = p["Pa Vilion"] || "No";
-            document.getElementById('LandSqM').value = p["Land sq.m"] || "";
-            document.getElementById('LandSqW').value = p["Land sq.w"] || "";
-            document.getElementById('HouseSize').value = p["House Size"] || "";
-            document.getElementById('PoolSize').value = p["Pool Size"] || "";
-            document.getElementById('PoolDeep').value = p["Pool Deep"] || "";
-            document.getElementById('CarPark').value = p["Car park"] || "";
-            document.getElementById('Electrical').value = p.Electrical || "3-Phase";
-            document.getElementById('Furniture').value = p.Furniture || "No";
             document.getElementById('Price').value = p.Price || "";
-            document.getElementById('FBLink').value = p.FBLink || "";
-            if (p.Thumbnail) {
-                document.getElementById('imagePreview').src = p.Thumbnail;
-                document.getElementById('imagePreview').style.display = 'block';
-                document.getElementById('uploadText').style.display = 'none';
-            }
+            updatePreview();
         }
 
         async function handleSave() {
-            const btn = document.getElementById('submitBtn'); btn.innerText = "UPLOADING..."; btn.disabled = true;
+            const btn = document.getElementById('submitBtn'); btn.innerText = "SAVING...";
             const formData = {
-                ID: document.getElementById('ID').value, Plot: document.getElementById('Plot').value,
-                Type: document.getElementById('Type').value, Status: document.getElementById('Status').value,
-                Badge: document.getElementById('Badge').value, Thumbnail: document.getElementById('imagePreview').src,
-                Description: document.getElementById('Description').value,
-                "Bed Room": document.getElementById('BedRoom').value, "Bath Room": document.getElementById('BathRoom').value,
-                "Pa Vilion": document.getElementById('PaVilion').value, "Land sq.m": document.getElementById('LandSqM').value,
-                "Land sq.w": document.getElementById('LandSqW').value, "House Size": document.getElementById('HouseSize').value,
-                "Pool Size": document.getElementById('PoolSize').value, "Pool Deep": document.getElementById('PoolDeep').value,
-                "Car park": document.getElementById('CarPark').value, Electrical: document.getElementById('Electrical').value,
-                Furniture: document.getElementById('Furniture').value, Price: document.getElementById('Price').value,
-                FBLink: document.getElementById('FBLink').value, imageBlob: base64Image, imageName: fileName, imageType: fileType
+                action: "save",
+                data: {
+                    ID: document.getElementById('ID').value,
+                    Plot: document.getElementById('Plot').value,
+                    Thumbnail: fixDriveLink(document.getElementById('Thumbnail').value),
+                    Status: document.getElementById('Status').value,
+                    Price: document.getElementById('Price').value,
+                    // ใส่ตัวแปรอื่นให้ครบตาม Sheet...
+                }
             };
-            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "save", data: formData }) });
+            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(formData) });
             alert(await res.text()); location.reload();
         }
     </script>
