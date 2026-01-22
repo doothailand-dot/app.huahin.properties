@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Optimized Status UI</title>
+    <title>Huahin Properties | Full Details & Share</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
@@ -19,13 +19,15 @@
         .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
+        /* Info Grid 11 รายการพร้อมไอคอน */
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .info-item { display: flex; items-center; gap: 8px; color: #6b7280; font-size: 13px; font-weight: 400; }
+        .info-icon { width: 16px; height: 16px; color: #9ca3af; flex-shrink: 0; }
+        /* ปุ่มแชร์ 8 ช่องทาง */
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 5px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; }
         .share-btn:active { transform: scale(0.9); }
         .share-btn span { font-size: 8px; font-weight: 800; text-transform: uppercase; color: white; }
-        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .info-item { display: flex; items-center; gap: 8px; color: #6b7280; font-size: 13px; font-weight: 400; }
-        .info-icon { width: 16px; height: 16px; color: #9ca3af; flex-shrink: 0; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
@@ -47,10 +49,10 @@
         </div>
     </nav>
 
-    <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
+    <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b">
         <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
         <div class="text-center font-black text-blue-900 text-[10px] uppercase tracking-widest leading-none">HUAHIN<br>PROPERTIES</div>
-        <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </header>
 
     <main id="app" class="max-w-xl mx-auto px-4 py-6"></main>
@@ -63,11 +65,9 @@
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
         function goToLineChat() { window.location.href = `https://line.me/R/ti/p/@247uimvp`; }
 
-        // ปรับแก้ข้อความแสดงผลให้กระชับตามสั่ง
         function getStatusInfo(status) {
             const s = (status || "").toLowerCase().trim();
             if (s.includes("ready to move in")) return { bg: "bg-[#06C755]", text: "text-[#06C755]", display: "Ready to move in" };
-            // เปลี่ยนจาก Under construction เป็น Under Const และคงสีม่วงไว้
             if (s.includes("under construction") || s.includes("under const")) return { bg: "bg-[#9333ea]", text: "text-[#9333ea]", display: "Under Const" };
             if (s.includes("sold out")) return { bg: "bg-[#ef4444]", text: "text-[#ef4444]", display: "Sold out" };
             if (s.includes("empty space")) return { bg: "bg-white border border-gray-200", text: "text-black", display: "Empty space" };
@@ -108,9 +108,7 @@
                     <div class="p-6">
                         <div class="flex justify-between items-center gap-2 mb-4 overflow-hidden">
                             <h2 class="text-2xl font-black text-gray-800 leading-none truncate flex-1">${p.ID || '-'}</h2>
-                            <span class="${statusInfo.bg} px-3 py-1.5 rounded-full text-[9px] font-bold uppercase text-white whitespace-nowrap">
-                                ${statusInfo.display}
-                            </span>
+                            <span class="${statusInfo.bg} px-3 py-1.5 rounded-full text-[9px] font-bold uppercase text-white whitespace-nowrap">${statusInfo.display}</span>
                             <span class="${statusInfo.text} text-[9px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
                         </div>
 
@@ -139,7 +137,6 @@
                         <div class="flex justify-center mb-1">
                             <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
                         </div>
-
                         <div class="share-grid">
                             <a href="https://line.me/R/msg/text/?${shareTxt} ${shareUrl}" class="share-btn bg-[#06C755]"><span>LINE</span></a>
                             <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
