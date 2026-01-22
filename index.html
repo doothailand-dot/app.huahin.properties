@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Mobile Perfect</title>
+    <title>Huahin Properties | Perfect Data Sync</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
@@ -13,6 +13,7 @@
         .line-green { color: #06C755; }
         .line-bg-green { background-color: #06C755; }
         
+        /* ไซด์บาร์แคบ 140px */
         #sidebar { 
             position: fixed; top: 0; left: -100%; width: 140px; height: 100%; 
             background: rgba(255, 255, 255, 0.98); z-index: 1000; transition: 0.4s; 
@@ -31,40 +32,43 @@
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
 
-        /* ปรับปุ่มแชร์ให้เล็กลงเพื่อประหยัดพื้นที่ */
-        .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 12px; border-top: 1px solid #f3f4f6; }
-        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 8px 0; border-radius: 12px; transition: 0.2s; }
-        .share-btn:active { transform: scale(0.9); opacity: 0.7; }
-        .share-btn span { font-size: 8px; font-weight: 700; text-transform: uppercase; }
-        .share-icon { width: 18px; height: 18px; }
+        /* ปุ่มแชร์ 8 ปุ่ม */
+        .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding-top: 15px; border-top: 1px solid #f0f0f0; }
+        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 12px; transition: 0.2s; }
+        .share-btn:active { transform: scale(0.9); opacity: 0.8; }
+        .share-btn span { font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* ปรับแต่งความสะอาดตาของข้อมูล */
+        .info-label { font-size: 10px; color: #9ca3af; }
+        .info-value { font-size: 11px; color: #374151; font-weight: 400; } /* เปลี่ยนเป็น font-normal ตามสั่ง */
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
 
     <div id="loadingScreen" class="loading-overlay">
         <div class="animate-house text-white mb-4"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
-        <p class="text-xs font-bold text-white opacity-90 uppercase tracking-widest text-center">กำลังปรับปรุงความสะอาดของหน้าจอ...</p>
+        <p class="text-xs font-bold text-white opacity-90 uppercase tracking-widest text-center">HUAHIN PROPERTIES</p>
     </div>
 
     <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <nav id="sidebar" class="flex flex-col">
         <div class="line-bg-green p-6 flex flex-col items-center gap-2" style="border-radius: 0 45px 0 0;">
             <img id="userImg" src="https://via.placeholder.com/100" class="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover">
-            <h3 id="userName" class="text-white font-bold text-[10px] truncate w-full text-center">Mr. Somjed</h3>
+            <h3 id="userName" class="text-white font-bold text-[10px] truncate w-full text-center">Somjet</h3>
         </div>
         <div class="py-4 flex flex-col items-center gap-4">
-            <div onclick="location.reload()" class="w-20 h-20 bg-white rounded-2xl shadow-sm flex flex-col items-center justify-center gap-1 border border-gray-50 active:scale-90 transition">
+            <div onclick="location.reload()" class="w-20 h-20 bg-white rounded-2xl shadow-sm flex flex-col items-center justify-center gap-1 border border-gray-100 active:scale-90 transition">
                 <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                <span class="text-[9px] font-bold text-gray-500">รีเฟรช</span>
+                <span class="text-[9px] font-bold text-gray-500 uppercase">Refresh</span>
             </div>
             <div onclick="goToLineChat()" class="w-20 h-20 bg-white rounded-2xl shadow-sm flex flex-col items-center justify-center gap-1 border border-gray-100 active:scale-90 transition">
                 <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                <span class="text-[9px] font-bold text-gray-500">แชทแอดมิน</span>
+                <span class="text-[9px] font-bold text-gray-500 uppercase">Admin</span>
             </div>
         </div>
     </nav>
 
-    <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b">
+    <header class="bg-white/95 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b">
         <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
         <div class="text-center font-black text-blue-900 text-[10px] uppercase tracking-widest leading-none">HUAHIN<br>PROPERTIES</div>
         <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
@@ -84,7 +88,7 @@
 
         function goToLineChat() { window.location.href = `https://line.me/R/ti/p/@247uimvp`; }
 
-        // ระบบคืนค่าสีตามสถานะ
+        // ระบบคืนค่าสีตามสถานะ (ทั้ง BG และ Text)
         function getStatusInfo(status) {
             const s = (status || "").toLowerCase().trim();
             if (s.includes("ready to move in")) return { bg: "bg-[#06C755]", text: "text-[#06C755]" };
@@ -111,13 +115,12 @@
                 const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getProperties" }) });
                 allProperties = await res.json();
                 renderCards(allProperties);
-            } catch (err) { alert("ดึงข้อมูลไม่สำเร็จ"); }
-            finally { document.getElementById('loadingScreen').style.display = 'none'; }
+            } catch (err) { console.error(err); } finally { document.getElementById('loadingScreen').style.display = 'none'; }
         }
 
-        function copyLink(title) {
+        function copyToClipboard(title) {
             const url = `https://liff.line.me/${LIFF_ID}`;
-            navigator.clipboard.writeText(`สนใจบ้าน: ${title} ดูเพิ่มเติมได้ที่: ${url}`).then(() => alert("คัดลอกลิงก์สำเร็จ! คุณสามารถนำไปโพสต์ใน TikTok หรือ IG ได้เลยครับ"));
+            navigator.clipboard.writeText(`สนใจบ้าน: ${title} ดูเพิ่มเติมที่: ${url}`).then(() => alert("คัดลอกลิงก์เรียบร้อย!"));
         }
 
         function renderCards(properties) {
@@ -125,63 +128,51 @@
             container.innerHTML = properties.map(p => {
                 const statusInfo = getStatusInfo(p.Status);
                 const shareUrl = encodeURIComponent(`https://liff.line.me/${LIFF_ID}`);
-                const shareTxt = encodeURIComponent(`สนใจบ้าน: ${p.Title}`);
+                const shareTxt = encodeURIComponent(`สนใจบ้าน: ${p.Plot} - ${p.Title}`);
 
                 return `
                 <div class="property-bubble">
-                    <img src="${p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : ''}" class="w-full h-64 object-cover">
+                    <img src="${p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : ''}" class="w-full h-60 object-cover">
                     <div class="p-6">
                         
                         <div class="flex justify-between items-center gap-2 mb-4 overflow-hidden">
-                            <h2 class="text-lg font-black text-gray-800 leading-none truncate flex-1">${p.Title || 'Property'}</h2>
+                            <h2 class="text-xl font-black text-gray-800 leading-none truncate flex-1">${p.Plot || 'Plot'}</h2>
                             <span class="${statusInfo.bg} px-2 py-1.5 rounded-full text-[8px] font-bold uppercase whitespace-nowrap text-white">
-                                ${p.Status || 'Status'}
+                                ${p.Status || ''}
                             </span>
                             <span class="${statusInfo.text} text-[8px] font-black uppercase whitespace-nowrap">
-                                ${p.Badge || ''} แปลงแนะนำ
+                                ${p.Plot || ''} ${p.Badge || ''}
                             </span>
                         </div>
 
-                        <div class="bg-gray-50 rounded-[25px] p-4 mb-4 border border-gray-100">
-                            <p class="text-[13px] text-gray-600 mb-4">${p.Description || 'ไม่มีคำบรรยาย'}</p>
-                            <div class="grid grid-cols-2 gap-y-2 pt-3 border-t">
-                                <div class="text-[11px] text-gray-400">พื้นที่: <span class="text-gray-800 font-normal">${p.Size || '-'}</span></div>
-                                <div class="text-[11px] text-gray-400">ห้องนอน: <span class="text-gray-800 font-normal">${p.Bedroom || '-'}</span></div>
-                                <div class="text-[11px] text-gray-400">ห้องน้ำ: <span class="text-gray-800 font-normal">${p.Bathroom || '-'}</span></div>
-                                <div class="text-[11px] text-gray-400">โครงการ: <span class="text-blue-500 font-normal">${p.ProjectName || '-'}</span></div>
+                        <div class="bg-gray-50 rounded-[30px] p-5 mb-5 border border-gray-100">
+                            <h3 class="font-bold text-gray-700 text-sm mb-2">${p.Type || 'House'} - ${p.Title || ''}</h3>
+                            <p class="text-[12px] text-gray-500 leading-relaxed mb-4">${p.Description || 'สัมผัสประสบการณ์การอยู่อาศัยที่เหนือระดับ'}</p>
+                            
+                            <div class="grid grid-cols-2 gap-x-4 gap-y-2 pt-4 border-t border-gray-200">
+                                <div class="flex justify-between items-center"><span class="info-label">ขนาดที่ดิน (sq.w):</span> <span class="info-value">${p['Land sq.w'] || '-'}</span></div>
+                                <div class="flex justify-between items-center"><span class="info-label">ขนาดบ้าน:</span> <span class="info-value">${p['House Size'] || '-'}</span></div>
+                                <div class="flex justify-between items-center"><span class="info-label">ห้องนอน/น้ำ:</span> <span class="info-value">${p['Bed Room'] || '-'}/${p['Bath Room'] || '-'}</span></div>
+                                <div class="flex justify-between items-center"><span class="info-label">ที่จอดรถ:</span> <span class="info-value">${p['Car park'] || '-'}</span></div>
+                                <div class="flex justify-between items-center"><span class="info-label">สระว่ายน้ำ:</span> <span class="info-value">${p['Pool Size'] || '-'}</span></div>
+                                <div class="flex justify-between items-center"><span class="info-label">เฟอร์นิเจอร์:</span> <span class="info-value">${p.Furniture || '-'}</span></div>
                             </div>
                         </div>
 
                         <div class="flex justify-between items-center mb-6">
                             <span class="text-[#06C755] font-black text-xl">฿${Number(p.Price || 0).toLocaleString()}</span>
-                            <button onclick="window.open('${p.MorePictures}', '_blank')" class="bg-blue-50 text-blue-600 px-6 py-2.5 rounded-full font-bold text-xs shadow-sm active:scale-95 transition-all">ดูรูปเพิ่มเติม ></button>
+                            <button onclick="window.open('${p.FBLink}', '_blank')" class="bg-blue-50 text-blue-600 px-6 py-2.5 rounded-full font-bold text-xs shadow-sm active:scale-95 transition-all">ดูรูปเพิ่มเติม ></button>
                         </div>
 
                         <div class="share-grid">
-                            <a href="https://line.me/R/msg/text/?${shareTxt} ${shareUrl}" class="share-btn bg-[#06C755] text-white">
-                                <span>LINE</span>
-                            </a>
-                            <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn bg-[#1877F2] text-white">
-                                <span>FB</span>
-                            </a>
-                            <a href="https://www.facebook.com/dialog/send?link=${shareUrl}&app_id=123456789&redirect_uri=${shareUrl}" target="_blank" class="share-btn bg-[#0084FF] text-white">
-                                <span>Mess</span>
-                            </a>
-                            <a href="https://wa.me/?text=${shareTxt}%20${shareUrl}" target="_blank" class="share-btn bg-[#25D366] text-white">
-                                <span>WhatsApp</span>
-                            </a>
-                            <a href="https://twitter.com/intent/tweet?text=${shareTxt}&url=${shareUrl}" target="_blank" class="share-btn bg-[#000000] text-white">
-                                <span>X</span>
-                            </a>
-                            <a href="https://t.me/share/url?url=${shareUrl}&text=${shareTxt}" target="_blank" class="share-btn bg-[#0088cc] text-white">
-                                <span>Tele</span>
-                            </a>
-                            <a href="mailto:?subject=${shareTxt}&body=${shareUrl}" class="share-btn bg-gray-500 text-white">
-                                <span>Email</span>
-                            </a>
-                            <button onclick="copyLink('${p.Title}')" class="share-btn bg-orange-500 text-white">
-                                <span>Link</span>
-                            </button>
+                            <a href="https://line.me/R/msg/text/?${shareTxt}%20${shareUrl}" class="share-btn bg-[#06C755] text-white"><span>LINE</span></a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn bg-[#1877F2] text-white"><span>FB</span></a>
+                            <a href="https://www.facebook.com/dialog/send?link=${shareUrl}&app_id=123456789&redirect_uri=${shareUrl}" target="_blank" class="share-btn bg-[#0084FF] text-white"><span>Mess</span></a>
+                            <a href="https://wa.me/?text=${shareTxt}%20${shareUrl}" target="_blank" class="share-btn bg-[#25D366] text-white"><span>WhatsApp</span></a>
+                            <a href="https://twitter.com/intent/tweet?text=${shareTxt}&url=${shareUrl}" target="_blank" class="share-btn bg-[#000000] text-white"><span>X</span></a>
+                            <a href="https://t.me/share/url?url=${shareUrl}&text=${shareTxt}" target="_blank" class="share-btn bg-[#0088cc] text-white"><span>Tele</span></a>
+                            <a href="mailto:?subject=${shareTxt}&body=${shareUrl}" class="share-btn bg-gray-500 text-white"><span>Email</span></a>
+                            <button onclick="copyToClipboard('${p.Plot}')" class="share-btn bg-orange-500 text-white"><span>Link</span></button>
                         </div>
                     </div>
                 </div>
