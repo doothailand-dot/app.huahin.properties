@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | International UI</title>
+    <title>Huahin Properties | Optimized Status UI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
@@ -32,7 +32,7 @@
 
     <div id="loadingScreen" class="loading-overlay">
         <div class="animate-house text-white mb-4"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
-        <p class="text-xs font-bold text-white opacity-90 uppercase tracking-widest text-center">Applying UI Updates...</p>
+        <p class="text-xs font-bold text-white opacity-90 uppercase tracking-widest text-center">HUAHIN PROPERTIES</p>
     </div>
 
     <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -47,10 +47,10 @@
         </div>
     </nav>
 
-    <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b">
-        <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+    <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
+        <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
         <div class="text-center font-black text-blue-900 text-[10px] uppercase tracking-widest leading-none">HUAHIN<br>PROPERTIES</div>
-        <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
     </header>
 
     <main id="app" class="max-w-xl mx-auto px-4 py-6"></main>
@@ -63,13 +63,15 @@
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
         function goToLineChat() { window.location.href = `https://line.me/R/ti/p/@247uimvp`; }
 
+        // ปรับแก้ข้อความแสดงผลให้กระชับตามสั่ง
         function getStatusInfo(status) {
             const s = (status || "").toLowerCase().trim();
-            if (s.includes("ready to move in")) return { bg: "bg-[#06C755]", text: "text-[#06C755]" };
-            if (s.includes("under construction")) return { bg: "bg-[#9333ea]", text: "text-[#9333ea]" };
-            if (s.includes("sold out")) return { bg: "bg-[#ef4444]", text: "text-[#ef4444]" };
-            if (s.includes("empty space")) return { bg: "bg-white border border-gray-200", text: "text-black" };
-            return { bg: "bg-gray-100", text: "text-gray-400" };
+            if (s.includes("ready to move in")) return { bg: "bg-[#06C755]", text: "text-[#06C755]", display: "Ready to move in" };
+            // เปลี่ยนจาก Under construction เป็น Under Const และคงสีม่วงไว้
+            if (s.includes("under construction") || s.includes("under const")) return { bg: "bg-[#9333ea]", text: "text-[#9333ea]", display: "Under Const" };
+            if (s.includes("sold out")) return { bg: "bg-[#ef4444]", text: "text-[#ef4444]", display: "Sold out" };
+            if (s.includes("empty space")) return { bg: "bg-white border border-gray-200", text: "text-black", display: "Empty space" };
+            return { bg: "bg-gray-100", text: "text-gray-400", display: status };
         }
 
         async function initLiff() {
@@ -104,9 +106,11 @@
                 <div class="property-bubble">
                     <img src="${p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : ''}" class="w-full h-64 object-cover">
                     <div class="p-6">
-                        <div class="flex justify-between items-center gap-2 mb-4">
+                        <div class="flex justify-between items-center gap-2 mb-4 overflow-hidden">
                             <h2 class="text-2xl font-black text-gray-800 leading-none truncate flex-1">${p.ID || '-'}</h2>
-                            <span class="${statusInfo.bg} px-3 py-1.5 rounded-full text-[9px] font-bold uppercase text-white">${p.Status || 'Status'}</span>
+                            <span class="${statusInfo.bg} px-3 py-1.5 rounded-full text-[9px] font-bold uppercase text-white whitespace-nowrap">
+                                ${statusInfo.display}
+                            </span>
                             <span class="${statusInfo.text} text-[9px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
                         </div>
 
@@ -133,9 +137,7 @@
                         </div>
 
                         <div class="flex justify-center mb-1">
-                            <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
-                            </svg>
+                            <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
                         </div>
 
                         <div class="share-grid">
