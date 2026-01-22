@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Balanced UI</title>
+    <title>Huahin Properties | Perfect Display</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
@@ -15,12 +15,15 @@
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
         
-        /* ป้าย Code บนรูปภาพ */
-        .badge-container { position: relative; width: 100%; height: 256px; overflow: hidden; }
-        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        /* ส่วนแสดงรูป Thumbnail เป็นพื้นหลัง */
+        .thumbnail-container { position: relative; width: 100%; height: 250px; background-color: #f3f4f6; overflow: hidden; }
+        .thumbnail-img { width: 100%; height: 100%; object-cover: cover; display: block; }
         
-        /* ป้าย Plot ขนาดเท่ากับ Status */
-        .status-style { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; height: fit-content; }
+        /* ป้าย Code บนรูปภาพ */
+        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        
+        /* ปรับขนาดป้าย Plot ให้เท่ากับ Status (Sold Out) */
+        .badge-mini { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; height: fit-content; display: flex; align-items: center; justify-content: center; }
         .bg-plot-green { background-color: #06C755; color: white; }
 
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -79,20 +82,23 @@
                 const statusInfo = getStatusInfo(p.Status);
                 const shareUrl = encodeURIComponent(`https://liff.line.me/${LIFF_ID}`);
                 const shareTxt = encodeURIComponent(`Interested in Plot: ${p.Plot}`);
-                const firstImg = p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : 'https://via.placeholder.com/400x250?text=No+Image';
+                
+                // แก้ไขการดึงรูปภาพจากคอลัมน์ Thumbnail (F) หรือ ImageUrls
+                const rawImg = p.Thumbnail || p.ImageUrls || "";
+                const firstImg = rawImg.split(',')[0].trim() || 'https://via.placeholder.com/400x250?text=No+Image';
 
                 return `
                 <div class="property-bubble">
-                    <div class="badge-container">
+                    <div class="thumbnail-container">
                         <div class="badge-code">Code: ${p.ID || '-'}</div>
-                        <img src="${firstImg}" class="w-full h-full object-cover">
+                        <img src="${firstImg}" class="thumbnail-img" style="object-fit: cover;">
                     </div>
                     
                     <div class="p-6">
                         <div class="flex justify-between items-center gap-2 mb-4">
-                            <div class="status-style bg-plot-green">Plot : ${p.Plot || '-'}</div>
+                            <div class="badge-mini bg-plot-green">Plot : ${p.Plot || '-'}</div>
                             <div class="flex gap-1.5 items-center">
-                                <span class="${statusInfo.bg} status-style text-white shadow-sm">${statusInfo.display}</span>
+                                <span class="${statusInfo.bg} badge-mini text-white shadow-sm">${statusInfo.display}</span>
                                 <span class="${statusInfo.text} text-[9px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
                             </div>
                         </div>
