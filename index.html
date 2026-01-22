@@ -19,13 +19,19 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; }
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
+        
+        /* รูปภาพ Hero */
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; }
+        
         .badge-mini { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; height: fit-content; }
         .bg-plot-green { background-color: #06C755; color: white; }
+
+        /* การจัดวางไอคอน 11 รายการ */
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .info-item { display: flex; align-items: center; gap: 10px; color: #4b5563; font-size: 13px; font-weight: 500; }
         .info-icon { width: 18px; height: 18px; color: #9ca3af; flex-shrink: 0; }
+        
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 10px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; cursor: pointer; }
         .share-btn span { font-size: 8px; font-weight: 800; text-transform: uppercase; color: white; }
@@ -35,7 +41,7 @@
 <body class="pb-10 overflow-x-hidden">
 
     <div id="loadingScreen" class="loading-overlay">
-        <p class="text-white font-bold animate-pulse uppercase tracking-widest">Refreshing Data...</p>
+        <p class="text-white font-bold animate-pulse uppercase tracking-widest">Restoring All Details...</p>
     </div>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-center sticky top-0 z-30 border-b shadow-sm">
@@ -67,14 +73,13 @@
             } catch (err) { document.getElementById('loadingScreen').style.display = 'none'; }
         }
 
-        // === แก้ไขฟังก์ชันแชร์ LINE ให้ทำงานได้ทุกเบราว์เซอร์ ===
+        // ฟังก์ชันแชร์ LINE ที่แก้ไขแล้วให้รองรับทั้ง Chrome และ LINE
         async function shareToLine(index) {
             const p = allProperties[index];
             const imageUrl = fixLink(p.Thumbnail);
             const shareUrl = `https://liff.line.me/${LIFF_ID}`;
             const shareTxt = encodeURIComponent(`Interested in Plot: ${p.Plot} ${shareUrl}`);
 
-            // 1. ตรวจสอบว่าเปิดในแอป LINE และรองรับ Picker หรือไม่
             if (liff.isInClient() && liff.isApiAvailable('shareTargetPicker')) {
                 try {
                     await liff.shareTargetPicker([{
@@ -101,12 +106,8 @@
                             ]}
                         }
                     }]);
-                } catch (error) {
-                    // กรณี Error ให้ใช้ Fallback
-                    window.open(`https://line.me/R/msg/text/?${shareTxt}`, '_blank');
-                }
+                } catch (error) { window.open(`https://line.me/R/msg/text/?${shareTxt}`, '_blank'); }
             } else {
-                // 2. Fallback: ถ้าเปิดใน Chrome/Safari ให้แชร์ผ่าน URL ปกติ
                 window.open(`https://line.me/R/msg/text/?${shareTxt}`, '_blank');
             }
         }
@@ -116,7 +117,7 @@
             container.innerHTML = properties.map((p, index) => {
                 const shareUrl = encodeURIComponent(`https://liff.line.me/${LIFF_ID}`);
                 const shareTxt = encodeURIComponent(`Interested in Plot: ${p.Plot}`);
-                
+
                 return `
                 <div class="property-bubble">
                     <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');">
@@ -125,7 +126,7 @@
                     
                     <div class="p-6">
                         <div class="flex justify-between items-center gap-2 mb-4">
-                            <div class="badge-mini bg-plot-green">Plot : ${p.Plot || '-'}</div>
+                            <div class="badge-mini bg-plot-green text-white">Plot : ${p.Plot || '-'}</div>
                             <div class="flex gap-1.5 items-center">
                                 <span class="bg-[#ef4444] badge-mini text-white shadow-sm">${p.Status || 'SOLD OUT'}</span>
                                 <span class="text-[#ef4444] text-[9px] font-black uppercase whitespace-nowrap">${p.Badge || 'HOT DEAL'}</span>
@@ -134,11 +135,18 @@
 
                         <div class="bg-gray-50 rounded-[25px] p-6 mb-5 border border-gray-100">
                             <p class="text-[14px] text-gray-600 mb-6 leading-relaxed font-normal">${p.Description || '-'}</p>
+                            
                             <div class="info-grid border-t pt-5">
                                 <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path></svg> Bed: ${p["Bed Room"] || '-'}</div>
                                 <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.535 5.343a1 1 0 011.414 0 3.394 3.394 0 004.242 0 1 1 0 011.414 1.414L10 16z" clip-rule="evenodd"></path></svg> Bath: ${p["Bath Room"] || '-'}</div>
                                 <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg> Pa Vilion: ${p["Pa Vilion"] || '-'}</div>
                                 <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg> Land: ${p["Land sq.m"] || '-'} m²</div>
+                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"></path></svg> Land: ${p["Land sq.w"] || '-'} sq.w</div>
+                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"></path></svg> House: ${p["House Size"] || '-'}</div>
+                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 100 4v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2a2 2 0 100-4V6z"></path></svg> Pool: ${p["Pool Size"] || '-'}</div>
+                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M7 10l5 5 5-5H7z"></path></svg> Deep: ${p["Pool Deep"] || '-'}</div>
+                                <div class="info-item"><svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> Car: ${p["Car park"] || '-'}</div>
+                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg> Elec: ${p["Electrical"] || '-'}</div>
                                 <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4h12v12H4V4z"></path></svg> Fur: ${p["Furniture"] || '-'}</div>
                             </div>
                         </div>
@@ -154,14 +162,13 @@
 
                         <div class="share-grid">
                             <div onclick="shareToLine(${index})" class="share-btn bg-[#06C755]"><span>LINE</span></div>
-                            
                             <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
                             <a href="fb-messenger://share?link=${shareUrl}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
-                            <a href="https://wa.me/?text=${shareUrl}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
-                            <a href="https://twitter.com/intent/tweet?url=${shareUrl}" target="_blank" class="share-btn bg-black"><span>X</span></a>
+                            <a href="https://wa.me/?text=${shareTxt}%20${shareUrl}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
+                            <a href="https://twitter.com/intent/tweet?text=${shareTxt}&url=${shareUrl}" target="_blank" class="share-btn bg-black"><span>X</span></a>
                             <a href="https://t.me/share/url?url=${shareUrl}&text=${shareTxt}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
-                            <a href="mailto:?body=${shareUrl}" class="share-btn bg-gray-600"><span>MAIL</span></a>
-                            <div onclick="navigator.clipboard.writeText('${shareUrl}'); alert('Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
+                            <a href="mailto:?subject=${shareTxt}&body=${shareUrl}" class="share-btn bg-gray-600"><span>MAIL</span></a>
+                            <div onclick="navigator.clipboard.writeText('${shareUrl}'); alert('Link Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
                         </div>
                     </div>
                 </div>
