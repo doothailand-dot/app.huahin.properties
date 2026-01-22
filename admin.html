@@ -3,71 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Dashboard | Jumbo UI</title>
+    <title>Admin Dashboard | Optimized UI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Prompt', sans-serif; background-color: #ffffff; color: #000; overflow-x: hidden; }
+        body { font-family: 'Prompt', sans-serif; background-color: #ffffff; color: #202124; }
         
-        /* ปรับระดับหัวข้อให้สมดุล (Label) */
-        label { display: block; font-size: 26px; color: #000; font-weight: 700; margin-bottom: 12px; margin-top: 45px; }
+        /* ปรับ Header ให้เป็นตัวพิมพ์ใหญ่ตามภาพที่คุณชอบ */
+        .admin-header { padding: 30px 24px 20px; font-size: 32px; font-weight: 700; color: #202124; border-bottom: 1px solid #f1f3f4; }
         
-        /* ปรับปรุงช่องกรอกให้สูงและตัวหนังสือใหญ่ (32px) โดยไม่ล้นจอ */
+        /* กล่องเลือกแปลง สไตล์ 3 ภาพแรก */
+        .selector-box { margin: 24px; padding: 24px; background-color: #f8f9ff; border-radius: 20px; border: 1px solid #e8efff; }
+        .selector-label { font-size: 20px; color: #1a73e8; font-weight: 600; margin-bottom: 12px; display: block; }
+        
+        /* ปรับขนาดช่องกรอกให้กลับมาเป็นแบบ "ใช้งานได้จริง" */
+        label { display: block; font-size: 20px; color: #202124; font-weight: 600; margin-bottom: 10px; margin-top: 28px; padding-left: 2px; }
+        
         input, select, textarea { 
             width: 100%; 
-            padding: 24px 20px; 
-            border: 3px solid #000; 
-            border-radius: 18px; 
-            font-size: 32px; /* ขนาดที่สมดุลที่สุดสำหรับมือถือครับ */
-            font-weight: 600;
+            padding: 18px 16px; /* ความสูงตามรูปที่ 1 */
+            border: 2px solid #dadce0; 
+            border-radius: 12px; 
+            font-size: 24px; /* ขนาดตัวอักษรที่สมดุลและกดง่าย */
             background-color: #fff;
-            color: #000;
+            color: #202124;
             appearance: none;
             outline: none;
-            line-height: 1.4; /* เพิ่มพื้นที่ให้วรรณยุกต์ไทยไม่จม */
+            transition: border-color 0.2s;
         }
 
-        /* ตัวหนังสือสมมติ (Placeholder) ให้ใหญ่เท่าตัวจริง */
-        input::placeholder, textarea::placeholder { font-size: 32px; color: #999; font-weight: 400; }
-        input:focus { border-color: #1a73e8; box-shadow: 0 0 0 6px rgba(26,115,232,0.1); }
+        input::placeholder, textarea::placeholder { font-size: 24px; color: #bdc1c6; }
+        input:focus, select:focus, textarea:focus { border-color: #1a73e8; }
 
-        /* ปรับลูกศร Dropdown ให้ใหญ่เข้ากับช่อง */
+        /* ปรับแต่งลูกศร Dropdown */
         select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23000000'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%235f6368'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 25px center;
-            background-size: 35px;
+            background-position: right 16px center;
+            background-size: 24px;
         }
 
-        /* ปุ่มด้านล่างขนาดใหญ่พิเศษสไตล์ AppSheet */
+        /* แถบปุ่มด้านล่างสไตล์ 3 ภาพแรก */
         .bottom-bar {
             position: fixed; bottom: 0; left: 0; right: 0;
-            background: white; border-top: 3px solid #f3f4f6;
-            display: flex; justify-content: space-between; padding: 25px; gap: 20px; z-index: 100;
+            background: white; border-top: 1px solid #f1f3f4;
+            display: flex; justify-content: space-between; padding: 20px 24px; gap: 20px; z-index: 100;
         }
-        .btn-action { flex: 1; padding: 22px; font-size: 26px; font-weight: 800; border-radius: 18px; text-transform: uppercase; border: 2px solid #ddd; }
-        .btn-save { background-color: #1a73e8; color: white; border: none; box-shadow: 0 10px 20px rgba(26,115,232,0.2); }
+        .btn-action { flex: 1; padding: 16px 0; font-size: 22px; font-weight: 600; border-radius: 12px; text-transform: none; transition: 0.2s; }
+        .btn-cancel { color: #1a73e8; border: none; background: transparent; }
+        .btn-save { background-color: #1a73e8; color: white; box-shadow: 0 4px 12px rgba(26,115,232,0.2); }
+        .btn-action:active { transform: scale(0.98); opacity: 0.9; }
     </style>
 </head>
-<body class="pb-60 px-8 max-w-4xl mx-auto">
+<body class="pb-48 max-w-lg mx-auto">
 
-    <div class="pt-12 pb-8 border-b-4 border-gray-100 flex items-center gap-10 sticky top-0 bg-white z-50">
-        <button onclick="location.reload()" class="text-5xl text-gray-400">✕</button>
-        <h1 class="text-4xl font-black uppercase">Property Management</h1>
-    </div>
+    <div class="admin-header">Admin Dashboard</div>
 
-    <div class="mt-12 p-10 bg-blue-50 rounded-[30px] border-3 border-blue-200">
-        <label style="margin-top: 0; font-size: 28px; color: #1e40af;">SELECT PLOT TO EDIT</label>
-        <select id="editSelector" onchange="loadSelectedData()" style="font-size: 32px; border-color: #1e40af; background-color: white;">
-            <option value="">-- CLICK TO START --</option>
+    <div class="selector-box">
+        <label class="selector-label">Select Plot to Edit</label>
+        <select id="editSelector" onchange="loadSelectedData()">
+            <option value="">-- NEW ENTRY --</option>
         </select>
     </div>
 
-    <form id="propertyForm">
-        <label>ID (รหัสแปลง)</label><input type="text" id="ID" required placeholder="Ex: M23">
-        <label>Plot Number</label><input type="text" id="Plot" placeholder="Ex: 14">
-        <label>Type (ประเภท)</label><input type="text" id="Type" placeholder="Ex: House">
+    <form id="propertyForm" class="px-6">
+        <label>ID (รหัสแปลง)</label><input type="text" id="ID" required placeholder="M23">
+        <label>Plot Number</label><input type="text" id="Plot" placeholder="14">
+        <label>Type (ประเภท)</label><input type="text" id="Type" placeholder="House">
         
         <label>Status (สถานะ)</label>
         <select id="Status">
@@ -77,45 +80,30 @@
             <option value="Empty space">Empty space</option>
         </select>
 
-        <label>Badge (ป้ายแสดงผล)</label><input type="text" id="Badge" placeholder="Ex: HOT DEAL">
-        <label>Thumbnail (รูปภาพหลัก)</label><textarea id="Thumbnail" rows="3" placeholder="URL รูปภาพ..."></textarea>
-        <label>Description (รายละเอียด)</label><textarea id="Description" rows="5" placeholder="ข้อมูลบ้าน..."></textarea>
+        <label>Badge (ป้ายโปรโมชั่น)</label><input type="text" id="Badge" placeholder="HOT DEAL">
+        <label>Thumbnail (รูปภาพหลัก)</label><textarea id="Thumbnail" rows="3" placeholder="ใส่ URL รูปภาพ..."></textarea>
+        <label>Description (รายละเอียด)</label><textarea id="Description" rows="5" placeholder="ใส่ข้อมูลบ้าน..."></textarea>
         
-        <label>Bed Room</label><input type="text" id="BedRoom" placeholder="Ex: 3">
-        <label>Bath Room</label><input type="text" id="BathRoom" placeholder="Ex: 2">
+        <label>Bed Room</label><input type="text" id="BedRoom" placeholder="3">
+        <label>Bath Room</label><input type="text" id="BathRoom" placeholder="2">
+        <label>Pa Vilion (ศาลา)</label><select id="PaVilion"><option value="Yes">Yes</option><option value="No">No</option></select>
         
-        <label>Pa Vilion (ศาลา)</label>
-        <select id="PaVilion">
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select>
-
-        <label>Land sq.m</label><input type="text" id="LandSqM" placeholder="Ex: 220">
-        <label>Land sq.w</label><input type="text" id="LandSqW" placeholder="Ex: 55">
-        <label>House Size</label><input type="text" id="HouseSize" placeholder="Ex: 160">
-        <label>Pool Size</label><input type="text" id="PoolSize" placeholder="Ex: 3x6">
-        <label>Pool Deep</label><input type="text" id="PoolDeep" placeholder="Ex: 1.5">
-        <label>Car park</label><input type="text" id="CarPark" placeholder="Ex: 2">
+        <label>Land sq.m</label><input type="text" id="LandSqM" placeholder="220">
+        <label>Land sq.w</label><input type="text" id="LandSqW" placeholder="55">
+        <label>House Size</label><input type="text" id="HouseSize" placeholder="160">
+        <label>Pool Size</label><input type="text" id="PoolSize" placeholder="3x6">
+        <label>Pool Deep</label><input type="text" id="PoolDeep" placeholder="1.5">
+        <label>Car park</label><input type="text" id="CarPark" placeholder="2">
         
-        <label>Electrical</label>
-        <select id="Electrical">
-            <option value="3-Phase">3-Phase</option>
-            <option value="Single Phase">Single Phase</option>
-        </select>
-
-        <label>Furniture</label>
-        <select id="Furniture">
-            <option value="Full">Full Furnished</option>
-            <option value="Partial">Partial Furnished</option>
-            <option value="No">No</option>
-        </select>
-
-        <label>Price (ราคาตัวเลข)</label><input type="number" id="Price" placeholder="Ex: 4700000">
-        <label>FB Link (ลิงก์รูปเพิ่มเติม)</label><input type="text" id="FBLink" placeholder="ลิงก์ Facebook...">
+        <label>Electrical</label><select id="Electrical"><option value="3-Phase">3-Phase</option><option value="Single Phase">Single Phase</option></select>
+        <label>Furniture</label><select id="Furniture"><option value="Full">Full</option><option value="Partial">Partial</option><option value="No">No</option></select>
+        
+        <label>Price (ราคาตัวเลข)</label><input type="number" id="Price" placeholder="4700000">
+        <label>FB Link (ลิงก์รูปเพิ่มเติม)</label><input type="text" id="FBLink" placeholder="ใส่ลิงก์ Facebook...">
 
         <div class="bottom-bar">
-            <button type="button" onclick="location.reload()" class="btn-action bg-gray-50 text-gray-500">CANCEL</button>
-            <button type="button" onclick="handleSave()" id="submitBtn" class="btn-action btn-save">SAVE DATA</button>
+            <button type="button" onclick="location.reload()" class="btn-action btn-cancel">Cancel</button>
+            <button type="button" onclick="handleSave()" id="submitBtn" class="btn-action btn-save">Save</button>
         </div>
     </form>
 
@@ -134,14 +122,13 @@
                     if(row[0]) {
                         const opt = document.createElement('option');
                         opt.value = index;
-                        opt.text = `EDIT: ${row[0]} - ${row[1] || ''}`;
+                        opt.text = `${row[0]} - ${row[1] || ''}`;
                         select.add(opt);
                     }
                 });
             } catch (err) { console.log(err); }
         }
 
-        // ดึงข้อมูลเข้าสู่ฟอร์มทั้ง 20 คอลัมน์ให้ตรงเป๊ะ
         function loadSelectedData() {
             const index = document.getElementById('editSelector').value;
             if (index === "") { document.getElementById('propertyForm').reset(); return; }
@@ -166,44 +153,32 @@
             document.getElementById('Furniture').value = row[17];
             document.getElementById('Price').value = row[18];
             document.getElementById('FBLink').value = row[19];
-            document.getElementById('submitBtn').innerText = "UPDATE DATA";
+            document.getElementById('submitBtn').innerText = "Update";
         }
 
         async function handleSave() {
             const btn = document.getElementById('submitBtn');
-            btn.innerText = "SAVING...";
-            btn.disabled = true;
+            btn.innerText = "Saving..."; btn.disabled = true;
 
             const formData = {
-                ID: document.getElementById('ID').value,
-                Plot: document.getElementById('Plot').value,
-                Type: document.getElementById('Type').value,
-                Status: document.getElementById('Status').value,
-                Badge: document.getElementById('Badge').value,
-                Thumbnail: document.getElementById('Thumbnail').value,
-                Description: document.getElementById('Description').value,
-                BedRoom: document.getElementById('BedRoom').value,
-                BathRoom: document.getElementById('BathRoom').value,
-                PaVilion: document.getElementById('PaVilion').value,
-                LandSqM: document.getElementById('LandSqM').value,
-                LandSqW: document.getElementById('LandSqW').value,
-                HouseSize: document.getElementById('HouseSize').value,
-                PoolSize: document.getElementById('PoolSize').value,
-                PoolDeep: document.getElementById('PoolDeep').value,
-                CarPark: document.getElementById('CarPark').value,
-                Electrical: document.getElementById('Electrical').value,
-                Furniture: document.getElementById('Furniture').value,
-                Price: document.getElementById('Price').value,
-                FBLink: document.getElementById('FBLink').value
+                ID: document.getElementById('ID').value, Plot: document.getElementById('Plot').value,
+                Type: document.getElementById('Type').value, Status: document.getElementById('Status').value,
+                Badge: document.getElementById('Badge').value, Thumbnail: document.getElementById('Thumbnail').value,
+                Description: document.getElementById('Description').value, BedRoom: document.getElementById('BedRoom').value,
+                BathRoom: document.getElementById('BathRoom').value, PaVilion: document.getElementById('PaVilion').value,
+                LandSqM: document.getElementById('LandSqM').value, LandSqW: document.getElementById('LandSqW').value,
+                HouseSize: document.getElementById('HouseSize').value, PoolSize: document.getElementById('PoolSize').value,
+                PoolDeep: document.getElementById('PoolDeep').value, CarPark: document.getElementById('CarPark').value,
+                Electrical: document.getElementById('Electrical').value, Furniture: document.getElementById('Furniture').value,
+                Price: document.getElementById('Price').value, FBLink: document.getElementById('FBLink').value
             };
 
             try {
                 const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "save", data: formData }) });
                 alert(await res.text());
                 location.reload();
-            } catch (err) { alert("Error: " + err); btn.disabled = false; btn.innerText = "SAVE DATA"; }
+            } catch (err) { alert("Error: " + err); btn.disabled = false; btn.innerText = "Save"; }
         }
-
         startApp();
     </script>
 </body>
