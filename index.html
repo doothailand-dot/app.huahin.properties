@@ -19,47 +19,32 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; }
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
-        
-        /* สไตล์รูปภาพและป้าย */
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; }
         .badge-mini { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; height: fit-content; }
         .bg-plot-green { background-color: #06C755; color: white; }
-
-        /* การจัดวางไอคอน 11 รายการ */
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .info-item { display: flex; align-items: center; gap: 10px; color: #4b5563; font-size: 13px; font-weight: 500; }
         .info-icon { width: 18px; height: 18px; color: #9ca3af; flex-shrink: 0; }
-        
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 10px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; cursor: pointer; }
         .share-btn span { font-size: 8px; font-weight: 800; text-transform: uppercase; color: white; }
         .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
 
-        /* === แก้ไข Sidebar Menu ให้แคบลงตามโซนสีเขียว === */
+        /* Sidebar 140px */
         .sidebar-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.4); z-index: 40; transition: opacity 0.3s ease; }
-        .sidebar-drawer { 
-            position: fixed; top: 0; left: 0; bottom: 0; 
-            width: 140px; /* ลดความกว้างให้เหลือประมาณ 40% ของเดิมตามขีดเขียว */
-            background-color: white; z-index: 50; 
-            transition: transform 0.3s ease-in-out; 
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1); 
-            display: flex; flex-direction: column;
-        }
-        .nav-text { font-size: 10px; font-weight: 600; margin-top: 4px; } /* ปรับขนาดฟอนต์ให้พอดีกับความแคบใหม่ */
+        .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 50; transition: transform 0.3s ease-in-out; box-shadow: 2px 0 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
 
     <div id="loadingScreen" class="loading-overlay">
-        <p class="text-white font-bold animate-pulse uppercase tracking-widest text-[10px]">Updating UI Layout...</p>
+        <p class="text-white font-bold animate-pulse uppercase tracking-widest text-[10px]">Updating Status Colors...</p>
     </div>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
         <button id="menuBtn" class="flex flex-col items-center justify-center text-blue-900">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
             <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">MENU</span>
         </button>
         <div class="text-center font-black text-blue-900 text-[10px] uppercase tracking-widest leading-none -ml-8">HUAHIN<br>PROPERTIES</div>
@@ -73,20 +58,11 @@
             <span class="font-bold text-blue-900 text-[8px] leading-tight">HUAHIN<br>PROPERTIES</span>
         </div>
         <nav class="flex-1 py-2">
-            <a href="#" class="flex flex-col items-center justify-center py-5 text-gray-500 hover:bg-blue-50 hover:text-blue-900 transition-colors border-b border-gray-50">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                <span class="nav-text">HOME</span>
-            </a>
-            <a href="#" class="flex flex-col items-center justify-center py-5 text-gray-500 hover:bg-blue-50 hover:text-blue-900 transition-colors border-b border-gray-50">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                <span class="nav-text">FAVORITE</span>
-            </a>
-            <a href="#" class="flex flex-col items-center justify-center py-5 text-gray-500 hover:bg-blue-50 hover:text-blue-900 transition-colors border-b border-gray-50">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                <span class="nav-text">CONTACT</span>
-            </a>
+            <a href="#" class="flex flex-col items-center justify-center py-5 text-gray-500 border-b border-gray-50"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg><span class="text-[10px] font-bold mt-1">HOME</span></a>
+            <a href="#" class="flex flex-col items-center justify-center py-5 text-gray-500 border-b border-gray-50"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg><span class="text-[10px] font-bold mt-1">FAVORITE</span></a>
+            <a href="#" class="flex flex-col items-center justify-center py-5 text-gray-500 border-b border-gray-50"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg><span class="text-[10px] font-bold mt-1">CONTACT</span></a>
         </nav>
-        <div class="p-3 text-[6px] text-gray-300 text-center uppercase tracking-tighter border-t font-bold">Expert v1.6</div>
+        <div class="p-3 text-[6px] text-gray-300 text-center uppercase border-t font-bold tracking-tighter">Expert v1.7</div>
     </div>
 
     <main id="app" class="max-w-xl mx-auto px-4 py-6"></main>
@@ -96,33 +72,32 @@
         const LIFF_ID = "2008909867-tJ76yUtj";
         let allProperties = [];
 
-        // Sidebar Logic
+        // Sidebar logic
         const menuBtn = document.getElementById('menuBtn');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
         const sidebarDrawer = document.getElementById('sidebarDrawer');
-
         function toggleMenu() {
             const isHidden = sidebarOverlay.classList.contains('hidden');
-            if (isHidden) {
-                sidebarOverlay.classList.remove('hidden');
-                setTimeout(() => sidebarOverlay.classList.remove('opacity-0'), 10);
-                sidebarDrawer.classList.remove('-translate-x-full');
-            } else {
-                sidebarOverlay.classList.add('opacity-0');
-                sidebarDrawer.classList.add('-translate-x-full');
-                setTimeout(() => sidebarOverlay.classList.add('hidden'), 300);
-            }
+            if (isHidden) { sidebarOverlay.classList.remove('hidden'); setTimeout(() => sidebarOverlay.classList.remove('opacity-0'), 10); sidebarDrawer.classList.remove('-translate-x-full'); }
+            else { sidebarOverlay.classList.add('opacity-0'); sidebarDrawer.classList.add('-translate-x-full'); setTimeout(() => sidebarOverlay.classList.add('hidden'), 300); }
         }
-        menuBtn.addEventListener('click', toggleMenu);
-        sidebarOverlay.addEventListener('click', toggleMenu);
+        menuBtn.addEventListener('click', toggleMenu); sidebarOverlay.addEventListener('click', toggleMenu);
 
+        // Fix Drive Link
         function fixLink(url) {
             if (!url) return 'https://via.placeholder.com/600x400?text=No+Image';
-            if (url.includes('drive.google.com')) {
-                const id = url.match(/[-\w]{25,}/);
-                return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : url;
-            }
+            if (url.includes('drive.google.com')) { const id = url.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : url; }
             return url;
+        }
+
+        // === ฟังก์ชันจัดการสีป้าย Status และ Badge ===
+        function getStatusStyle(status) {
+            const s = (status || "").toLowerCase().trim();
+            if (s.includes("ready to move in")) return { badge: "bg-[#06C755] text-white", text: "text-[#06C755]" };
+            if (s.includes("under const")) return { badge: "bg-[#9333ea] text-white", text: "text-[#9333ea]" };
+            if (s.includes("empty space")) return { badge: "bg-white text-black border border-gray-300", text: "text-gray-500" };
+            if (s.includes("sold out")) return { badge: "bg-[#ef4444] text-white", text: "text-[#ef4444]" };
+            return { badge: "bg-gray-200 text-gray-600", text: "text-gray-400" };
         }
 
         async function initLiff() {
@@ -135,35 +110,11 @@
         }
 
         async function shareToLine(index) {
-            const p = allProperties[index];
-            const imageUrl = fixLink(p.Thumbnail);
-            const shareUrl = `https://liff.line.me/${LIFF_ID}`;
+            const p = allProperties[index]; const imageUrl = fixLink(p.Thumbnail); const shareUrl = `https://liff.line.me/${LIFF_ID}`;
             const shareTxt = encodeURIComponent(`Interested Plot: ${p.Plot} ${shareUrl}`);
-
             if (liff.isInClient() && liff.isApiAvailable('shareTargetPicker')) {
-                try {
-                    await liff.shareTargetPicker([{
-                        "type": "flex",
-                        "altText": `สนใจบ้านแปลน: ${p.Plot}`,
-                        "contents": {
-                            "type": "bubble",
-                            "hero": { "type": "image", "url": imageUrl, "size": "full", "aspectRatio": "20:13", "aspectMode": "cover" },
-                            "body": {
-                                "type": "box", "layout": "vertical", "contents": [
-                                    { "type": "text", "text": `Plot: ${p.Plot}`, "weight": "bold", "size": "xl", "color": "#06C755" },
-                                    { "type": "text", "text": p.Description || "Luxury House in Huahin", "size": "xs", "color": "#8c8c8c", "margin": "md", "wrap": true },
-                                    { "type": "box", "layout": "baseline", "margin": "lg", "contents": [
-                                        { "type": "text", "text": "Price", "color": "#aaaaaa", "size": "sm", "flex": 1 },
-                                        { "type": "text", "text": `฿${Number(p.Price || 0).toLocaleString()}`, "color": "#06C755", "size": "md", "flex": 4, "weight": "bold" }
-                                    ]}
-                                ]
-                            },
-                            "footer": { "type": "box", "layout": "vertical", "spacing": "sm", "contents": [
-                                { "type": "button", "style": "primary", "height": "sm", "color": "#06C755", "action": { "type": "uri", "label": "VIEW DETAILS", "uri": shareUrl } }
-                            ]}
-                        }
-                    }]);
-                } catch (error) { window.open(`https://line.me/R/msg/text/?${shareTxt}`, '_blank'); }
+                try { await liff.shareTargetPicker([{ "type": "flex", "altText": `สนใจบ้านแปลน: ${p.Plot}`, "contents": { "type": "bubble", "hero": { "type": "image", "url": imageUrl, "size": "full", "aspectRatio": "20:13", "aspectMode": "cover" }, "body": { "type": "box", "layout": "vertical", "contents": [ { "type": "text", "text": `Plot: ${p.Plot}`, "weight": "bold", "size": "xl", "color": "#06C755" }, { "type": "text", "text": p.Description || "Luxury House in Huahin", "size": "xs", "color": "#8c8c8c", "margin": "md", "wrap": true }, { "type": "box", "layout": "baseline", "margin": "lg", "contents": [ { "type": "text", "text": "Price", "color": "#aaaaaa", "size": "sm", "flex": 1 }, { "type": "text", "text": `฿${Number(p.Price || 0).toLocaleString()}`, "color": "#06C755", "size": "md", "flex": 4, "weight": "bold" } ] } ] }, "footer": { "type": "box", "layout": "vertical", "contents": [ { "type": "button", "style": "primary", "height": "sm", "color": "#06C755", "action": { "type": "uri", "label": "VIEW DETAILS", "uri": shareUrl } } ] } } }]); }
+                catch (error) { window.open(`https://line.me/R/msg/text/?${shareTxt}`, '_blank'); }
             } else { window.open(`https://line.me/R/msg/text/?${shareTxt}`, '_blank'); }
         }
 
@@ -172,6 +123,7 @@
             container.innerHTML = properties.map((p, index) => {
                 const shareUrl = encodeURIComponent(`https://liff.line.me/${LIFF_ID}`);
                 const shareTxt = encodeURIComponent(`Interested Plot: ${p.Plot}`);
+                const styles = getStatusStyle(p.Status); // เรียกใช้ฟังก์ชันสีที่แก้ไขใหม่
 
                 return `
                 <div class="property-bubble">
@@ -182,8 +134,8 @@
                         <div class="flex justify-between items-center gap-2 mb-4">
                             <div class="badge-mini bg-plot-green text-white">Plot : ${p.Plot || '-'}</div>
                             <div class="flex gap-1.5 items-center">
-                                <span class="bg-[#ef4444] badge-mini text-white shadow-sm">${p.Status || 'SOLD OUT'}</span>
-                                <span class="text-[#ef4444] text-[9px] font-black uppercase whitespace-nowrap">${p.Badge || 'HOT DEAL'}</span>
+                                <span class="${styles.badge} badge-mini shadow-sm">${p.Status || '-'}</span>
+                                <span class="${styles.text} text-[9px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
                             </div>
                         </div>
 
