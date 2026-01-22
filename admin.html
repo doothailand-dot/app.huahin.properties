@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Console | Delete Enabled</title>
+    <title>Admin Console | Delete Success Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -11,23 +11,20 @@
         .admin-header { font-size: 24px; font-weight: 900; color: #1e3a8a; letter-spacing: 0.05em; }
         label { display: block; font-size: 14px; color: #64748b; font-weight: 700; margin-top: 20px; margin-bottom: 6px; text-transform: uppercase; }
         input, select, textarea { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; font-weight: 500; background-color: #fff; outline: none; }
-        
-        /* กลุ่มปุ่มด้านล่าง */
         .button-group { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-top: 25px; border-top: 2px solid #f1f5f9; }
         .btn-action { padding: 14px; font-size: 15px; font-weight: 800; border-radius: 12px; transition: 0.2s; cursor: pointer; text-align: center; text-transform: uppercase; }
         .btn-save { background-color: #2563eb; color: white; border: none; }
         .btn-cancel { background-color: #fff; color: #64748b; border: 2px solid #e2e8f0; }
-        /* ปุ่ม Delete สีแดง */
         .btn-delete { background-color: #ef4444; color: white; border: none; grid-column: span 2; margin-top: 10px; }
         .btn-delete:disabled { background-color: #fecaca; cursor: not-allowed; }
     </style>
 </head>
-<body class="px-6">
-    <div class="pt-8 pb-4 sticky top-0 bg-[#f8fafc]/90 backdrop-blur-md z-50 border-b mb-6 text-center">
+<body class="px-6 text-center">
+    <div class="pt-8 pb-4 sticky top-0 bg-[#f8fafc]/90 backdrop-blur-md z-50 border-b mb-6">
         <h1 class="admin-header">ADMIN CONSOLE</h1>
     </div>
 
-    <form id="propertyForm" class="max-w-2xl mx-auto bg-white p-6 rounded-3xl shadow-sm border">
+    <form id="propertyForm" class="max-w-2xl mx-auto bg-white p-6 rounded-3xl shadow-sm border text-left">
         <label>SELECT ENTRY TO EDIT</label>
         <select id="editSelector" onchange="loadData()" style="background-color:#eff6ff; border-color:#bfdbfe;">
             <option value="">-- NEW ENTRY --</option>
@@ -84,8 +81,7 @@
             const i = document.getElementById('editSelector').value; 
             const delBtn = document.getElementById('deleteBtn');
             if(i==="") { delBtn.disabled = true; return; }
-            
-            delBtn.disabled = false; // เปิดปุ่ม Delete เมื่อมีการเลือกบ้านที่มีอยู่แล้ว
+            delBtn.disabled = false;
             const p = allData[i];
             document.getElementById('ID').value = p.ID || ""; 
             document.getElementById('Plot').value = p.Plot || "";
@@ -99,7 +95,7 @@
             document.getElementById('PoolDepth').value = p["Pool Depth"] || "";
             document.getElementById('Furnishing').value = p.Furnishing || ""; 
             document.getElementById('Price').value = p.Price || "";
-            document.getElementById('Status').value = p.Status || ""; 
+            document.getElementById('Status').value = p.Status || "Ready to move in"; 
             document.getElementById('Badge').value = p.Badge || "";
             document.getElementById('Type').value = p.Type || ""; 
             document.getElementById('Description').value = p.Description || "";
@@ -109,29 +105,28 @@
             document.getElementById('FBLink').value = p.FBLink || "";
         }
 
-        // === ฟังก์ชันลบข้อมูลพร้อมป๊อปอัปยืนยัน ===
+        // === ฟังก์ชันลบข้อมูลที่แก้ไขใหม่เพื่อความแม่นยำสูง ===
         async function deleteData(){
             const id = document.getElementById('ID').value;
             const plot = document.getElementById('Plot').value;
             
-            // ป๊อปอัปยืนยันตามโจทย์ของคุณ Somjet
-            const confirmAction = confirm(`⚠️ คุณแน่ใจหรือไม่ที่จะลบข้อมูลบ้านหลังนี้?\nรหัส: ${id}\nแปลง: ${plot}\n\nเมื่อลบแล้วจะไม่สามารถย้อนคืนได้!`);
+            const confirmAction = confirm(`⚠️ คุณแน่ใจหรือไม่ที่จะลบข้อมูลบ้านหลังนี้ออกจากฐานข้อมูล?\nรหัส: ${id}\nแปลง: ${plot}\n\nเมื่อลบแล้วจะไม่สามารถย้อนคืนได้!`);
             
             if (confirmAction) {
                 const btn = document.getElementById('deleteBtn');
-                btn.innerText = "DELETING...";
+                btn.innerText = "DELETING FROM DATABASE...";
                 btn.disabled = true;
 
                 try {
                     const response = await fetch(GAS_URL, {
                         method: 'POST',
-                        body: JSON.stringify({ action: "delete", id: id })
+                        body: JSON.stringify({ action: "delete", id: id, plot: plot }) // ส่งทั้ง ID และ Plot เพื่อระบุแถวให้ถูก
                     });
                     const result = await response.text();
                     alert(result);
                     location.reload();
                 } catch (e) {
-                    alert("❌ Error connecting to database");
+                    alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อ");
                     btn.innerText = "Delete Property";
                     btn.disabled = false;
                 }
@@ -153,7 +148,7 @@
                 Thumbnail: document.getElementById('Thumbnail').value, FBLink: document.getElementById('FBLink').value
             }};
             await fetch(GAS_URL,{method:'POST',body:JSON.stringify(d)}); 
-            alert("✅ Saved!"); 
+            alert("✅ บันทึกข้อมูลสำเร็จ!"); 
             location.reload();
         }
     </script>
