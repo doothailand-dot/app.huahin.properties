@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin | Huahin Properties</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Prompt', sans-serif; background-color: #ffffff; color: #202124; }
+        .input-group { margin-bottom: 22px; width: 100%; }
+        label { display: block; font-size: 18px; color: #444746; font-weight: 500; margin-bottom: 8px; }
+        
+        /* ปรับความสูงและความกว้างของกรอบตามรูปที่ 1 */
+        input, select, textarea { 
+            width: 100%; 
+            padding: 18px 16px; /* เลข 18 คือความสูง ยิ่งมากยิ่งสูงครับ */
+            border: 2px solid #dadce0; /* ความหนากรอบ 2px */
+            border-radius: 10px; 
+            font-size: 24px; /* ขนาดตัวอักษรที่คุณต้องการให้ใหญ่ชัดเจน */
+            background-color: #fff;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input::placeholder { font-size: 24px; color: #c0c4c9; }
+        input:focus { border-color: #1a73e8; }
+        
+        .bottom-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; background: white;
+            border-top: 1px solid #e0e0e0; display: flex; padding: 18px 24px; gap: 20px; z-index: 100;
+        }
+        .btn-save { flex: 1; padding: 14px 0; font-size: 20px; font-weight: 600; border-radius: 8px; background-color: #1a73e8; color: white; }
+    </style>
+</head>
+<body class="pb-40 px-6">
+
+    <div class="py-6 border-b flex items-center gap-4 sticky top-0 bg-white z-50">
+        <h1 class="text-2xl font-semibold">Admin Properties</h1>
+    </div>
+
+    <div class="my-8 p-6 bg-blue-50 rounded-2xl border border-blue-100">
+        <label style="color: #1a73e8;">Select Entry to Edit</label>
+        <select id="editSelector" onchange="loadSelectedData()">
+            <option value="">-- NEW ENTRY --</option>
+        </select>
+    </div>
+
+    <form id="propertyForm">
+        <div class="input-group"><label>ID (M23)</label><input type="text" name="ID" id="ID" required placeholder="M23"></div>
+        <div class="input-group"><label>Plot Number</label><input type="text" name="Plot" id="Plot" placeholder="14"></div>
+        <div class="input-group">
+            <label>Status</label>
+            <select name="Status" id="Status">
+                <option value="Ready to move in">Ready to move in</option>
+                <option value="Under Const">Under Const</option>
+                <option value="Sold Out">Sold Out</option>
+                <option value="Empty space">Empty space</option>
+            </select>
+        </div>
+        <div class="input-group"><label>Badge</label><input type="text" name="Badge" id="Badge" placeholder="HOT DEAL"></div>
+        <div class="input-group"><label>Price</label><input type="number" name="Price" id="Price" placeholder="4700000"></div>
+        <div class="bottom-bar">
+            <button type="button" onclick="location.reload()" class="flex-1 text-blue-600 font-semibold">Cancel</button>
+            <button type="button" onclick="handleSave()" id="submitBtn" class="btn-save shadow-md">Save</button>
+        </div>
+    </form>
+
+    <script>
+        // *** สำคัญ: นำ URL ที่ได้จาก Apps Script มาวางตรงนี้ ***
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbxm8AVQvJ_E6DuDouk1oUpfFuxFWdXRtC8alwy8fJ8yopv-ghbPP5TiPnY08oi5r6I-/exec"; 
+        let fullData = [];
+
+        window.onload = async () => {
+            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getProperties" }) });
+            fullData = await res.json();
+            const select = document.getElementById('editSelector');
+            fullData.forEach((row, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.text = `${row[0]} - ${row[1] || ''}`;
+                select.add(opt);
+            });
+        };
+
+        function loadSelectedData() {
+            const index = document.getElementById('editSelector').value;
+            if (index === "") { document.getElementById('propertyForm').reset(); return; }
+            const row = fullData[index];
+            document.getElementById('ID').value = row[0];
+            document.getElementById('Plot').value = row[1];
+            // ... ใส่ค่าอื่นๆ จนครบ ...
+        }
+
+        async function handleSave() {
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "Saving...";
+            const formData = {
+                ID: document.getElementById('ID').value,
+                Plot: document.getElementById('Plot').value,
+                Status: document.getElementById('Status').value,
+                Price: document.getElementById('Price').value,
+                // ... เก็บค่าจากช่องอื่นให้ครบ ...
+            };
+
+            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "save", data: formData }) });
+            alert(await res.text());
+            location.reload();
+        }
+    </script>
+</body>
+</html>
