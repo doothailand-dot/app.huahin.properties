@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Full Details</title>
+    <title>Huahin Properties | Full Details & Share</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
@@ -11,24 +11,16 @@
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; }
         
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
-        
-        /* รูปภาพโตเป็นพื้นหลัง */
-        .hero-img { 
-            width: 100%; height: 350px; 
-            background-size: cover; background-position: center; 
-            position: relative; background-color: #eee;
-        }
-
-        /* ป้าย Code และ Plot สีเขียว */
+        .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; }
         .badge-mini { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; height: fit-content; }
         .bg-plot-green { background-color: #06C755; color: white; }
 
-        /* การจัดวางไอคอนและข้อมูลรายละเอียด */
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .info-item { display: flex; align-items: center; gap: 10px; color: #4b5563; font-size: 13px; font-weight: 500; }
         .info-icon { width: 18px; height: 18px; color: #9ca3af; flex-shrink: 0; }
         
+        /* สไตล์ปุ่มแชร์ 8 ปุ่ม */
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 10px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; }
         .share-btn span { font-size: 8px; font-weight: 800; text-transform: uppercase; color: white; }
@@ -38,7 +30,7 @@
 <body class="pb-10 overflow-x-hidden">
 
     <div id="loadingScreen" class="loading-overlay">
-        <p class="text-white font-bold animate-pulse">LOADING DETAILS...</p>
+        <p class="text-white font-bold animate-pulse uppercase tracking-widest">Loading Property Details...</p>
     </div>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-center sticky top-0 z-30 border-b shadow-sm">
@@ -73,7 +65,8 @@
             const container = document.getElementById('app');
             container.innerHTML = properties.map(p => {
                 const shareUrl = encodeURIComponent(`https://liff.line.me/${LIFF_ID}`);
-                
+                const shareTxt = encodeURIComponent(`Interested in Plot: ${p.Plot}`);
+
                 return `
                 <div class="property-bubble">
                     <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');">
@@ -109,14 +102,21 @@
 
                         <div class="flex justify-between items-center mb-6">
                             <span class="text-[#06C755] font-black text-2xl">฿${Number(p.Price || 0).toLocaleString()}</span>
-                            <button onclick="window.open('${p.FBLink}', '_blank')" class="bg-blue-50 text-blue-600 px-6 py-2.5 rounded-full font-bold text-[11px] shadow-sm">ดูรูปเพิ่มเติม ></button>
+                            <button onclick="window.open('${p.FBLink}', '_blank')" class="bg-blue-50 text-blue-600 px-6 py-2.5 rounded-full font-bold text-[11px] shadow-sm active:scale-95 transition-all">View Photos ></button>
                         </div>
 
+                        <div class="flex justify-center mb-2">
+                            <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                        </div>
                         <div class="share-grid">
-                            <a href="https://line.me/R/msg/text/?Interested ${p.Plot} ${shareUrl}" class="share-btn bg-[#06C755]"><span>LINE</span></a>
+                            <a href="https://line.me/R/msg/text/?${shareTxt} ${shareUrl}" class="share-btn bg-[#06C755]"><span>LINE</span></a>
                             <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
                             <a href="fb-messenger://share?link=${shareUrl}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
-                            <div onclick="navigator.clipboard.writeText('${shareUrl}'); alert('คัดลอกลิงก์แล้ว!');" class="share-btn bg-orange-500"><span>LINK</span></div>
+                            <a href="https://wa.me/?text=${shareTxt}%20${shareUrl}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
+                            <a href="https://twitter.com/intent/tweet?text=${shareTxt}&url=${shareUrl}" target="_blank" class="share-btn bg-black"><span>X</span></a>
+                            <a href="https://t.me/share/url?url=${shareUrl}&text=${shareTxt}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
+                            <a href="mailto:?subject=${shareTxt}&body=${shareUrl}" class="share-btn bg-gray-600"><span>MAIL</span></a>
+                            <div onclick="navigator.clipboard.writeText('${shareUrl}'); alert('Link Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
                         </div>
                     </div>
                 </div>
