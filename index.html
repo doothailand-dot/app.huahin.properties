@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Full Data & Share</title>
+    <title>Huahin Properties | Mobile Optimized</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
@@ -31,16 +31,9 @@
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
 
-        /* ตารางข้อมูลพร้อมไอคอน */
-        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding-top: 15px; border-top: 1px solid #f3f4f6; }
-        .info-item { display: flex; align-items: center; gap: 8px; }
-        .info-icon { width: 16px; height: 16px; color: #9ca3af; flex-shrink: 0; }
-        .info-text { font-size: 11px; color: #4b5563; font-weight: 400; line-height: 1.2; }
-
-        /* ส่วนแชร์ 8 ปุ่ม */
-        .share-section { padding-top: 20px; border-top: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 100%; }
-        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 12px; transition: 0.2s; }
+        /* Multi-Share Grid สวยงามไม่รก */
+        .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 10px; }
+        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; }
         .share-btn:active { transform: scale(0.9); opacity: 0.8; }
         .share-btn span { font-size: 8px; font-weight: 800; text-transform: uppercase; }
     </style>
@@ -49,28 +42,28 @@
 
     <div id="loadingScreen" class="loading-overlay">
         <div class="animate-house text-white mb-4"><svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></div>
-        <p class="text-xs font-bold text-white opacity-90 uppercase tracking-widest text-center">HUAHIN PROPERTIES</p>
+        <p class="text-xs font-bold text-white opacity-90 uppercase tracking-widest text-center">กำลังจัดเตรียมหน้าจอที่สะอาดตาที่สุด...</p>
     </div>
 
     <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <nav id="sidebar" class="flex flex-col">
-        <div class="line-bg-green p-6 flex flex-col items-center gap-2" style="border-radius: 0 45px 45px 0;">
+        <div class="line-bg-green p-6 flex flex-col items-center gap-2" style="border-radius: 0 45px 0 0;">
             <img id="userImg" src="https://via.placeholder.com/100" class="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover">
             <h3 id="userName" class="text-white font-bold text-[10px] truncate w-full text-center">Somjet</h3>
         </div>
-        <div class="py-6 flex flex-col items-center gap-6">
-            <div onclick="location.reload()" class="flex flex-col items-center gap-1 active:scale-90 transition">
+        <div class="py-4 flex flex-col items-center gap-4">
+            <div onclick="location.reload()" class="w-20 h-20 bg-white rounded-2xl shadow-sm flex flex-col items-center justify-center gap-1 border border-gray-50 active:scale-90 transition">
                 <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                <span class="text-[9px] font-bold text-gray-500 uppercase">Refresh</span>
+                <span class="text-[9px] font-bold text-gray-500">รีเฟรช</span>
             </div>
-            <div onclick="goToLineChat()" class="flex flex-col items-center gap-1 active:scale-90 transition">
+            <div onclick="goToLineChat()" class="w-20 h-20 bg-white rounded-2xl shadow-sm flex flex-col items-center justify-center gap-1 border border-gray-100 active:scale-90 transition">
                 <svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                <span class="text-[9px] font-bold text-gray-500 uppercase">Admin</span>
+                <span class="text-[9px] font-bold text-gray-500">แชทแอดมิน</span>
             </div>
         </div>
     </nav>
 
-    <header class="bg-white/95 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b">
+    <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b">
         <button onclick="toggleSidebar()" class="p-1"><svg class="w-6 h-6 line-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
         <div class="text-center font-black text-blue-900 text-[10px] uppercase tracking-widest leading-none">HUAHIN<br>PROPERTIES</div>
         <button onclick="goToLineChat()" class="p-1 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
@@ -81,7 +74,7 @@
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbx3bugngrbXWPAR5u99E2EMpeGT1szKTDorsld8TWR2ZHOJtwvU53x_CYavzMFAuCQ/exec"; 
         const LIFF_ID = "2008909867-tJ76yUtj";
-        let allProperties = [];
+        let allPropertiesData = [];
 
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
@@ -90,6 +83,7 @@
 
         function goToLineChat() { window.location.href = `https://line.me/R/ti/p/@247uimvp`; }
 
+        // กำหนดสีตามสถานะ
         function getStatusInfo(status) {
             const s = (status || "").toLowerCase().trim();
             if (s.includes("ready to move in")) return { bg: "bg-[#06C755]", text: "text-[#06C755]" };
@@ -114,15 +108,15 @@
         async function loadProperties() {
             try {
                 const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getProperties" }) });
-                allProperties = await res.json();
-                renderCards(allProperties);
-            } catch (err) { console.error(err); } 
+                allPropertiesData = await res.json();
+                renderCards(allPropertiesData);
+            } catch (err) { alert("ดึงข้อมูลไม่สำเร็จ"); }
             finally { document.getElementById('loadingScreen').style.display = 'none'; }
         }
 
         function copyToClipboard(title) {
             const url = `https://liff.line.me/${LIFF_ID}`;
-            navigator.clipboard.writeText(`สนใจบ้าน: ${title} คลิกดูข้อมูล: ${url}`).then(() => alert("คัดลอกลิงก์สำเร็จ!"));
+            navigator.clipboard.writeText(`สนใจบ้าน: ${title} ดูเพิ่มเติม: ${url}`).then(() => alert("คัดลอกลิงก์เรียบร้อย!"));
         }
 
         function renderCards(properties) {
@@ -130,58 +124,49 @@
             container.innerHTML = properties.map(p => {
                 const statusInfo = getStatusInfo(p.Status);
                 const shareUrl = encodeURIComponent(`https://liff.line.me/${LIFF_ID}`);
-                const shareTxt = encodeURIComponent(`สนใจบ้าน: ${p.Plot} ${p.Title}`);
+                const shareTxt = encodeURIComponent(`สนใจบ้าน: ${p.Title}`);
 
                 return `
                 <div class="property-bubble">
-                    <img src="${p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : ''}" class="w-full h-60 object-cover">
+                    <img src="${p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : ''}" class="w-full h-64 object-cover">
                     <div class="p-6">
                         
                         <div class="flex justify-between items-center gap-2 mb-4 overflow-hidden">
-                            <h2 class="text-lg font-black text-gray-800 truncate flex-1">${p.Plot || ''}</h2>
-                            <span class="${statusInfo.bg} px-2 py-1.5 rounded-full text-[8px] font-bold uppercase text-white">
-                                ${p.Status || ''}
+                            <h2 class="text-xl font-black text-gray-800 leading-none truncate flex-1">${p.Title || 'Property'}</h2>
+                            
+                            <span class="${statusInfo.bg} px-3 py-1.5 rounded-full text-[9px] font-bold uppercase whitespace-nowrap text-white">
+                                ${p.Status || 'Status'}
                             </span>
-                            <span class="${statusInfo.text} text-[8px] font-black uppercase whitespace-nowrap">
-                                ${p.Plot || ''} ${p.Badge || ''}
+
+                            <span class="${statusInfo.text} text-[9px] font-black uppercase whitespace-nowrap">
+                                ${p.Badge || ''}
                             </span>
                         </div>
 
-                        <div class="bg-gray-50 rounded-[30px] p-5 mb-5 border border-gray-100">
-                            <p class="text-[12px] text-gray-500 mb-4 leading-relaxed">${p.Description || 'สัมผัสประสบการณ์การอยู่อาศัยที่เหนือระดับ'}</p>
-                            
-                            <div class="info-grid">
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path></svg><span class="info-text">Bed: ${p['Bed Room'] || '-'}</span></div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5z" clip-rule="evenodd"></path></svg><span class="info-text">Bath: ${p['Bath Room'] || '-'}</span></div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg><span class="info-text">Pa Vilion: ${p['Pa Vilion'] || '-'}</span></div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2zM3 16a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z"></path></svg><span class="info-text">Land: ${p['Land sq.m'] || '-'} m²</span></div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path></svg><span class="info-text">Land: ${p['Land sq.w'] || '-'} sq.w</span></div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z"></path></svg><span class="info-text">House: ${p['House Size'] || '-'}</span></div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"></path></svg><span class="info-text">Pool: ${p['Pool Size'] || '-'}</span></div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l7-4.667a1 1 0 000-1.664l-7-4.667A1 1 0 0010 4.667V7.4l-5.445-3.632z"></path></svg><span class="info-text">Deep: ${p['Pool Deep'] || '-'}</span></div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path><path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10V8h4.414l1.293 1.293A1 1 0 0016.414 10H18v5h.05a2.5 2.5 0 014.9 0H24V10.414a2 2 0 00-.586-1.414l-3-3A2 2 0 0019 5.414V5a1 1 0 00-1-1H3z"></path></svg><span class="info-text">Car: ${p['Car park'] || '-'}</span></div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg><span class="info-text">Elec: ${p.Electrical || '-'}</span></div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M3 12v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-3a2 2 0 00-2-2H5a2 2 0 00-2 2z"></path><path d="M10 3a2 2 0 100 4 2 2 0 000-4zM7 8a2 2 0 100 4 2 2 0 000-4zM13 8a2 2 0 100 4 2 2 0 000-4z"></path></svg><span class="info-text">Fur: ${p.Furniture || '-'}</span></div>
+                        <div class="bg-gray-50 rounded-[25px] p-4 mb-4 border border-gray-100">
+                            <p class="text-[13px] text-gray-500 mb-4 leading-relaxed">${p.Description || 'สัมผัสประสบการณ์การอยู่อาศัยที่เหนือระดับ'}</p>
+                            <div class="grid grid-cols-2 gap-y-3 pt-3 border-t">
+                                <div class="text-[11px] text-gray-400">ขนาดพื้นที่: <span class="text-gray-800 font-normal">${p.Size || '-'}</span></div>
+                                <div class="text-[11px] text-gray-400">ห้องนอน: <span class="text-gray-800 font-normal">${p.Bedroom || '-'}</span></div>
+                                <div class="text-[11px] text-gray-400">ห้องน้ำ: <span class="text-gray-800 font-normal">${p.Bathroom || '-'}</span></div>
+                                <div class="text-[11px] text-gray-400">โครงการ: <span class="text-blue-500 font-normal">${p.ProjectName || '-'}</span></div>
                             </div>
                         </div>
 
                         <div class="flex justify-between items-center mb-6">
-                            <span class="text-[#06C755] font-black text-xl">฿${Number(p.Price || 0).toLocaleString()}</span>
-                            <button onclick="window.open('${p.FBLink}', '_blank')" class="bg-blue-50 text-blue-600 px-6 py-2 rounded-full font-bold text-[10px] active:scale-95">ดูรูปเพิ่มเติม ></button>
+                            <span class="text-[#06C755] font-black text-lg">฿${Number(p.Price || 0).toLocaleString()}</span>
+                            <button onclick="window.open('${p.MorePictures}', '_blank')" class="bg-blue-50 text-blue-600 px-6 py-2 rounded-full font-bold text-[10px] shadow-sm active:scale-95 transition-all">ดูรูปเพิ่มเติม ></button>
                         </div>
 
-                        <div class="share-section">
-                            <svg class="w-6 h-6 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.681-1.389l-4.94-2.47a3.027 3.027 0 000-.59l4.94-2.47A2.976 2.976 0 0015 8z"></path></svg>
-                            <div class="share-grid">
-                                <a href="https://line.me/R/msg/text/?${shareTxt}%20${shareUrl}" class="share-btn bg-[#06C755] text-white"><span>LINE</span></a>
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn bg-[#1877F2] text-white"><span>FB</span></a>
-                                <a href="https://www.facebook.com/dialog/send?link=${shareUrl}&app_id=123456789&redirect_uri=${shareUrl}" target="_blank" class="share-btn bg-[#0084FF] text-white"><span>Mess</span></a>
-                                <a href="https://wa.me/?text=${shareTxt}%20${shareUrl}" target="_blank" class="share-btn bg-[#25D366] text-white"><span>WhatsApp</span></a>
-                                <a href="https://twitter.com/intent/tweet?text=${shareTxt}&url=${shareUrl}" target="_blank" class="share-btn bg-[#000000] text-white"><span>X</span></a>
-                                <a href="https://t.me/share/url?url=${shareUrl}&text=${shareTxt}" target="_blank" class="share-btn bg-[#0088cc] text-white"><span>Tele</span></a>
-                                <a href="mailto:?subject=${shareTxt}&body=${shareUrl}" class="share-btn bg-gray-500 text-white"><span>Email</span></a>
-                                <button onclick="copyToClipboard('${p.Plot}')" class="share-btn bg-orange-500 text-white"><span>Link</span></button>
-                            </div>
+                        <div class="share-grid">
+                            <a href="https://line.me/R/msg/text/?${shareTxt} ${shareUrl}" class="share-btn bg-[#06C755] text-white"><span>LINE</span></a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn bg-[#1877F2] text-white"><span>FB</span></a>
+                            <a href="fb-messenger://share?link=${shareUrl}" class="share-btn bg-[#0084FF] text-white"><span>Mess</span></a>
+                            <a href="https://wa.me/?text=${shareTxt}%20${shareUrl}" target="_blank" class="share-btn bg-[#25D366] text-white"><span>WA</span></a>
+                            <a href="https://twitter.com/intent/tweet?text=${shareTxt}&url=${shareUrl}" target="_blank" class="share-btn bg-black text-white"><span>X</span></a>
+                            <a href="https://t.me/share/url?url=${shareUrl}&text=${shareTxt}" target="_blank" class="share-btn bg-[#0088cc] text-white"><span>Tele</span></a>
+                            <a href="mailto:?subject=${shareTxt}&body=${shareUrl}" class="share-btn bg-gray-600 text-white"><span>Mail</span></a>
+                            <div onclick="copyToClipboard('${p.Title}')" class="share-btn bg-orange-500 text-white"><span>Link</span></div>
                         </div>
                     </div>
                 </div>
