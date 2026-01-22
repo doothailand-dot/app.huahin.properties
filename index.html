@@ -3,206 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | International Edition</title>
-    
-    <meta property="og:title" content="Huahin Properties | Luxury Living">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1000">
-    
+    <title>Huahin Properties | Global Catalog</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; top: 0 !important; }
-        
-        /* ซ่อน Google Translate แบบมาตรฐาน */
-        #google_translate_element, .goog-te-banner-frame.skiptranslate { display: none !important; }
-        .goog-te-gadget { display: none !important; }
-
-        /* สไตล์ธงชาติแปลภาษา */
-        .flag-btn { cursor: pointer; transition: transform 0.2s; font-size: 18px; line-height: 1; }
+        .goog-te-banner-frame.skiptranslate, .goog-te-gadget { display: none !important; }
+        .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; }
         .flag-btn:hover { transform: scale(1.2); }
-
-        /* Styles เดิมที่เสถียรแล้ว */
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; }
         .badge-mini { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; height: fit-content; }
-        
-        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .info-item { display: flex; align-items: center; gap: 10px; color: #4b5563; font-size: 13px; font-weight: 500; }
-        .info-icon { width: 18px; height: 18px; color: #9ca3af; }
-        
-        /* แผงแชร์ 8 ปุ่ม */
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .info-item { display: flex; align-items: center; gap: 8px; color: #4b5563; font-size: 12px; font-weight: 500; }
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 10px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; cursor: pointer; }
         .share-btn span { font-size: 8px; font-weight: 800; color: white; }
-        
-        .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 50; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
-
-    <div id="loadingScreen" class="loading-overlay">
-        <p class="text-white font-bold animate-pulse uppercase tracking-widest text-[10px]">Updating International UI...</p>
-    </div>
-
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
-        <button id="menuBtn" class="flex flex-col items-center justify-center text-blue-900">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
-            <span class="text-[8px] font-bold uppercase tracking-wider mt-0.5">MENU</span>
-        </button>
-        
-        <div class="text-center font-black text-blue-900 text-[10px] uppercase tracking-widest leading-none">HUAHIN<br>PROPERTIES</div>
-        
-        <div class="flex gap-1.5">
-            <span class="flag-btn" onclick="changeLang('th')" title="Thai">🇹🇭</span>
-            <span class="flag-btn" onclick="changeLang('en')" title="English">🇺🇸</span>
-            <span class="flag-btn" onclick="changeLang('zh-CN')" title="Chinese">🇨🇳</span>
-            <span class="flag-btn" onclick="changeLang('ru')" title="Russian">🇷🇺</span>
-            <span class="flag-btn" onclick="changeLang('de')" title="German">🇩🇪</span>
-            <span class="flag-btn" onclick="changeLang('fr')" title="French">🇫🇷</span>
-        </div>
+        <button id="menuBtn" class="flex flex-col items-center justify-center text-blue-900"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg><span class="text-[8px] font-bold">MENU</span></button>
+        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase">HUAHIN<br>PROPERTIES</div>
+        <div class="flex gap-1.5"><span class="flag-btn" onclick="chgLng('th')">🇹🇭</span><span class="flag-btn" onclick="chgLng('en')">🇺🇸</span><span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span><span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span><span class="flag-btn" onclick="chgLng('de')">🇩🇪</span><span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span></div>
     </header>
-
     <div id="google_translate_element"></div>
-
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
     <div id="sidebarDrawer" class="sidebar-drawer -translate-x-full">
-        <div class="p-4 bg-blue-50 border-b text-center">
-            <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black mx-auto">HP</div>
-            <span class="font-bold text-blue-900 text-[8px] mt-2 block">HUAHIN<br>PROPERTIES</span>
-        </div>
-        <nav class="flex-1 py-4 text-center">
-            <a href="#" class="block py-4 text-gray-500 border-b border-gray-50 text-[10px] font-bold">HOME</a>
-            <a href="#" class="block py-4 text-gray-500 border-b border-gray-50 text-[10px] font-bold">FAVORITE</a>
-            <a href="#" class="block py-4 text-gray-500 border-b border-gray-50 text-[10px] font-bold">CONTACT</a>
-        </nav>
+        <div class="p-4 bg-blue-50 border-b text-center"><div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black mx-auto">HP</div><span class="font-bold text-blue-900 text-[8px] mt-2 block leading-tight">HUAHIN<br>PROPERTIES</span></div>
+        <nav class="flex-1 py-4 text-center"><a href="#" class="block py-4 text-gray-500 border-b border-gray-50 text-[10px] font-bold">HOME</a><a href="#" class="block py-4 text-gray-500 text-[10px] font-bold">CONTACT</a></nav>
     </div>
-
     <main id="app" class="max-w-xl mx-auto px-4 py-6"></main>
-
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec"; 
-        const LIFF_ID = "2008909867-tJ76yUtj";
-        let allProperties = [];
-
-        // Sidebar logic
-        const menuBtn = document.getElementById('menuBtn');
-        const overlay = document.getElementById('sidebarOverlay');
-        const drawer = document.getElementById('sidebarDrawer');
+        let allProps = [];
+        const menuBtn = document.getElementById('menuBtn'), overlay = document.getElementById('sidebarOverlay'), drawer = document.getElementById('sidebarDrawer');
         menuBtn.onclick = () => { overlay.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); };
         overlay.onclick = () => { overlay.classList.add('hidden'); drawer.classList.add('-translate-x-full'); };
-
-        // === ฟังก์ชันแปลภาษาผ่านธงชาติ ===
-        function changeLang(lang) {
-            const select = document.querySelector('select.goog-te-combo');
-            if (select) {
-                select.value = lang;
-                select.dispatchEvent(new Event('change'));
-            }
-        }
-
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'th',
-                includedLanguages: 'th,en,zh-CN,ru,de,fr',
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
-
-        function fixLink(url) {
-            if (!url) return 'https://via.placeholder.com/600x400?text=No+Image';
-            if (url.includes('drive.google.com')) { const id = url.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : url; }
-            return url;
-        }
-
-        function getStatusStyle(status) {
-            const s = (status || "").toLowerCase().trim();
-            if (s.includes("ready to move in")) return { badge: "bg-[#06C755] text-white", text: "text-[#06C755]" };
-            if (s.includes("under const")) return { badge: "bg-[#9333ea] text-white", text: "text-[#9333ea]" };
-            if (s.includes("empty space")) return { badge: "bg-white text-black border border-gray-300", text: "text-gray-500" };
-            if (s.includes("sold out")) return { badge: "bg-[#ef4444] text-white", text: "text-[#ef4444]" };
-            return { badge: "bg-gray-200 text-gray-600", text: "text-gray-400" };
-        }
-
-        async function initLiff() {
-            try {
-                await liff.init({ liffId: LIFF_ID });
-                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: "getProperties" }) });
-                allProperties = await res.json();
-                render(allProperties);
-            } catch (err) { document.getElementById('loadingScreen').style.display = 'none'; }
-        }
-
-        async function shareToLine(index) {
-            const p = allProperties[index]; const shareUrl = `https://liff.line.me/${LIFF_ID}`;
-            const shareTxt = encodeURIComponent(`Interested Plot: ${p.Plot} ${shareUrl}`);
-            window.open(`https://line.me/R/msg/text/?${shareTxt}`, '_blank');
-        }
-
-        function render(properties) {
-            const container = document.getElementById('app');
-            container.innerHTML = properties.map((p, index) => {
-                const styles = getStatusStyle(p.Status);
-                const shareUrl = encodeURIComponent(`https://liff.line.me/${LIFF_ID}`);
-                
+        function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
+        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
+        function fixLink(u){ if(!u) return 'https://via.placeholder.com/600x400?text=No+Image'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
+        function getSty(s){ const t = (s||"").toLowerCase(); if(t.includes("ready")) return "bg-[#06C755] text-white"; if(t.includes("under")) return "bg-[#9333ea] text-white"; if(t.includes("empty")) return "bg-white text-black border"; return "bg-[#ef4444] text-white"; }
+        async function init(){ try{ await liff.init({liffId:"2008909867-tJ76yUtj"}); const r = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:"getProperties"})}); allProps = await r.json(); render(); }catch(e){} }
+        function render(){
+            document.getElementById('app').innerHTML = allProps.map((p,i)=>{
+                const s = getSty(p.Status); const u = encodeURIComponent(`https://liff.line.me/2008909867-tJ76yUtj`);
                 return `
                 <div class="property-bubble">
-                    <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');">
-                        <div class="badge-code">Code: ${p.ID || '-'}</div>
-                    </div>
+                    <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"><div class="badge-code">Code: ${p.ID}</div></div>
                     <div class="p-6">
-                        <div class="flex justify-between items-center gap-2 mb-4">
-                            <div class="badge-mini bg-[#06C755] text-white">Plot : ${p.Plot || '-'}</div>
-                            <div class="flex gap-1.5 items-center">
-                                <span class="${styles.badge} badge-mini shadow-sm">${p.Status || '-'}</span>
-                                <span class="${styles.text} text-[9px] font-black uppercase">${p.Badge || ''}</span>
+                        <div class="flex justify-between items-center mb-4"><div class="badge-mini bg-[#06C755] text-white">Plot: ${p.Plot}</div><div class="flex gap-1.5"><span class="${s} badge-mini">${p.Status}</span><span class="text-[9px] font-black text-red-500 uppercase">${p.Badge||''}</span></div></div>
+                        <div class="bg-gray-50 rounded-[25px] p-5 mb-5 border">
+                            <p class="text-[13px] text-gray-600 mb-4 leading-relaxed">${p.Description||'-'}</p>
+                            <div class="info-grid border-t pt-4">
+                                <div class="info-item">🛏️ Bedrooms: ${p.Bedrooms}</div><div class="info-item">🚿 Bathrooms: ${p.Bathrooms}</div>
+                                <div class="info-item">🏠 Pavilion: ${p.Pavilion}</div><div class="info-item">📐 Land (m²): ${p["Land Area (sq.m)"]}</div>
+                                <div class="info-item">📏 Land (sq.w): ${p["Land Area (sq.w)"]}</div><div class="info-item">🏗️ Living Area: ${p["Living Area"]}</div>
+                                <div class="info-item">🏊 Pool Size: ${p["Pool Size"]}</div><div class="info-item">⏬ Pool Depth: ${p["Pool Depth"]}</div>
+                                <div class="info-item">🚗 Parking: ${p.Parking}</div><div class="info-item">⚡ Electricity: ${p.Electricity}</div>
+                                <div class="info-item">🛋️ Furnishing: ${p.Furnishing}</div>
                             </div>
                         </div>
-                        <div class="bg-gray-50 rounded-[25px] p-6 mb-5 border border-gray-100">
-                            <p class="text-[14px] text-gray-600 mb-6 leading-relaxed font-normal">${p.Description || '-'}</p>
-                            <div class="info-grid border-t pt-5">
-                                <div class="info-item">🛏️ Bed: ${p["Bed Room"] || '-'}</div>
-                                <div class="info-item">🚿 Bath: ${p["Bath Room"] || '-'}</div>
-                                <div class="info-item">🏠 Pa Vilion: ${p["Pa Vilion"] || '-'}</div>
-                                <div class="info-item">📐 Land: ${p["Land sq.m"] || '-'} m²</div>
-                                <div class="info-item">📏 Land: ${p["Land sq.w"] || '-'} sq.w</div>
-                                <div class="info-item">🏗️ House: ${p["House Size"] || '-'}</div>
-                                <div class="info-item">🏊 Pool: ${p["Pool Size"] || '-'}</div>
-                                <div class="info-item">⏬ Deep: ${p["Pool Deep"] || '-'}</div>
-                                <div class="info-item">🚗 Car: ${p["Car park"] || '-'}</div>
-                                <div class="info-item">⚡ Elec: ${p["Electrical"] || '-'}</div>
-                                <div class="info-item">🛋️ Fur: ${p["Furniture"] || '-'}</div>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center mb-6">
-                            <span class="text-[#06C755] font-black text-2xl">฿${Number(p.Price || 0).toLocaleString()}</span>
-                            <button onclick="window.open('${p.FBLink}', '_blank')" class="bg-blue-50 text-blue-600 px-6 py-2.5 rounded-full font-bold text-[11px] shadow-sm">View Photos ></button>
-                        </div>
-                        
-                        <div class="flex justify-center mb-2">
-                            <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                        </div>
-
+                        <div class="flex justify-between items-center mb-6"><span class="text-[#06C755] font-black text-2xl">฿${Number(p.Price).toLocaleString()}</span><button onclick="window.open('${p.FBLink}','_blank')" class="bg-blue-50 text-blue-600 px-6 py-2 rounded-full font-bold text-[10px]">View Photos ></button></div>
+                        <div class="flex justify-center mb-2"><svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></div>
                         <div class="share-grid">
-                            <div onclick="shareToLine(${index})" class="share-btn bg-[#06C755]"><span>LINE</span></div>
-                            <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
-                            <a href="fb-messenger://share?link=${shareUrl}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
-                            <a href="https://wa.me/?text=${shareUrl}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
-                            <a href="https://twitter.com/intent/tweet?url=${shareUrl}" target="_blank" class="share-btn bg-black"><span>X</span></a>
-                            <a href="https://t.me/share/url?url=${shareUrl}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
-                            <a href="mailto:?body=${shareUrl}" class="share-btn bg-gray-600"><span>MAIL</span></a>
-                            <div onclick="navigator.clipboard.writeText(decodeURIComponent('${shareUrl}')); alert('Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
+                            <div onclick="window.open('https://line.me/R/msg/text/?Interested%20${p.Plot}%20${u}')" class="share-btn bg-[#06C755]"><span>LINE</span></div>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
+                            <a href="fb-messenger://share?link=${u}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
+                            <a href="https://wa.me/?text=${u}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
+                            <a href="https://twitter.com/intent/tweet?url=${u}" target="_blank" class="share-btn bg-black"><span>X</span></a>
+                            <a href="https://t.me/share/url?url=${u}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
+                            <a href="mailto:?body=${u}" class="share-btn bg-gray-600"><span>MAIL</span></a>
+                            <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
                         </div>
                     </div>
-                </div>
-                `;
+                </div>`;
             }).join('');
-            document.getElementById('loadingScreen').style.display = 'none';
         }
-        initLiff();
+        init();
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
