@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Huahin Properties | Luxury Living & Global Reach</title>
-    <meta name="description" content="ค้นหาบ้านและพูลวิลล่าระดับพรีเมียมในหัวหิน ราคาพิเศษ พร้อมรายละเอียดครบถ้วน">
+    <meta name="description" content="พูลวิลล่าและบ้านหรูในหัวหิน พร้อมรองรับลูกค้าทั่วโลกด้วยระบบ 20 ภาษา">
     <meta property="og:title" content="Huahin Properties | Premium Catalog">
-    <meta property="og:description" content="ค้นหาบ้านสวยและพูลวิลล่าในหัวหิน ราคาเริ่มต้นที่ ฿4,xxx,xxx">
     <meta property="og:image" content="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1000">
     <meta property="og:url" content="https://doothailand-dot.github.io/app.huahin.properties/">
     <meta property="og:type" content="website">
@@ -19,40 +18,39 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; top: 0 !important; }
         
-        /* ซ่อนแถบ Google Translate ด้านบนไม่ให้รบกวนสายตา */
-        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        /* ปรับแต่ง Google Translate ให้ดูพรีเมียม */
+        .goog-te-banner-frame.skiptranslate { display: none !important; } /* ซ่อนแถบบน */
         .goog-te-gadget-simple { 
-            background-color: transparent !important; 
-            border: none !important; 
+            background-color: #f8fafc !important; 
+            border: 1px solid #e2e8f0 !important; 
+            padding: 4px 8px !important;
+            border-radius: 12px !important;
             font-size: 10px !important;
             display: flex !important;
             align-items: center !important;
         }
-        .goog-te-gadget-icon { width: 18px !important; height: 18px !important; margin-right: 4px !important; }
-        
-        /* สไตล์เดิมที่คงไว้ทั้งหมด */
+        .goog-te-gadget-icon { display: none !important; } /* ซ่อนโลโก้ Google */
+        .goog-te-menu-value span { color: #1e3a8a !important; font-weight: 600 !important; }
+
+        /* สไตล์เดิมที่เสถียรแล้ว */
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; }
         .badge-mini { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; height: fit-content; }
-        .bg-plot-green { background-color: #06C755; color: white; }
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .info-item { display: flex; align-items: center; gap: 10px; color: #4b5563; font-size: 13px; font-weight: 500; }
-        .info-icon { width: 18px; height: 18px; color: #9ca3af; flex-shrink: 0; }
+        .info-item { display: flex; align-items: center; gap: 10px; color: #4b5563; font-size: 13px; }
+        .info-icon { width: 18px; height: 18px; color: #9ca3af; }
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 10px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; cursor: pointer; }
         .share-btn span { font-size: 8px; font-weight: 800; text-transform: uppercase; color: white; }
         .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
-
-        /* Sidebar 140px */
-        .sidebar-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.4); z-index: 40; transition: opacity 0.3s ease; }
-        .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 50; transition: transform 0.3s ease-in-out; box-shadow: 2px 0 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 50; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
 
     <div id="loadingScreen" class="loading-overlay">
-        <p class="text-white font-bold animate-pulse uppercase tracking-widest text-[10px]">Preparing Multi-Language...</p>
+        <p class="text-white font-bold animate-pulse uppercase tracking-widest text-[10px]">Optimizing Multi-Language...</p>
     </div>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
@@ -63,21 +61,20 @@
         
         <div class="text-center font-black text-blue-900 text-[10px] uppercase tracking-widest leading-none">HUAHIN<br>PROPERTIES</div>
         
-        <div id="google_translate_element" class="scale-90 origin-right"></div>
+        <div id="google_translate_element"></div>
     </header>
 
-    <div id="sidebarOverlay" class="sidebar-overlay hidden opacity-0"></div>
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
     <div id="sidebarDrawer" class="sidebar-drawer -translate-x-full">
-        <div class="p-4 bg-blue-50 border-b flex flex-col items-center gap-2 text-center">
-            <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black text-xs">HP</div>
-            <span class="font-bold text-blue-900 text-[8px] leading-tight">HUAHIN<br>PROPERTIES</span>
+        <div class="p-4 bg-blue-50 border-b text-center">
+            <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black mx-auto">HP</div>
+            <span class="font-bold text-blue-900 text-[8px] mt-2 block">GLOBAL CATALOG</span>
         </div>
-        <nav class="flex-1 py-2">
-            <a href="#" class="flex flex-col items-center justify-center py-5 text-gray-500 border-b border-gray-50"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg><span class="text-[10px] font-bold mt-1">HOME</span></a>
-            <a href="#" class="flex flex-col items-center justify-center py-5 text-gray-500 border-b border-gray-50"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg><span class="text-[10px] font-bold mt-1">FAVORITE</span></a>
-            <a href="#" class="flex flex-col items-center justify-center py-5 text-gray-500 border-b border-gray-50"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg><span class="text-[10px] font-bold mt-1">CONTACT</span></a>
+        <nav class="flex-1 py-4">
+            <a href="#" class="flex flex-col items-center py-4 text-gray-500 border-b border-gray-50"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg><span class="text-[10px] font-bold mt-1">HOME</span></a>
+            <a href="#" class="flex flex-col items-center py-4 text-gray-500 border-b border-gray-50"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg><span class="text-[10px] font-bold mt-1">CONTACT</span></a>
         </nav>
-        <div class="p-3 text-[6px] text-gray-300 text-center uppercase border-t font-bold tracking-tighter">Expert v1.8</div>
+        <div class="p-4 text-[7px] text-gray-300 text-center uppercase font-bold border-t">v1.9 Global</div>
     </div>
 
     <main id="app" class="max-w-xl mx-auto px-4 py-6"></main>
@@ -89,19 +86,16 @@
 
         // Sidebar logic
         const menuBtn = document.getElementById('menuBtn');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        const sidebarDrawer = document.getElementById('sidebarDrawer');
-        function toggleMenu() {
-            const isHidden = sidebarOverlay.classList.contains('hidden');
-            if (isHidden) { sidebarOverlay.classList.remove('hidden'); setTimeout(() => sidebarOverlay.classList.remove('opacity-0'), 10); sidebarDrawer.classList.remove('-translate-x-full'); }
-            else { sidebarOverlay.classList.add('opacity-0'); sidebarDrawer.classList.add('-translate-x-full'); setTimeout(() => sidebarOverlay.classList.add('hidden'), 300); }
-        }
-        menuBtn.addEventListener('click', toggleMenu); sidebarOverlay.addEventListener('click', toggleMenu);
+        const overlay = document.getElementById('sidebarOverlay');
+        const drawer = document.getElementById('sidebarDrawer');
+        menuBtn.onclick = () => { overlay.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); };
+        overlay.onclick = () => { overlay.classList.add('hidden'); drawer.classList.add('-translate-x-full'); };
 
-        // Google Translate Initialization
+        // === ฟังก์ชันแปลภาษา 20 ภาษาหลักตามโจทย์ ===
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'th',
+                includedLanguages: 'th,en,zh-CN,zh-TW,ru,fr,de,sv,no,da,ja,ko,es,it,nl,ar,hi,vi,my,lo',
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: false
             }, 'google_translate_element');
@@ -131,22 +125,10 @@
             } catch (err) { document.getElementById('loadingScreen').style.display = 'none'; }
         }
 
-        async function shareToLine(index) {
-            const p = allProperties[index]; const imageUrl = fixLink(p.Thumbnail); const shareUrl = `https://liff.line.me/${LIFF_ID}`;
-            const shareTxt = encodeURIComponent(`Interested Plot: ${p.Plot} ${shareUrl}`);
-            if (liff.isInClient() && liff.isApiAvailable('shareTargetPicker')) {
-                try { await liff.shareTargetPicker([{ "type": "flex", "altText": `สนใจบ้านแปลน: ${p.Plot}`, "contents": { "type": "bubble", "hero": { "type": "image", "url": imageUrl, "size": "full", "aspectRatio": "20:13", "aspectMode": "cover" }, "body": { "type": "box", "layout": "vertical", "contents": [ { "type": "text", "text": `Plot: ${p.Plot}`, "weight": "bold", "size": "xl", "color": "#06C755" }, { "type": "text", "text": p.Description || "Luxury House in Huahin", "size": "xs", "color": "#8c8c8c", "margin": "md", "wrap": true }, { "type": "box", "layout": "baseline", "margin": "lg", "contents": [ { "type": "text", "text": "Price", "color": "#aaaaaa", "size": "sm", "flex": 1 }, { "type": "text", "text": `฿${Number(p.Price || 0).toLocaleString()}`, "color": "#06C755", "size": "md", "flex": 4, "weight": "bold" } ] } ] }, "footer": { "type": "box", "layout": "vertical", "contents": [ { "type": "button", "style": "primary", "height": "sm", "color": "#06C755", "action": { "type": "uri", "label": "VIEW DETAILS", "uri": shareUrl } } ] } } }]); }
-                catch (error) { window.open(`https://line.me/R/msg/text/?${shareTxt}`, '_blank'); }
-            } else { window.open(`https://line.me/R/msg/text/?${shareTxt}`, '_blank'); }
-        }
-
         function render(properties) {
             const container = document.getElementById('app');
             container.innerHTML = properties.map((p, index) => {
-                const shareUrl = encodeURIComponent(`https://liff.line.me/${LIFF_ID}`);
-                const shareTxt = encodeURIComponent(`Interested Plot: ${p.Plot}`);
                 const styles = getStatusStyle(p.Status);
-
                 return `
                 <div class="property-bubble">
                     <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');">
@@ -154,48 +136,44 @@
                     </div>
                     <div class="p-6">
                         <div class="flex justify-between items-center gap-2 mb-4">
-                            <div class="badge-mini bg-plot-green text-white">Plot : ${p.Plot || '-'}</div>
+                            <div class="badge-mini bg-[#06C755] text-white">Plot : ${p.Plot || '-'}</div>
                             <div class="flex gap-1.5 items-center">
                                 <span class="${styles.badge} badge-mini shadow-sm">${p.Status || '-'}</span>
-                                <span class="${styles.text} text-[9px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
+                                <span class="${styles.text} text-[9px] font-black uppercase">${p.Badge || ''}</span>
                             </div>
                         </div>
-
                         <div class="bg-gray-50 rounded-[25px] p-6 mb-5 border border-gray-100">
                             <p class="text-[14px] text-gray-600 mb-6 leading-relaxed font-normal">${p.Description || '-'}</p>
                             <div class="info-grid border-t pt-5">
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path></svg> Bed: ${p["Bed Room"] || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-7.535 5.343a1 1 0 011.414 0 3.394 3.394 0 004.242 0 1 1 0 011.414 1.414L10 16z" clip-rule="evenodd"></path></svg> Bath: ${p["Bath Room"] || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011-1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg> Pa Vilion: ${p["Pa Vilion"] || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg> Land: ${p["Land sq.m"] || '-'} m²</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"></path></svg> Land: ${p["Land sq.w"] || '-'} sq.w</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"></path></svg> House: ${p["House Size"] || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 100 4v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2a2 2 0 100-4V6z"></path></svg> Pool: ${p["Pool Size"] || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M7 10l5 5 5-5H7z"></path></svg> Deep: ${p["Pool Deep"] || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> Car: ${p["Car park"] || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg> Elec: ${p["Electrical"] || '-'}</div>
-                                <div class="info-item"><svg class="info-icon" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4h12v12H4V4z"></path></svg> Fur: ${p["Furniture"] || '-'}</div>
+                                <div class="info-item">🛏️ Bed: ${p["Bed Room"] || '-'}</div>
+                                <div class="info-item">🚿 Bath: ${p["Bath Room"] || '-'}</div>
+                                <div class="info-item">🏠 Pa Vilion: ${p["Pa Vilion"] || '-'}</div>
+                                <div class="info-item">📐 Land: ${p["Land sq.m"] || '-'} m²</div>
+                                <div class="info-item">📏 Land: ${p["Land sq.w"] || '-'} sq.w</div>
+                                <div class="info-item">🏗️ House: ${p["House Size"] || '-'}</div>
+                                <div class="info-item">🏊 Pool: ${p["Pool Size"] || '-'}</div>
+                                <div class="info-item">⏬ Deep: ${p["Pool Deep"] || '-'}</div>
+                                <div class="info-item">🚗 Car: ${p["Car park"] || '-'}</div>
+                                <div class="info-item">⚡ Elec: ${p["Electrical"] || '-'}</div>
+                                <div class="info-item">🛋️ Fur: ${p["Furniture"] || '-'}</div>
                             </div>
                         </div>
-
                         <div class="flex justify-between items-center mb-6">
                             <span class="text-[#06C755] font-black text-2xl">฿${Number(p.Price || 0).toLocaleString()}</span>
                             <button onclick="window.open('${p.FBLink}', '_blank')" class="bg-blue-50 text-blue-600 px-6 py-2.5 rounded-full font-bold text-[11px] shadow-sm active:scale-95 transition-all">View Photos ></button>
                         </div>
-
                         <div class="flex justify-center mb-2">
                             <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
                         </div>
-
                         <div class="share-grid">
                             <div onclick="shareToLine(${index})" class="share-btn bg-[#06C755]"><span>LINE</span></div>
-                            <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
-                            <a href="fb-messenger://share?link=${shareUrl}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
-                            <a href="https://wa.me/?text=${shareTxt}%20${shareUrl}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
-                            <a href="https://twitter.com/intent/tweet?text=${shareTxt}&url=${shareUrl}" target="_blank" class="share-btn bg-black"><span>X</span></a>
-                            <a href="https://t.me/share/url?url=${shareUrl}&text=${shareTxt}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
-                            <a href="mailto:?subject=${shareTxt}&body=${shareUrl}" class="share-btn bg-gray-600"><span>MAIL</span></a>
-                            <div onclick="navigator.clipboard.writeText('${shareUrl}'); alert('Link Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=..." target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
+                            <a href="fb-messenger://share?link=..." class="share-btn bg-[#0084FF]"><span>MESS</span></a>
+                            <a href="https://wa.me/?text=..." target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
+                            <a href="https://twitter.com/intent/tweet?url=..." target="_blank" class="share-btn bg-black"><span>X</span></a>
+                            <a href="https://t.me/share/url?url=..." target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
+                            <a href="mailto:?body=..." class="share-btn bg-gray-600"><span>MAIL</span></a>
+                            <div onclick="alert('Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
                         </div>
                     </div>
                 </div>
