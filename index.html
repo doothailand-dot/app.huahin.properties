@@ -3,26 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Premium Display</title>
+    <title>Huahin Properties | Balanced UI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; }
-        .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
+        
+        .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
         .loading-overlay { position: fixed; inset: 0; background: #8cabd9; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-house { animation: bounce 1.5s infinite ease-in-out; }
+        
+        /* ป้าย Code บนรูปภาพ */
+        .badge-container { position: relative; width: 100%; height: 256px; overflow: hidden; }
+        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        
+        /* ป้าย Plot ขนาดเท่ากับ Status */
+        .status-style { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; height: fit-content; }
+        .bg-plot-green { background-color: #06C755; color: white; }
+
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .info-item { display: flex; items-center; gap: 8px; color: #6b7280; font-size: 13px; font-weight: 400; }
         .info-icon { width: 16px; height: 16px; color: #9ca3af; flex-shrink: 0; }
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 5px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; }
         .share-btn span { font-size: 8px; font-weight: 800; text-transform: uppercase; color: white; }
-        
-        /* สไตล์ป้าย Code และ Plot ตามรูปตัวอย่าง */
-        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; z-index: 10; border: 1px solid rgba(255,255,255,0.2); }
-        .badge-plot { background-color: #06C755; color: white; padding: 6px 16px; border-radius: 25px; font-size: 13px; font-weight: 800; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
@@ -32,7 +38,7 @@
         <p class="text-xs font-bold text-white opacity-90 uppercase tracking-widest text-center">HUAHIN PROPERTIES</p>
     </div>
 
-    <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-center sticky top-0 z-30 border-b shadow-sm">
+    <header class="bg-white/90 backdrop-blur-md px-4 py-3 flex items-center justify-center sticky top-0 z-30 border-b">
         <div class="text-center font-black text-blue-900 text-[10px] uppercase tracking-widest leading-none">HUAHIN<br>PROPERTIES</div>
     </header>
 
@@ -73,18 +79,20 @@
                 const statusInfo = getStatusInfo(p.Status);
                 const shareUrl = encodeURIComponent(`https://liff.line.me/${LIFF_ID}`);
                 const shareTxt = encodeURIComponent(`Interested in Plot: ${p.Plot}`);
+                const firstImg = p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : 'https://via.placeholder.com/400x250?text=No+Image';
 
                 return `
                 <div class="property-bubble">
-                    <div class="badge-code">Code: ${p.ID || '-'}</div>
-                    
-                    <img src="${p.ImageUrls ? p.ImageUrls.split(',')[0].trim() : ''}" class="w-full h-64 object-cover">
+                    <div class="badge-container">
+                        <div class="badge-code">Code: ${p.ID || '-'}</div>
+                        <img src="${firstImg}" class="w-full h-full object-cover">
+                    </div>
                     
                     <div class="p-6">
                         <div class="flex justify-between items-center gap-2 mb-4">
-                            <div class="badge-plot">Plot : ${p.Plot || '-'}</div>
+                            <div class="status-style bg-plot-green">Plot : ${p.Plot || '-'}</div>
                             <div class="flex gap-1.5 items-center">
-                                <span class="${statusInfo.bg} px-2.5 py-1 rounded-full text-[9px] font-bold uppercase text-white shadow-sm">${statusInfo.display}</span>
+                                <span class="${statusInfo.bg} status-style text-white shadow-sm">${statusInfo.display}</span>
                                 <span class="${statusInfo.text} text-[9px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
                             </div>
                         </div>
