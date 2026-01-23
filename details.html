@@ -10,40 +10,39 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; top: 0 !important; position: static !important; }
         
-        /* ซ่อนแถบเครื่องมือแปลภาษามาตรฐานเพื่อให้หน้าเว็บสะอาด */
+        /* ซ่อนแถบเครื่องมือแปลภาษามาตรฐาน */
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
         iframe#\3a 1\.container { display: none !important; }
 
-        /* ปุ่มธงชาติแปลภาษา */
-        .flag-btn { cursor: pointer; font-size: 22px; transition: 0.2s; line-height: 1; }
+        /* ปุ่มธงชาติแปลภาษา 6 ประเทศ */
+        .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; line-height: 1; }
         .flag-btn:hover { transform: scale(1.2); }
 
         .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; background-color: #eee; }
         .badge-mini { padding: 4px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
         
-        /* แผงข้อมูล 11 ไอคอน */
+        /* รายละเอียด 11 ไอคอน */
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .info-item { display: flex; align-items: center; gap: 10px; color: #4b5563; font-size: 13px; font-weight: 500; }
         
-        /* แผงแชร์ 8 ปุ่มสมบูรณ์ */
+        /* แผงแชร์ 8 ปุ่ม */
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; transition: 0.2s; cursor: pointer; }
         .share-btn span { font-size: 8px; font-weight: 800; color: white; }
 
-        /* ตารางรายการบ้าน Thumbnail (2 คอลัมน์) */
+        /* ตาราง Thumbnail บ้านหลังอื่นๆ 2 คอลัมน์ */
         .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 0; }
-        .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; transition: 0.2s; }
-        .related-card:active { transform: scale(0.95); }
+        .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
 
-    <div id="loading" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center font-bold text-blue-900 uppercase tracking-widest">Updating Details...</div>
+    <div id="loading" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center font-bold text-blue-900 uppercase">Updating Data...</div>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b shadow-sm">
         <button onclick="window.location.href='index.html'" class="text-blue-900 font-bold text-[10px] uppercase border border-blue-900 px-3 py-1 rounded-full">< Back</button>
-        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase">HUAHIN<br>PROPERTIES</div>
-        <div class="flex gap-1.5">
+        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase leading-tight">HUAHIN<br>PROPERTIES</div>
+        <div class="flex gap-1">
             <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span>
             <span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
             <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span>
@@ -82,7 +81,7 @@
                 const allProps = await r.json();
                 
                 const p = allProps.find(item => item.ID === propertyId);
-                // ดึงรายการบ้านหลังอื่นๆ ที่ยังไม่ได้คลิก
+                // ดึงรายการบ้านหลังอื่นๆ ทั้งหมดที่ไม่ได้คลิกเข้ามา
                 const others = allProps.filter(item => item.ID !== propertyId);
 
                 if(p) render(p, others);
@@ -133,7 +132,7 @@
 
                         <div class="flex flex-col items-center gap-4 mb-8">
                             <span class="text-[#06C755] font-black text-4xl">฿${Number(p.Price).toLocaleString()}</span>
-                            <button onclick="window.open('${p.FBLink}','_blank')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg uppercase">View All Photos & Video ></button>
+                            <button onclick="window.open('${p.FBLink}','_blank')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg">VIEW ALL PHOTOS & VIDEO ></button>
                         </div>
 
                         <div class="border-t pt-6">
@@ -154,7 +153,7 @@
                     </div>
 
                     <div class="mt-12 mb-10 px-2">
-                        <div class="flex justify-between items-end mb-6">
+                        <div class="flex justify-between items-end mb-5">
                             <h2 class="text-xl font-black text-blue-900 leading-none">OTHER PROPERTIES</h2>
                         </div>
                         <div class="related-grid">
