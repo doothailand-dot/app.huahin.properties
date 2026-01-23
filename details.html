@@ -10,14 +10,12 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; top: 0 !important; position: static !important; }
         
-        /* ซ่อนแถบ Google Translate มาตรฐาน */
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
         iframe#\3a 1\.container { display: none !important; }
 
         .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; line-height: 1; }
         .flag-btn:hover { transform: scale(1.2); }
 
-        /* ป้ายรหัสบ้านสีเขียว */
         .badge-code { 
             position: absolute; top: 15px; left: 15px; 
             background-color: #06C755; color: white; 
@@ -29,8 +27,19 @@
         .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; position: relative; background-color: #eee; z-index: 1; }
         .badge-mini { padding: 4px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
         
-        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .info-item { display: flex; align-items: center; gap: 10px; color: #4b5563; font-size: 13px; font-weight: 500; }
+        /* ✅ แก้ไขจุดที่ 1: ปรับจาก 2 คอลัมน์ เป็นคอลัมน์เดี่ยว เพื่อไม่ให้ตัวหนังสือเบียดกัน */
+        .info-grid { display: flex; flex-direction: column; gap: 14px; }
+        .info-item { 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 12px; 
+            color: #4b5563; 
+            font-size: 14px; 
+            font-weight: 500; 
+            border-bottom: 1px solid #f1f5f9; 
+            padding-bottom: 8px; 
+        }
+        .info-item span { color: #1e293b; font-weight: 700; margin-left: auto; } /* แยกหัวข้อกับค่าตัวเลขให้สมดุล */
         
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; transition: 0.2s; cursor: pointer; }
@@ -46,7 +55,7 @@
 </head>
 <body class="pb-10 overflow-x-hidden">
 
-    <div id="loading" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-4 text-center">
+    <div id="loading" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-4 text-center px-6">
         <div class="flex gap-3 text-5xl animate-bounce"><span>🏠</span><span>✨</span><span>🌴</span></div>
         <p class="text-white font-black text-xl tracking-[0.2em] uppercase">HUAHIN.PROPERTIES</p>
         <p class="text-white/60 text-[10px] font-bold uppercase tracking-[0.3em] animate-pulse">Fetching details...</p>
@@ -120,16 +129,24 @@
                             <div class="flex flex-col items-end gap-2"><span class="${s} badge-mini shadow-sm">${p.Status}</span><span class="text-[#ef4444] text-[9px] font-black uppercase">${p.Badge || ''}</span></div>
                         </div>
                         <div class="mb-8"><p class="text-[14px] text-gray-600 leading-relaxed">${p.Description || '-'}</p></div>
+                        
                         <div class="bg-gray-50 rounded-3xl p-6 mb-8 border border-gray-100">
+                            <h3 class="text-[10px] font-black text-blue-900 uppercase tracking-widest mb-4 opacity-40">Property Details</h3>
                             <div class="info-grid">
-                                <div class="info-item">🛏️ Bedrooms: ${p.Bedrooms}</div><div class="info-item">🚿 Bathrooms: ${p.Bathrooms}</div>
-                                <div class="info-item">🏠 Pavilion: ${p.Pavilion}</div><div class="info-item">📐 Land (m²): ${p["Land Area (sq.m)"]}</div>
-                                <div class="info-item">📏 Land (sq.w): ${p["Land Area (sq.w)"]}</div><div class="info-item">🏗️ Living: ${p["Living Area"]}</div>
-                                <div class="info-item">🏊 Pool: ${p["Pool Size"]}</div><div class="info-item">⏬ Deep: ${p["Pool Depth"]}</div>
-                                <div class="info-item">🚗 Parking: ${p.Parking}</div><div class="info-item">⚡ Elec: ${p.Electricity}</div>
-                                <div class="info-item">🛋️ Fur: ${p.Furnishing}</div>
+                                <div class="info-item">🛏️ Bedrooms <span>${p.Bedrooms}</span></div>
+                                <div class="info-item">🚿 Bathrooms <span>${p.Bathrooms}</span></div>
+                                <div class="info-item">🏠 Pavilion <span>${p.Pavilion}</span></div>
+                                <div class="info-item">📐 Land Area (m²) <span>${p["Land Area (sq.m)"]}</span></div>
+                                <div class="info-item">📏 Land Area (sq.w) <span>${p["Land Area (sq.w)"]}</span></div>
+                                <div class="info-item">🏗️ Living Area <span>${p["Living Area"]}</span></div>
+                                <div class="info-item">🏊 Pool Size <span>${p["Pool Size"]}</span></div>
+                                <div class="info-item">⏬ Pool Depth <span>${p["Pool Depth"]}</span></div>
+                                <div class="info-item">🚗 Parking <span>${p.Parking}</span></div>
+                                <div class="info-item">⚡ Electricity <span>${p.Electricity}</span></div>
+                                <div class="info-item">🛋️ Furnishing <span>${p.Furnishing}</span></div>
                             </div>
                         </div>
+
                         <div class="flex flex-col items-center gap-4 mb-8">
                             <span class="text-[#06C755] font-black text-4xl">฿${Number(p.Price).toLocaleString()}</span>
                             <button onclick="window.open('${p.FBLink}','_blank')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg uppercase">View All Photos & Video ></button>
