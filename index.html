@@ -10,13 +10,20 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; top: 0 !important; position: static !important; }
         
-        /* ซ่อนแถบ Google Translate */
+        /* ซ่อนแถบ Google Translate มาตรฐาน */
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
         iframe#\3a 1\.container { display: none !important; }
 
-        .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; line-height: 1; }
+        /* สไตล์ธงชาติแปลภาษา */
+        .flag-btn { cursor: pointer; font-size: 18px; transition: 0.2s; line-height: 1; }
+        .flag-btn:hover { transform: scale(1.2); }
+
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
+        
+        /* ป้ายรหัสบ้านสีเขียวที่กู้คืนมา */
+        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; }
+        
         .badge-mini { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 60; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
     </style>
@@ -38,12 +45,14 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
             <span class="text-[8px] font-bold uppercase mt-0.5">MENU</span>
         </button>
-        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase">HUAHIN<br>PROPERTIES</div>
+        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase leading-none">HUAHIN<br>PROPERTIES</div>
         <div class="flex gap-1">
             <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span>
             <span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
             <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span>
             <span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
+            <span class="flag-btn" onclick="chgLng('de')">🇩🇪</span>
+            <span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span>
         </div>
     </header>
 
@@ -70,7 +79,7 @@
         overlay.onclick = () => { overlay.classList.add('hidden'); drawer.classList.add('-translate-x-full'); };
 
         function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
-        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru',autoDisplay:false},'google_translate_element');}
+        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
         function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
         
         function getSty(s){ 
@@ -87,7 +96,6 @@
                 const allProps = await r.json();
                 render(allProps);
             } catch(e) { console.error(e); }
-            // ซ่อน Loading เมื่อโหลดเสร็จ
             document.getElementById('loadingScreen').style.display = 'none';
         }
 
@@ -96,7 +104,9 @@
                 const s = getSty(p.Status);
                 return `
                 <div class="property-bubble">
-                    <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"></div>
+                    <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');">
+                        <div class="badge-code">Code: ${p.ID}</div>
+                    </div>
                     <div class="p-6">
                         <div class="flex justify-between items-center mb-4">
                             <div class="text-black font-black text-2xl tracking-tighter">${p.Plot}</div>
@@ -108,7 +118,7 @@
                         <div class="flex justify-between items-center">
                             <span class="text-[#06C755] font-black text-2xl">฿${Number(p.Price).toLocaleString()}</span>
                             <button onclick="window.location.href='details.html?id=${p.ID}'" 
-                                    class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold text-[10px] shadow-lg active:scale-95 transition-all">
+                                    class="bg-blue-600 text-white px-6 py-2.5 rounded-full font-bold text-[11px] shadow-lg active:scale-95 transition-all">
                                 VIEW DETAILS >
                             </button>
                         </div>
