@@ -16,63 +16,44 @@
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .info-item { display: flex; align-items: center; gap: 10px; color: #4b5563; font-size: 13px; font-weight: 500; }
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
-        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; }
-        .share-btn span { font-size: 8px; font-weight: 800; color: white; }
+        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; color: white; cursor: pointer; }
+        .share-btn span { font-size: 8px; font-weight: 800; }
         /* สไตล์ Related Items ด้านล่าง */
-        .related-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px 0; scrollbar-width: none; }
-        .related-card { min-width: 160px; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .related-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px 0; scrollbar-width: none; -ms-overflow-style: none; }
+        .related-scroll::-webkit-scrollbar { display: none; }
+        .related-card { min-width: 160px; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
-
     <div id="loading" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center font-bold text-blue-900">LOADING...</div>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b shadow-sm">
-        <button onclick="window.location.href='index.html'" class="text-blue-900 font-bold text-xs uppercase"> < Back</button>
-        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase">HUAHIN<br>PROPERTIES</div>
-        <div class="flex gap-1">
-            <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span>
-            <span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
-            <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span>
-            <span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
-        </div>
+        <button onclick="window.location.href='index.html'" class="text-blue-900 font-bold text-xs"> < BACK</button>
+        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase leading-none">HUAHIN<br>PROPERTIES</div>
+        <div class="flex gap-1"><span class="flag-btn" onclick="chgLng('th')">🇹🇭</span><span class="flag-btn" onclick="chgLng('en')">🇺🇸</span><span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span><span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span></div>
     </header>
 
     <div id="google_translate_element" style="display:none"></div>
 
-    <main id="details-app">
-        </main>
+    <main id="details-app"></main>
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec";
-        
         function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
         function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru',autoDisplay:false},'google_translate_element');}
         function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
-        
-        // ระบบสี Status
-        function getSty(s){ 
-            const t = (s||"").toLowerCase(); 
-            if(t.includes("ready")) return "bg-[#06C755] text-white"; 
-            if(t.includes("construction")) return "bg-[#9333ea] text-white"; 
-            if(t.includes("empty")) return "bg-white text-black border border-gray-300"; 
-            return "bg-[#ef4444] text-white"; 
-        }
+        function getSty(s){ const t = (s||"").toLowerCase(); if(t.includes("ready")) return "bg-[#06C755] text-white"; if(t.includes("construction")) return "bg-[#9333ea] text-white"; if(t.includes("empty")) return "bg-white text-black border"; return "bg-[#ef4444] text-white"; }
 
         async function init(){
             const urlParams = new URLSearchParams(window.location.search);
-            const propertyId = urlParams.get('id'); // รับ ID จาก URL
-
+            const propertyId = urlParams.get('id');
             try {
                 const r = await fetch(GAS_URL, {method:'POST', body:JSON.stringify({action:"getProperties"})});
                 const allProps = await r.json();
-                
-                // ค้นหาบ้านหลังที่เลือก
                 const p = allProps.find(item => item.ID === propertyId);
-                const related = allProps.filter(item => item.ID !== propertyId).slice(0, 6); // สุ่มบ้านหลังอื่นมาโชว์ 6 หลัง
-
+                const related = allProps.filter(item => item.ID !== propertyId).slice(0, 6);
                 if(p) render(p, related);
-                else document.body.innerHTML = "<h1>Property Not Found</h1>";
+                else document.body.innerHTML = "<h1 class='p-10'>Property Not Found</h1>";
             } catch(e) { console.error(e); }
             document.getElementById('loading').style.display = 'none';
         }
@@ -80,69 +61,43 @@
         function render(p, related){
             const s = getSty(p.Status);
             const u = encodeURIComponent(window.location.href);
-            
             document.getElementById('details-app').innerHTML = `
                 <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"></div>
-
                 <div class="max-w-xl mx-auto px-5 -mt-10">
                     <div class="bg-white rounded-[35px] p-6 shadow-xl border">
                         <div class="flex justify-between items-start mb-6">
-                            <div>
-                                <h1 class="text-4xl font-black text-black leading-none">${p.Plot}</h1>
-                                <p class="text-xs text-gray-400 mt-1 uppercase font-bold tracking-widest">Property Code: ${p.ID}</p>
-                            </div>
+                            <h1 class="text-4xl font-black text-black leading-none">${p.Plot}</h1>
                             <div class="flex flex-col items-end gap-2">
                                 <span class="${s} badge-mini shadow-sm">${p.Status}</span>
                                 <span class="text-[#ef4444] text-[10px] font-black uppercase">${p.Badge || ''}</span>
                             </div>
                         </div>
-
-                        <div class="mb-8">
-                            <p class="text-[15px] text-gray-600 leading-relaxed">${p.Description || '-'}</p>
-                        </div>
-
+                        <p class="text-[15px] text-gray-600 mb-8 leading-relaxed">${p.Description || '-'}</p>
                         <div class="bg-gray-50 rounded-3xl p-6 mb-8 border border-gray-100">
-                            <h3 class="text-[10px] font-black text-blue-900 uppercase tracking-tighter mb-4 opacity-30">Technical Specifications</h3>
                             <div class="info-grid">
-                                <div class="info-item">🛏️ Bedrooms: ${p.Bedrooms}</div>
-                                <div class="info-item">🚿 Bathrooms: ${p.Bathrooms}</div>
-                                <div class="info-item">🏠 Pavilion: ${p.Pavilion}</div>
-                                <div class="info-item">📐 Land Area (m²): ${p["Land Area (sq.m)"]}</div>
-                                <div class="info-item">📏 Land Area (sq.w): ${p["Land Area (sq.w)"]}</div>
-                                <div class="info-item">🏗️ Living Area: ${p["Living Area"]}</div>
-                                <div class="info-item">🏊 Pool Size: ${p["Pool Size"]}</div>
-                                <div class="info-item">⏬ Pool Depth: ${p["Pool Depth"]}</div>
-                                <div class="info-item">🚗 Parking: ${p.Parking}</div>
-                                <div class="info-item">⚡ Electricity: ${p.Electricity}</div>
+                                <div class="info-item">🛏️ Bedrooms: ${p.Bedrooms}</div><div class="info-item">🚿 Bathrooms: ${p.Bathrooms}</div>
+                                <div class="info-item">🏠 Pavilion: ${p.Pavilion}</div><div class="info-item">📐 Land (m²): ${p["Land Area (sq.m)"]}</div>
+                                <div class="info-item">📏 Land (sq.w): ${p["Land Area (sq.w)"]}</div><div class="info-item">🏗️ Living Area: ${p["Living Area"]}</div>
+                                <div class="info-item">🏊 Pool Size: ${p["Pool Size"]}</div><div class="info-item">⏬ Pool Depth: ${p["Pool Depth"]}</div>
+                                <div class="info-item">🚗 Parking: ${p.Parking}</div><div class="info-item">⚡ Electricity: ${p.Electricity}</div>
                                 <div class="info-item">🛋️ Furnishing: ${p.Furnishing}</div>
                             </div>
                         </div>
-
                         <div class="flex flex-col items-center gap-4 mb-8">
                             <span class="text-[#06C755] font-black text-4xl">฿${Number(p.Price).toLocaleString()}</span>
                             <button onclick="window.open('${p.FBLink}','_blank')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg">VIEW ALL PHOTOS & VIDEO ></button>
                         </div>
-
                         <div class="border-t pt-6">
-                            <p class="text-center text-[9px] font-bold text-gray-300 uppercase tracking-widest mb-3">Share Property</p>
                             <div class="share-grid">
                                 <div onclick="window.open('https://line.me/R/msg/text/?Interested%20${p.Plot}%20${u}')" class="share-btn bg-[#06C755]"><span>LINE</span></div>
                                 <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
                                 <a href="fb-messenger://share?link=${u}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
-                                <a href="https://wa.me/?text=${u}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
-                                <a href="https://twitter.com/intent/tweet?url=${u}" target="_blank" class="share-btn bg-black"><span>X</span></a>
-                                <a href="https://t.me/share/url?url=${u}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
-                                <a href="mailto:?body=${u}" class="share-btn bg-gray-600"><span>MAIL</span></a>
-                                <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('Link Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
+                                <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
                             </div>
                         </div>
                     </div>
-
                     <div class="mt-10 mb-10">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-black text-blue-900">OTHER PROPERTIES</h2>
-                            <a href="index.html" class="text-xs font-bold text-blue-500">SEE ALL ></a>
-                        </div>
+                        <h2 class="text-xl font-black text-blue-900 mb-4">OTHER PROPERTIES</h2>
                         <div class="related-scroll">
                             ${related.map(r => `
                                 <div class="related-card" onclick="window.location.href='details.html?id=${r.ID}'">
