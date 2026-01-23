@@ -10,33 +10,32 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; top: 0 !important; position: static !important; }
         
-        /* ซ่อนแถบ Google Translate มาตรฐาน */
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
         iframe#\3a 1\.container { display: none !important; }
 
-        /* สไตล์ธงชาติแปลภาษา */
         .flag-btn { cursor: pointer; font-size: 18px; transition: 0.2s; line-height: 1; }
         .flag-btn:hover { transform: scale(1.2); }
 
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
         
-        /* ป้ายรหัสบ้านสีเขียวที่กู้คืนมา */
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; }
         
-        .badge-mini { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
+        /* ปรับขนาด Badge ให้เล็กลงเล็กน้อยเพื่อความสวยงาม */
+        .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
+        
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 60; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
 
-    <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-5 text-center">
+    <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-5 text-center px-6">
         <div class="flex gap-4 text-5xl animate-bounce">
             <span>🐚</span><span>🌊</span><span>🏖️</span>
         </div>
         <div>
-            <p class="text-white font-black text-2xl tracking-[0.25em] uppercase">HUAHIN.PROPERTIES</p>
-            <p class="text-white/70 text-[10px] font-bold uppercase tracking-[0.4em] mt-2 animate-pulse">Loading Catalog...</p>
+            <p class="text-white font-black text-xl tracking-widest uppercase">HUAHIN.PROPERTIES</p>
+            <p class="text-white/70 text-[9px] font-bold uppercase tracking-[0.3em] mt-2 animate-pulse">Loading Catalog...</p>
         </div>
     </div>
 
@@ -59,7 +58,7 @@
     <div id="google_translate_element" style="display:none"></div>
 
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-[55] hidden"></div>
-    <div id="sidebarDrawer" class="sidebar-drawer -translate-x-full text-center">
+    <div id="sidebarDrawer" class="sidebar-drawer -translate-x-full text-center fixed top-0 left-0 bottom-0 bg-white">
         <div class="p-4 bg-blue-50 border-b">
             <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black mx-auto">HP</div>
             <span class="font-bold text-blue-900 text-[8px] mt-2 block leading-tight uppercase">Huahin<br>Properties</span>
@@ -108,17 +107,17 @@
                         <div class="badge-code">Code: ${p.ID}</div>
                     </div>
                     <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <div class="text-black font-black text-2xl tracking-tighter">${p.Plot}</div>
-                            <div class="flex gap-1.5">
+                        <div class="flex flex-wrap justify-between items-start gap-2 mb-4">
+                            <div class="text-black font-black text-2xl tracking-tighter leading-none">${p.Plot}</div>
+                            <div class="flex flex-wrap gap-1.5 justify-end items-center">
                                 <span class="${s} badge-mini shadow-sm">${p.Status}</span>
-                                <span class="text-[#ef4444] text-[9px] font-black uppercase">${p.Badge || ''}</span>
+                                <span class="text-[#ef4444] text-[8px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
                             </div>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-[#06C755] font-black text-2xl">฿${Number(p.Price).toLocaleString()}</span>
+                        <div class="flex justify-between items-center gap-2 mt-2">
+                            <span class="text-[#06C755] font-black text-xl leading-none">฿${Number(p.Price).toLocaleString()}</span>
                             <button onclick="window.location.href='details.html?id=${p.ID}'" 
-                                    class="bg-blue-600 text-white px-6 py-2.5 rounded-full font-bold text-[11px] shadow-lg active:scale-95 transition-all">
+                                    class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold text-[9px] shadow-lg active:scale-95 transition-all whitespace-nowrap">
                                 VIEW DETAILS >
                             </button>
                         </div>
