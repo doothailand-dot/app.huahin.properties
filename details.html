@@ -13,16 +13,19 @@
         .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; line-height: 1; }
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
         .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; position: relative; background-color: #eee; z-index: 1; }
+        
+        /* ✅ จัดเรียงแบบคอลัมน์เดี่ยวตามสั่ง */
         .info-grid { display: flex; flex-direction: column; gap: 14px; }
         .info-item { display: flex; align-items: flex-start; gap: 12px; color: #4b5563; font-size: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
         .info-item span { color: #1e293b; font-weight: 700; margin-left: auto; text-align: right; }
+        
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; transition: 0.2s; cursor: pointer; color: white; }
         .share-btn span { font-size: 8px; font-weight: 800; }
         .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 0; }
         .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; cursor: pointer; display: flex; flex-direction: column; }
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 100; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
-        #staffFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 150; background: #2563eb; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); border: 2px solid white; white-space: nowrap; }
+        #staffFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 200; background: #2563eb; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); border: 2px solid white; white-space: nowrap; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
@@ -98,16 +101,27 @@
                     <div class="bg-white rounded-[35px] p-6 shadow-2xl border border-white/50">
                         <div class="flex justify-between items-start mb-6">
                             <div><h1 class="text-4xl font-black text-black leading-none">${p.Plot}</h1><p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest">Selected Property</p></div>
-                            <div class="flex flex-col items-end gap-2"><span class="bg-[#06C755] text-white badge-mini shadow-sm px-3 py-1 rounded-full font-bold uppercase" style="font-size: 8px;">${p.Status}</span></div>
+                            <div class="flex flex-col items-end gap-2">
+                                <span class="bg-[#9333ea] text-white badge-mini shadow-sm px-3 py-1 rounded-full font-bold uppercase" style="font-size: 8px;">${p.Status}</span>
+                                <span class="text-[#ef4444] text-[9px] font-black uppercase">${p.Badge || ''}</span>
+                            </div>
                         </div>
                         <div class="text-blue-900 font-black text-xs mb-4 uppercase">📍 ${p.SubDistrict}, ${p.District}</div>
                         <div class="mb-8 text-[14px] text-gray-600 leading-relaxed">${p.Description || '-'}</div>
                         
                         <div class="bg-gray-50 rounded-3xl p-6 mb-8 border border-gray-100">
                             <div class="info-grid">
-                                <div class="info-item">🛏️ Bedrooms <span>${p.Bedrooms}</span></div><div class="info-item">🚿 Bathrooms <span>${p.Bathrooms}</span></div>
-                                <div class="info-item">📐 Land Area (m²) <span>${p["Land Area (sq.m)"]}</span></div><div class="info-item">🏗️ Living Area <span>${p["Living Area"]}</span></div>
-                                <div class="info-item">🚗 Parking <span>${p.Parking}</span></div><div class="info-item">⚡ Electricity <span>${p.Electricity}</span></div>
+                                <div class="info-item">🛏️ Bedrooms <span>${p.Bedrooms}</span></div>
+                                <div class="info-item">🚿 Bathrooms <span>${p.Bathrooms}</span></div>
+                                <div class="info-item">🏠 Pavilion <span>${p.Pavilion}</span></div>
+                                <div class="info-item">📐 Land Area (m²) <span>${p["Land Area (sq.m)"]}</span></div>
+                                <div class="info-item">📏 Land Area (sq.w) <span>${p["Land Area (sq.w)"]}</span></div>
+                                <div class="info-item">🏗️ Living (m²) <span>${p["Living Area"]}</span></div>
+                                <div class="info-item">🏊 Pool Size <span>${p["Pool Size"]}</span></div>
+                                <div class="info-item">⏬ Pool Depth <span>${p["Pool Depth"]}</span></div>
+                                <div class="info-item">🚗 Parking <span>${p.Parking}</span></div>
+                                <div class="info-item">⚡ Electricity <span>${p.Electricity}</span></div>
+                                <div class="info-item">🛋️ Furnishing <span>${p.Furnishing}</span></div>
                             </div>
                         </div>
 
@@ -132,7 +146,7 @@
                     </div>
 
                     <div class="mt-12 mb-10 px-2">
-                        <h2 class="text-xl font-black text-blue-900 leading-none mb-6">OTHER PROPERTIES</h2>
+                        <h2 class="text-xl font-black text-blue-900 leading-none mb-6 uppercase">Other Properties</h2>
                         <div class="related-grid">
                             ${others.map(r => `
                                 <div class="related-card" onclick="location.href='details.html?id=${r.ID}${isStaff}'">
