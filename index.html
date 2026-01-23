@@ -15,17 +15,16 @@
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; }
         .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
-        .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 60; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+        
+        /* ✅ Sidebar 140px ตามที่คุณต้องการ */
+        .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 70; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
 
     <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-5 text-center px-6">
         <div class="flex gap-4 text-5xl animate-bounce"><span>🐚</span><span>🌊</span><span>🏖️</span></div>
-        <div>
-            <p class="text-white font-black text-xl tracking-widest uppercase">HUAHIN.PROPERTIES</p>
-            <p class="text-white/70 text-[9px] font-bold uppercase tracking-widest mt-2 animate-pulse">Loading Catalog...</p>
-        </div>
+        <div><p class="text-white font-black text-xl tracking-widest uppercase">HUAHIN.PROPERTIES</p></div>
     </div>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b shadow-sm">
@@ -37,18 +36,35 @@
         <div class="flex gap-1">
             <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span><span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
             <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span><span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
-            <span class="flag-btn" onclick="chgLng('de')">🇩🇪</span><span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span>
         </div>
     </header>
 
     <div id="google_translate_element" style="display:none"></div>
 
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-[65] hidden"></div>
+    <div id="sidebarDrawer" class="sidebar-drawer -translate-x-full text-center">
+        <div class="p-4 bg-blue-50 border-b">
+            <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black mx-auto">HP</div>
+            <span class="font-bold text-blue-900 text-[8px] mt-2 block leading-tight uppercase">Huahin<br>Properties</span>
+        </div>
+        <nav class="py-4">
+            <a href="#" class="block py-4 text-blue-900 font-bold text-[10px] uppercase bg-blue-50">Catalog</a>
+            <a href="#" class="block py-4 text-gray-500 text-[10px] font-bold uppercase">Contact</a>
+        </nav>
+    </div>
+
     <main id="app" class="max-w-xl mx-auto px-4 py-6"></main>
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec";
+        
+        // ✅ Sidebar Toggle Logic
+        const menuBtn = document.getElementById('menuBtn'), overlay = document.getElementById('sidebarOverlay'), drawer = document.getElementById('sidebarDrawer');
+        menuBtn.onclick = () => { overlay.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); };
+        overlay.onclick = () => { overlay.classList.add('hidden'); drawer.classList.add('-translate-x-full'); };
+
         function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
-        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
+        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru',autoDisplay:false},'google_translate_element');}
         function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
         
         async function init(){
@@ -78,8 +94,7 @@
                         </div>
                         <div class="text-gray-500 text-[10px] font-bold uppercase mb-2">📍 ${p.SubDistrict}, ${p.District}</div>
                         <div class="flex gap-4 text-blue-900 font-bold text-[10px] mb-4 border-t pt-2">
-                            <span>🛏️ ${p.Bedrooms} BED</span>
-                            <span>🚿 ${p.Bathrooms} BATH</span>
+                            <span>🛏️ ${p.Bedrooms} BED</span><span>🚿 ${p.Bathrooms} BATH</span>
                         </div>
                         <div class="flex justify-between items-center gap-2">
                             <span class="text-[#06C755] font-black text-xl leading-none">฿${Number(p.Price).toLocaleString()}</span>
