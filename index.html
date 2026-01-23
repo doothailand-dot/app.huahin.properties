@@ -2,131 +2,106 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Premium Catalog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Console | Huahin Properties</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
-        body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; top: 0 !important; position: static !important; }
-        
-        .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
-        iframe#\3a 1\.container { display: none !important; }
-
-        .flag-btn { cursor: pointer; font-size: 18px; transition: 0.2s; line-height: 1; }
-        .flag-btn:hover { transform: scale(1.2); }
-
-        .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
-        .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
-        
-        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; }
-        
-        /* ปรับขนาด Badge ให้เล็กลงเล็กน้อยเพื่อความสวยงาม */
-        .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
-        
-        .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 60; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+        body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; padding-bottom: 50px; }
+        label { display: block; font-size: 13px; color: #64748b; font-weight: 700; margin-top: 15px; margin-bottom: 5px; text-transform: uppercase; }
+        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; outline: none; }
+        .btn-group { margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn { padding: 14px; border-radius: 12px; font-weight: 800; text-align: center; cursor: pointer; text-transform: uppercase; }
+        .btn-save { background: #2563eb; color: white; }
     </style>
 </head>
-<body class="pb-10 overflow-x-hidden">
+<body class="px-6">
+    <h1 class="text-2xl font-black text-blue-900 text-center py-8">ADMIN CONSOLE</h1>
+    
+    <form id="propertyForm" class="max-w-xl mx-auto bg-white p-6 rounded-3xl shadow-sm border">
+        <label>SELECT ENTRY</label>
+        <select id="editSelector" onchange="loadData()" class="bg-blue-50 border-blue-200"><option value="">-- NEW ENTRY --</option></select>
 
-    <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-5 text-center px-6">
-        <div class="flex gap-4 text-5xl animate-bounce">
-            <span>🐚</span><span>🌊</span><span>🏖️</span>
+        <div class="grid grid-cols-2 gap-4">
+            <div><label>ID (Code)</label><input type="text" id="ID" required></div>
+            <div><label>Plot Number</label><input type="text" id="Plot"></div>
         </div>
-        <div>
-            <p class="text-white font-black text-xl tracking-widest uppercase">HUAHIN.PROPERTIES</p>
-            <p class="text-white/70 text-[9px] font-bold uppercase tracking-[0.3em] mt-2 animate-pulse">Loading Catalog...</p>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div><label>Bedrooms</label><input type="text" id="Bedrooms"></div>
+            <div><label>Bathrooms</label><input type="text" id="Bathrooms"></div>
         </div>
-    </div>
 
-    <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b shadow-sm">
-        <button id="menuBtn" class="flex flex-col items-center justify-center text-blue-900">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
-            <span class="text-[8px] font-bold uppercase mt-0.5">MENU</span>
-        </button>
-        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase leading-none">HUAHIN<br>PROPERTIES</div>
-        <div class="flex gap-1">
-            <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span>
-            <span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
-            <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span>
-            <span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
-            <span class="flag-btn" onclick="chgLng('de')">🇩🇪</span>
-            <span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span>
+        <label>District (อำเภอ)</label>
+        <select id="District" onchange="updateSubDistricts()">
+            <option value="">-- Select District --</option>
+            <option value="หัวหิน">หัวหิน (Hua Hin)</option>
+            <option value="ชะอำ">ชะอำ (Cha-am)</option>
+            <option value="ปราณบุรี">ปราณบุรี (Pran Buri)</option>
+        </select>
+
+        <label>Sub-District (ตำบล)</label>
+        <select id="SubDistrict">
+            <option value="">-- Select District First --</option>
+        </select>
+
+        <label>Price (THB)</label><input type="number" id="Price">
+        <label>Status</label>
+        <select id="Status">
+            <option value="Ready to move in">Ready to move in</option>
+            <option value="Under Construction">Under Construction</option>
+            <option value="Sold Out">Sold Out</option>
+        </select>
+
+        <label>Description</label><textarea id="Description" rows="3"></textarea>
+        <label>Thumbnail Link</label><input type="text" id="Thumbnail">
+        <label>FB Link</label><input type="text" id="FBLink">
+
+        <div class="hidden">
+            <input type="text" id="Pavilion" value="No">
+            <input type="text" id="LandAreaSqM"><input type="text" id="LandAreaSqW">
+            <input type="text" id="LivingArea"><input type="text" id="PoolSize">
+            <input type="text" id="PoolDepth"><input type="text" id="Furnishing">
+            <input type="text" id="Badge"><input type="text" id="Type">
+            <input type="text" id="Parking"><input type="text" id="Electricity">
         </div>
-    </header>
 
-    <div id="google_translate_element" style="display:none"></div>
-
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-[55] hidden"></div>
-    <div id="sidebarDrawer" class="sidebar-drawer -translate-x-full text-center fixed top-0 left-0 bottom-0 bg-white">
-        <div class="p-4 bg-blue-50 border-b">
-            <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black mx-auto">HP</div>
-            <span class="font-bold text-blue-900 text-[8px] mt-2 block leading-tight uppercase">Huahin<br>Properties</span>
+        <div class="btn-group">
+            <div class="btn border-2" onclick="location.reload()">Cancel</div>
+            <div class="btn btn-save" onclick="saveData()" id="saveBtn">Save Data</div>
         </div>
-        <nav class="py-4">
-            <a href="#" class="block py-4 text-blue-900 font-bold text-[10px] uppercase bg-blue-50">Catalog</a>
-            <a href="#" class="block py-4 text-gray-500 text-[10px] font-bold uppercase">Contact</a>
-        </nav>
-    </div>
-
-    <main id="app" class="max-w-xl mx-auto px-4 py-6"></main>
+    </form>
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec";
-        const menuBtn = document.getElementById('menuBtn'), overlay = document.getElementById('sidebarOverlay'), drawer = document.getElementById('sidebarDrawer');
-        menuBtn.onclick = () => { overlay.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); };
-        overlay.onclick = () => { overlay.classList.add('hidden'); drawer.classList.add('-translate-x-full'); };
+        const subDistMap = {
+            "หัวหิน": ["หัวหิน", "หนองแก", "หินเหล็กไฟ", "หนองพลับ", "ทับใต้", "ห้วยสัตว์ใหญ่", "บึงนคร"],
+            "ชะอำ": ["ชะอำ", "บางเก่า", "นายาง", "เขาใหญ่", "หนองศาลา", "ห้วยทรายเหนือ", "ไร่ใหม่พัฒนา", "สามพระยา", "ดอนขุนห้วย"],
+            "ปราณบุรี": ["ปราณบุรี", "เขาน้อย", "ปากน้ำปราณ", "หนองตาแต้ม", "วังก์พง", "เขาจ้าว"]
+        };
 
-        function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
-        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
-        function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
-        
-        function getSty(s){ 
-            const t = (s||"").toLowerCase(); 
-            if(t.includes("ready")) return "bg-[#06C755] text-white"; 
-            if(t.includes("construction")) return "bg-[#9333ea] text-white"; 
-            if(t.includes("empty")) return "bg-white text-black border border-gray-300"; 
-            return "bg-[#ef4444] text-white"; 
+        function updateSubDistricts() {
+            const dist = document.getElementById('District').value;
+            const subDistSelect = document.getElementById('SubDistrict');
+            subDistSelect.innerHTML = '<option value="">-- Select Sub-District --</option>';
+            if(subDistMap[dist]) {
+                subDistMap[dist].forEach(s => {
+                    const o = document.createElement('option'); o.value = s; o.text = s; subDistSelect.add(o);
+                });
+            }
         }
 
-        async function init(){
-            try {
-                const r = await fetch(GAS_URL, {method:'POST', body:JSON.stringify({action:"getProperties"})});
-                const allProps = await r.json();
-                render(allProps);
-            } catch(e) { console.error(e); }
-            document.getElementById('loadingScreen').style.display = 'none';
+        async function saveData() {
+            const btn = document.getElementById('saveBtn'); btn.innerText = "SAVING...";
+            const fields = ["ID","Plot","Bedrooms","Bathrooms","Pavilion","LandAreaSqM","LandAreaSqW","LivingArea","PoolSize","PoolDepth","Furnishing","Price","Status","Badge","Type","Description","Parking","Electricity","District","SubDistrict","Thumbnail","FBLink"];
+            const data = {};
+            fields.forEach(f => {
+                const el = document.getElementById(f.replace(/\s/g,''));
+                if(el) data[f === "LandAreaSqM" ? "Land Area (sq.m)" : f === "LandAreaSqW" ? "Land Area (sq.w)" : f] = el.value;
+            });
+            await fetch(GAS_URL, {method:'POST', body:JSON.stringify({action:"save", data: data})});
+            alert("Success!"); location.reload();
         }
-
-        function render(properties){
-            document.getElementById('app').innerHTML = properties.map((p) => {
-                const s = getSty(p.Status);
-                return `
-                <div class="property-bubble">
-                    <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');">
-                        <div class="badge-code">Code: ${p.ID}</div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex flex-wrap justify-between items-start gap-2 mb-4">
-                            <div class="text-black font-black text-2xl tracking-tighter leading-none">${p.Plot}</div>
-                            <div class="flex flex-wrap gap-1.5 justify-end items-center">
-                                <span class="${s} badge-mini shadow-sm">${p.Status}</span>
-                                <span class="text-[#ef4444] text-[8px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center gap-2 mt-2">
-                            <span class="text-[#06C755] font-black text-xl leading-none">฿${Number(p.Price).toLocaleString()}</span>
-                            <button onclick="window.location.href='details.html?id=${p.ID}'" 
-                                    class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold text-[9px] shadow-lg active:scale-95 transition-all whitespace-nowrap">
-                                VIEW DETAILS >
-                            </button>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-        init();
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
