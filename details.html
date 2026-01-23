@@ -10,16 +10,16 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; top: 0 !important; position: static !important; }
         
-        /* ซ่อนแถบ Google Translate มาตรฐานเพื่อความสวยงาม */
+        /* ซ่อนแถบ Google Translate มาตรฐาน */
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
         iframe#\3a 1\.container { display: none !important; }
 
-        /* สไตล์ธงชาติแปลภาษา */
+        /* ปุ่มธงชาติแปลภาษา */
         .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; line-height: 1; }
         .flag-btn:hover { transform: scale(1.2); }
 
         .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; background-color: #eee; }
-        .badge-mini { padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .badge-mini { padding: 4px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
         
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .info-item { display: flex; align-items: center; gap: 10px; color: #4b5563; font-size: 13px; font-weight: 500; }
@@ -31,7 +31,8 @@
 
         /* ตาราง Thumbnail บ้านหลังอื่นๆ 2 คอลัมน์ */
         .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 0; }
-        .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; cursor: pointer; }
+        .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s; }
+        .related-card:active { transform: scale(0.95); }
 
         /* Sidebar 140px */
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 60; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
@@ -39,12 +40,12 @@
 </head>
 <body class="pb-10 overflow-x-hidden">
 
-    <div id="loading" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-4">
-        <div class="flex gap-3 text-4xl animate-bounce">
+    <div id="loading" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-4 text-center">
+        <div class="flex gap-3 text-5xl animate-bounce">
             <span>🏠</span><span>✨</span><span>🌴</span>
         </div>
         <p class="text-white font-black text-xl tracking-[0.2em] uppercase">HUAHIN.PROPERTIES</p>
-        <p class="text-white/70 text-[10px] font-bold uppercase tracking-widest animate-pulse">Loading Details...</p>
+        <p class="text-white/60 text-[10px] font-bold uppercase tracking-[0.3em] animate-pulse">Fetching details...</p>
     </div>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b shadow-sm">
@@ -53,7 +54,7 @@
             <span class="text-[8px] font-bold uppercase mt-0.5">MENU</span>
         </button>
         <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase leading-tight">HUAHIN<br>PROPERTIES</div>
-        <div class="flex gap-1">
+        <div class="flex gap-1.5">
             <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span>
             <span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
             <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span>
@@ -101,15 +102,16 @@
 
         async function init(){
             const urlParams = new URLSearchParams(window.location.search);
-            const propertyId = urlParams.get('id');
+            const propertyId = urlParams.get('id'); // ดึงค่า ID ที่ไม่ซ้ำกันจาก URL
 
             try {
                 const r = await fetch(GAS_URL, {method:'POST', body:JSON.stringify({action:"getProperties"})});
                 const allProps = await r.json();
                 
-                const p = allProps.find(item => item.ID === propertyId);
-                // ดึงรายการบ้านหลังอื่นๆ ที่ไม่ใช่หลังที่กำลังดูอยู่
-                const others = allProps.filter(item => item.ID !== propertyId);
+                // ล็อกข้อมูลบ้านตาม ID ที่ได้รับ
+                const p = allProps.find(item => String(item.ID).trim() === String(propertyId).trim());
+                // กรองบ้านหลังอื่นๆ มาทำตารางด้านล่าง
+                const others = allProps.filter(item => String(item.ID).trim() !== String(propertyId).trim());
 
                 if(p) render(p, others);
                 else document.body.innerHTML = "<div class='p-10 text-center font-bold'>Property Not Found</div>";
@@ -117,7 +119,6 @@
             document.getElementById('loading').style.display = 'none';
         }
 
-        // ส่วนที่ 1: ตารางบ้านหลังอื่นๆ ด้านล่างสุด (Grid 2 คอลัมน์)
         function render(p, others){
             const s = getSty(p.Status);
             const u = encodeURIComponent(window.location.href);
@@ -144,9 +145,9 @@
                             <div class="info-grid">
                                 <div class="info-item">🛏️ Bedrooms: ${p.Bedrooms}</div><div class="info-item">🚿 Bathrooms: ${p.Bathrooms}</div>
                                 <div class="info-item">🏠 Pavilion: ${p.Pavilion}</div><div class="info-item">📐 Land (m²): ${p["Land Area (sq.m)"]}</div>
-                                <div class="info-item">📏 Land (sq.w): ${p["Land Area (sq.w)"]}</div><div class="info-item">🏗️ Living: ${p["Living Area"]}</div>
-                                <div class="info-item">🏊 Pool: ${p["Pool Size"]}</div><div class="info-item">⏬ Deep: ${p["Pool Depth"]}</div>
-                                <div class="info-item">🚗 Car: ${p.Parking}</div><div class="info-item">⚡ Elec: ${p.Electricity}</div>
+                                <div class="info-item">📏 Land (sq.w): ${p["Land Area (sq.w)"]}</div><div class="info-item">🏗️ Living Area: ${p["Living Area"]}</div>
+                                <div class="info-item">🏊 Pool Size: ${p["Pool Size"]}</div><div class="info-item">⏬ Deep: ${p["Pool Depth"]}</div>
+                                <div class="info-item">🚗 Parking: ${p.Parking}</div><div class="info-item">⚡ Elec: ${p.Electricity}</div>
                                 <div class="info-item">🛋️ Fur: ${p.Furnishing}</div>
                             </div>
                         </div>
@@ -165,16 +166,18 @@
                                 <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
                                 <a href="fb-messenger://share?link=${u}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
                                 <a href="https://wa.me/?text=${u}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
-                                <div class="share-btn bg-black"><span>X</span></div>
-                                <div class="share-btn bg-[#0088cc]"><span>TELE</span></div>
-                                <div class="share-btn bg-gray-600"><span>MAIL</span></div>
+                                <div class="share-btn bg-black text-white p-2 rounded-xl flex flex-col items-center"><span>X</span></div>
+                                <div class="share-btn bg-[#0088cc] text-white p-2 rounded-xl flex flex-col items-center"><span>TELE</span></div>
+                                <div class="share-btn bg-gray-600 text-white p-2 rounded-xl flex flex-col items-center"><span>MAIL</span></div>
                                 <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-12 mb-10 px-2">
-                        <div class="flex justify-between items-end mb-6"><h2 class="text-xl font-black text-blue-900">OTHER PROPERTIES</h2></div>
+                        <div class="flex justify-between items-end mb-6">
+                            <h2 class="text-xl font-black text-blue-900 leading-none uppercase">Other Properties</h2>
+                        </div>
                         <div class="related-grid">
                             ${others.map(r => `
                                 <div class="related-card" onclick="location.href='details.html?id=${r.ID}'">
@@ -184,6 +187,7 @@
                                             <p class="text-[11px] font-black text-black">${r.Plot}</p>
                                             <span class="text-[8px] font-bold text-gray-400 uppercase">${r.Status}</span>
                                         </div>
+                                        <p class="text-[10px] text-gray-500 mb-1 leading-none">${r.Bedrooms} Bed | ${r.Bathrooms} Bath</p>
                                         <p class="text-[11px] font-black text-[#06C755]">฿${Number(r.Price).toLocaleString()}</p>
                                     </div>
                                 </div>
