@@ -10,12 +10,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; top: 0 !important; position: static !important; }
         
+        /* ซ่อนแถบ Google Translate มาตรฐาน */
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
         iframe#\3a 1\.container { display: none !important; }
 
         .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; line-height: 1; }
         .flag-btn:hover { transform: scale(1.2); }
 
+        /* ป้ายรหัสบ้านสีเขียว */
         .badge-code { 
             position: absolute; top: 15px; left: 15px; 
             background-color: #06C755; color: white; 
@@ -24,7 +26,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
+        .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; position: relative; background-color: #eee; z-index: 1; }
         .badge-mini { padding: 4px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
         
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
@@ -34,46 +36,10 @@
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; transition: 0.2s; cursor: pointer; }
         .share-btn span { font-size: 8px; font-weight: 800; color: white; }
 
-        /* === 🔥 จุดแก้ไขสำคัญ: CSS สำหรับตาราง Other Properties ให้ไม่ล้น ไม่เบียด 🔥 === */
-        .related-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 12px; 
-            padding: 10px 0; 
-        }
-        
-        /* 1. การ์ดแม่: บังคับเรียงแนวตั้ง (Column) และตัดส่วนเกิน (Hidden) */
-        .related-card { 
-            background: white; 
-            border-radius: 20px; 
-            overflow: hidden; /* สำคัญมาก! ตัดรูปที่ล้นกรอบโค้งออก */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
-            border: 1px solid #f1f5f9; 
-            cursor: pointer; 
-            display: flex; /* ใช้ Flexbox */
-            flex-direction: column; /* เรียงจากบนลงล่าง */
-        }
-
-        /* 2. ส่วนรูปภาพ: ล็อกความสูงตายตัว ห้ามยืดหด */
-        .related-card-image {
-            width: 100%;
-            height: 120px; /* ความสูงคงที่ */
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            flex-shrink: 0; /* ห้ามหดตัว */
-        }
-
-        /* 3. ส่วนเนื้อหา: อยู่ด้านล่างอย่างเป็นระเบียบ */
-        .related-card-content {
-            padding: 10px 12px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background-color: white; /* ยืนยันพื้นหลังสีขาว */
-        }
-        /* ===================================================================== */
+        .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 0; }
+        .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; cursor: pointer; position: relative; display: flex; flex-direction: column; }
+        .related-card-image { width: 100%; height: 120px; background-size: cover; background-position: center; position: relative; flex-shrink: 0; }
+        .related-card-content { padding: 10px 12px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; background-color: white; }
 
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 60; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
     </style>
@@ -147,8 +113,8 @@
                     <div class="badge-code">Code: ${p.ID}</div>
                 </div>
 
-                <div class="max-w-xl mx-auto px-5 -mt-10">
-                    <div class="bg-white rounded-[35px] p-6 shadow-xl border">
+                <div class="max-w-xl mx-auto px-5 -mt-12 relative z-10">
+                    <div class="bg-white rounded-[35px] p-6 shadow-2xl border border-white/50">
                         <div class="flex justify-between items-start mb-6">
                             <div><h1 class="text-4xl font-black text-black leading-none">${p.Plot}</h1><p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest">Selected Property</p></div>
                             <div class="flex flex-col items-end gap-2"><span class="${s} badge-mini shadow-sm">${p.Status}</span><span class="text-[#ef4444] text-[9px] font-black uppercase">${p.Badge || ''}</span></div>
@@ -160,7 +126,7 @@
                                 <div class="info-item">🏠 Pavilion: ${p.Pavilion}</div><div class="info-item">📐 Land (m²): ${p["Land Area (sq.m)"]}</div>
                                 <div class="info-item">📏 Land (sq.w): ${p["Land Area (sq.w)"]}</div><div class="info-item">🏗️ Living: ${p["Living Area"]}</div>
                                 <div class="info-item">🏊 Pool: ${p["Pool Size"]}</div><div class="info-item">⏬ Deep: ${p["Pool Depth"]}</div>
-                                <div class="info-item">🚗 Car: ${p.Parking}</div><div class="info-item">⚡ Elec: ${p.Electricity}</div>
+                                <div class="info-item">🚗 Parking: ${p.Parking}</div><div class="info-item">⚡ Elec: ${p.Electricity}</div>
                                 <div class="info-item">🛋️ Fur: ${p.Furnishing}</div>
                             </div>
                         </div>
@@ -182,9 +148,7 @@
                     </div>
 
                     <div class="mt-12 mb-10 px-2">
-                        <div class="flex justify-between items-end mb-6">
-                            <h2 class="text-xl font-black text-blue-900 leading-none uppercase">Other Properties</h2>
-                        </div>
+                        <div class="flex justify-between items-end mb-6"><h2 class="text-xl font-black text-blue-900 leading-none uppercase">Other Properties</h2></div>
                         <div class="related-grid">
                             ${others.map(r => `
                                 <div class="related-card" onclick="location.href='details.html?id=${r.ID}'">
@@ -192,13 +156,7 @@
                                         <div class="badge-code" style="top: 8px; left: 8px; font-size: 7px; padding: 2px 8px;">Code: ${r.ID}</div>
                                     </div>
                                     <div class="related-card-content">
-                                        <div>
-                                            <div class="flex justify-between items-center mb-1">
-                                                <p class="text-[11px] font-black text-black truncate">${r.Plot}</p>
-                                                <span class="text-[8px] font-bold text-gray-400 uppercase">${r.Status}</span>
-                                            </div>
-                                            <p class="text-[9px] text-gray-500 leading-none">${r.Bedrooms} Bed | ${r.Bathrooms} Bath</p>
-                                        </div>
+                                        <div><div class="flex justify-between items-center mb-1"><p class="text-[11px] font-black text-black truncate">${r.Plot}</p><span class="text-[8px] font-bold text-gray-400 uppercase">${r.Status}</span></div><p class="text-[9px] text-gray-500 leading-none">${r.Bedrooms} Bed | ${r.Bathrooms} Bath</p></div>
                                         <p class="text-[11px] font-black text-[#06C755] mt-2">฿${Number(r.Price).toLocaleString()}</p>
                                     </div>
                                 </div>
