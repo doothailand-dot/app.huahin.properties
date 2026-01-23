@@ -3,70 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Luxury Global</title>
-    
+    <title>Huahin Properties | Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
-        
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; top: 0 !important; position: static !important; }
-        
-        /* ซ่อนแถบเครื่องมือ Google Translate */
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
-        iframe#\3a 1\.container { display: none !important; }
-
-        /* สไตล์ธงชาติแปลภาษา */
-        .flag-btn { cursor: pointer; font-size: 22px; transition: transform 0.2s; line-height: 1; }
-        .flag-btn:hover { transform: scale(1.2); }
-
-        /* Styles พื้นฐาน */
+        .flag-btn { cursor: pointer; font-size: 22px; transition: 0.2s; line-height: 1; }
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
-        .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
-        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; }
+        .hero-img { width: 100%; height: 250px; background-size: cover; background-position: center; background-color: #eee; }
         .badge-mini { padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; height: fit-content; }
-        
-        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .info-item { display: flex; align-items: center; gap: 8px; color: #4b5563; font-size: 12px; font-weight: 500; }
-        
-        .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 15px; border-top: 1px solid #f3f4f6; margin-top: 10px; }
-        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 10px 0; border-radius: 15px; transition: 0.2s; cursor: pointer; }
-        .share-btn span { font-size: 8px; font-weight: 800; color: white; }
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 50; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
-
-    <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] flex flex-col items-center justify-center z-[9999]">
-        <p class="text-white font-bold animate-pulse uppercase tracking-widest text-[10px]">Optimizing Layout...</p>
-    </div>
+    <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] flex flex-col items-center justify-center z-[9999]"><p class="text-white font-bold animate-pulse text-[10px]">LOADING CATALOG...</p></div>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-30 border-b shadow-sm">
-        <button id="menuBtn" class="flex flex-col items-center justify-center text-blue-900">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
-            <span class="text-[8px] font-bold">MENU</span>
-        </button>
-        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase">HUAHIN<br>PROPERTIES</div>
-        <div class="flex gap-1">
-            <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span>
-            <span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
-            <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span>
-            <span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
-            <span class="flag-btn" onclick="chgLng('de')">🇩🇪</span>
-            <span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span>
-        </div>
+        <button id="menuBtn" class="flex flex-col items-center justify-center text-blue-900"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg><span class="text-[8px] font-bold">MENU</span></button>
+        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase leading-none">HUAHIN<br>PROPERTIES</div>
+        <div class="flex gap-1"><span class="flag-btn" onclick="chgLng('th')">🇹🇭</span><span class="flag-btn" onclick="chgLng('en')">🇺🇸</span><span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span><span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span><span class="flag-btn" onclick="chgLng('de')">🇩🇪</span><span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span></div>
     </header>
 
     <div id="google_translate_element" style="display:none"></div>
-
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
     <div id="sidebarDrawer" class="sidebar-drawer -translate-x-full">
-        <div class="p-4 bg-blue-50 border-b text-center"><div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black mx-auto">HP</div><span class="font-bold text-blue-900 text-[8px] mt-2 block leading-tight">HUAHIN<br>PROPERTIES</span></div>
-        <nav class="flex-1 py-4 text-center">
-            <a href="#" class="block py-4 text-gray-500 border-b border-gray-50 text-[10px] font-bold uppercase">Home</a>
-            <a href="#" class="block py-4 text-gray-500 text-[10px] font-bold uppercase">Contact</a>
-        </nav>
+        <div class="p-4 bg-blue-50 border-b text-center"><div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black mx-auto">HP</div><span class="font-bold text-blue-900 text-[8px] mt-2 block leading-tight uppercase">Huahin Properties</span></div>
+        <nav class="flex-1 py-4 text-center"><a href="index.html" class="block py-4 text-blue-900 border-b border-gray-50 text-[10px] font-bold">HOME</a><a href="#" class="block py-4 text-gray-500 text-[10px] font-bold">CONTACT</a></nav>
     </div>
 
     <main id="app" class="max-w-xl mx-auto px-4 py-6"></main>
@@ -74,76 +38,46 @@
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec"; 
         let allProps = [];
-
         const menuBtn = document.getElementById('menuBtn'), overlay = document.getElementById('sidebarOverlay'), drawer = document.getElementById('sidebarDrawer');
         menuBtn.onclick = () => { overlay.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); };
         overlay.onclick = () => { overlay.classList.add('hidden'); drawer.classList.add('-translate-x-full'); };
 
         function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
         function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
-
-        function fixLink(u){ if(!u) return 'https://via.placeholder.com/600x400?text=No+Image'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
+        function fixLink(u){ if(!u) return 'https://via.placeholder.com/600x400'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
         
         function getSty(s){ 
             const t = (s||"").toLowerCase(); 
             if(t.includes("ready")) return "bg-[#06C755] text-white"; 
-            if(t.includes("under construction") || t.includes("construction")) return "bg-[#9333ea] text-white"; 
+            if(t.includes("construction")) return "bg-[#9333ea] text-white"; 
             if(t.includes("empty")) return "bg-white text-black border border-gray-300"; 
             return "bg-[#ef4444] text-white"; 
         }
 
         async function init(){ 
-            try{ 
-                await liff.init({liffId:"2008909867-tJ76yUtj"}); 
+            try { 
                 const r = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:"getProperties"})}); 
-                allProps = await r.json(); 
-                render(); 
-            }catch(e){ document.getElementById('loadingScreen').style.display='none'; } 
+                allProps = await r.json(); render(); 
+            } catch(e) { document.getElementById('loadingScreen').style.display='none'; } 
         }
 
         function render(){
             document.getElementById('app').innerHTML = allProps.map((p,i)=>{
-                const s = getSty(p.Status); const u = encodeURIComponent(`https://liff.line.me/2008909867-tJ76yUtj`);
+                const s = getSty(p.Status);
                 return `
                 <div class="property-bubble">
-                    <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"><div class="badge-code">Code: ${p.ID}</div></div>
+                    <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"></div>
                     <div class="p-6">
                         <div class="flex justify-between items-center mb-4">
                             <div class="text-black font-black text-2xl tracking-tighter">${p.Plot}</div>
                             <div class="flex gap-1.5 items-center">
                                 <span class="${s} badge-mini shadow-sm">${p.Status}</span>
-                                <span class="text-[#ef4444] text-[9px] font-black uppercase whitespace-nowrap">${p.Badge||''}</span>
                             </div>
                         </div>
-
-                        <div class="bg-gray-50 rounded-[25px] p-5 mb-5 border">
-                            <p class="text-[13px] text-gray-600 mb-4 leading-relaxed">${p.Description||'-'}</p>
-                            <div class="info-grid border-t pt-4">
-                                <div class="info-item">🛏️ Bedrooms: ${p.Bedrooms}</div><div class="info-item">🚿 Bathrooms: ${p.Bathrooms}</div>
-                                <div class="info-item">🏠 Pavilion: ${p.Pavilion}</div><div class="info-item">📐 Land (m²): ${p["Land Area (sq.m)"]}</div>
-                                <div class="info-item">📏 Land (sq.w): ${p["Land Area (sq.w)"]}</div><div class="info-item">🏗️ Living Area: ${p["Living Area"]}</div>
-                                <div class="info-item">🏊 Pool Size: ${p["Pool Size"]}</div><div class="info-item">⏬ Pool Depth: ${p["Pool Depth"]}</div>
-                                <div class="info-item">🚗 Parking: ${p.Parking}</div><div class="info-item">⚡ Electricity: ${p.Electricity}</div>
-                                <div class="info-item">🛋️ Furnishing: ${p.Furnishing}</div>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between items-center mb-6">
+                        <div class="flex justify-between items-center">
                             <span class="text-[#06C755] font-black text-2xl">฿${Number(p.Price).toLocaleString()}</span>
-                            <button onclick="window.open('${p.FBLink}','_blank')" class="bg-blue-50 text-blue-600 px-6 py-2 rounded-full font-bold text-[10px]">View Photos ></button>
-                        </div>
-                        
-                        <div class="flex justify-center mb-2"><svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></div>
-                        
-                        <div class="share-grid">
-                            <div onclick="window.open('https://line.me/R/msg/text/?Interested%20${p.Plot}%20${u}')" class="share-btn bg-[#06C755]"><span>LINE</span></div>
-                            <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
-                            <a href="fb-messenger://share?link=${u}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
-                            <a href="https://wa.me/?text=${u}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
-                            <a href="https://twitter.com/intent/tweet?url=${u}" target="_blank" class="share-btn bg-black"><span>X</span></a>
-                            <a href="https://t.me/share/url?url=${u}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
-                            <a href="mailto:?body=${u}" class="share-btn bg-gray-600"><span>MAIL</span></a>
-                            <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
+                            <button onclick="window.location.href='details.html?id=${p.ID}'" 
+                                    class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold text-[10px] shadow-lg">VIEW DETAILS ></button>
                         </div>
                     </div>
                 </div>`;
