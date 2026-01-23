@@ -10,35 +10,21 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
-        iframe#\3a 1\.container { display: none !important; }
-
-        .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; line-height: 1; }
-        .flag-btn:hover { transform: scale(1.2); }
-
-        .badge-code { 
-            position: absolute; top: 15px; left: 15px; 
-            background-color: #06C755; color: white; 
-            padding: 4px 12px; border-radius: 20px; 
-            font-size: 10px; font-weight: 700; z-index: 10; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-
+        .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; }
+        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
         .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; position: relative; background-color: #eee; z-index: 1; }
-        .badge-mini { padding: 4px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
-        
         .info-grid { display: flex; flex-direction: column; gap: 14px; }
         .info-item { display: flex; align-items: flex-start; gap: 12px; color: #4b5563; font-size: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
         .info-item span { color: #1e293b; font-weight: 700; margin-left: auto; text-align: right; }
-
-        /* ✅ แก้ไข: ปรับโครงสร้างแผงแชร์ 8 ปุ่ม (2 แถว แถวละ 4) */
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; transition: 0.2s; cursor: pointer; color: white; }
         .share-btn span { font-size: 8px; font-weight: 800; }
-
         .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 0; }
         .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; cursor: pointer; display: flex; flex-direction: column; }
-        
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 70; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+
+        /* ✅ สไตล์ปุ่มลับสำหรับสตาฟ (อ้างอิงตามรูป Screenshot_20260123_144836_LINE.jpg) */
+        #staffFloatingBtn { display: none; position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); z-index: 200; background: #2563eb; color: white; padding: 14px 24px; border-radius: 50px; font-weight: 800; font-size: 14px; box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4); white-space: nowrap; border: 2px solid white; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
@@ -47,6 +33,8 @@
         <div class="flex gap-3 text-5xl animate-bounce"><span>🏠</span><span>✨</span><span>🌴</span></div>
         <p class="text-white font-black text-xl uppercase">HUAHIN.PROPERTIES</p>
     </div>
+
+    <button id="staffFloatingBtn" onclick="window.location.href='staff-edit.html'">📝 Go back and edit (EDIT)</button>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b shadow-sm">
         <button id="menuBtn" class="flex flex-col items-center justify-center text-blue-900">
@@ -79,7 +67,13 @@
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec";
-        
+
+        // ✅ เช็คสถานะสตาฟเพื่อแสดงปุ่มกลับไปแก้ไข
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('staff') === 'true') {
+            document.getElementById('staffFloatingBtn').style.display = 'block';
+        }
+
         const menuBtn = document.getElementById('menuBtn'), overlay = document.getElementById('sidebarOverlay'), drawer = document.getElementById('sidebarDrawer');
         menuBtn.onclick = () => { overlay.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); };
         overlay.onclick = () => { overlay.classList.add('hidden'); drawer.classList.add('-translate-x-full'); };
@@ -89,7 +83,6 @@
         function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
 
         async function init(){
-            const urlParams = new URLSearchParams(window.location.search);
             const propertyId = urlParams.get('id');
             try {
                 const r = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:"getProperties"})});
@@ -103,6 +96,8 @@
 
         function render(p, others){
             const u = encodeURIComponent(window.location.href);
+            const isStaff = urlParams.get('staff') === 'true' ? '&staff=true' : '';
+
             document.getElementById('details-app').innerHTML = `
                 <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');">
                     <div class="badge-code">Code: ${p.ID}</div>
@@ -111,7 +106,7 @@
                     <div class="bg-white rounded-[35px] p-6 shadow-2xl border border-white/50">
                         <div class="flex justify-between items-start mb-6">
                             <div><h1 class="text-4xl font-black text-black leading-none">${p.Plot}</h1><p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest">Selected Property</p></div>
-                            <div class="flex flex-col items-end gap-2"><span class="bg-[#06C755] text-white badge-mini shadow-sm px-3 py-1 rounded-full">${p.Status}</span></div>
+                            <div class="flex flex-col items-end gap-2"><span class="bg-[#06C755] text-white badge-mini shadow-sm px-3 py-1 rounded-full font-bold uppercase" style="font-size: 8px;">${p.Status}</span></div>
                         </div>
                         <div class="text-blue-900 font-black text-xs mb-4 uppercase">📍 ${p.SubDistrict}, ${p.District}</div>
                         <div class="mb-8 text-[14px] text-gray-600 leading-relaxed">${p.Description || '-'}</div>
@@ -119,8 +114,7 @@
                         <div class="bg-gray-50 rounded-3xl p-6 mb-8 border border-gray-100">
                             <div class="info-grid">
                                 <div class="info-item">🛏️ Bedrooms <span>${p.Bedrooms}</span></div><div class="info-item">🚿 Bathrooms <span>${p.Bathrooms}</span></div>
-                                <div class="info-item">🏠 Pavilion <span>${p.Pavilion}</span></div><div class="info-item">📐 Land (m²) <span>${p["Land Area (sq.m)"]}</span></div>
-                                <div class="info-item">🏗️ Living Area <span>${p["Living Area"]}</span></div><div class="info-item">🏊 Pool Size <span>${p["Pool Size"]}</span></div>
+                                <div class="info-item">📐 Land Area (m²) <span>${p["Land Area (sq.m)"]}</span></div><div class="info-item">🏗️ Living Area <span>${p["Living Area"]}</span></div>
                             </div>
                         </div>
 
@@ -137,11 +131,7 @@
                                 <div onclick="window.open('https://line.me/R/msg/text/?Interested%20${p.Plot}%20${u}')" class="share-btn bg-[#06C755]"><span>LINE</span></div>
                                 <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
                                 <a href="fb-messenger://share?link=${u}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
-                                <a href="https://wa.me/?text=${u}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
-                                <a href="https://twitter.com/intent/tweet?url=${u}" target="_blank" class="share-btn bg-black"><span>X</span></a>
-                                <a href="https://t.me/share/url?url=${u}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
-                                <a href="mailto:?body=${u}" class="share-btn bg-gray-600"><span>MAIL</span></a>
-                                <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
+                                <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('คัดลอกลิงก์แล้ว!');" class="share-btn bg-orange-500"><span>LINK</span></div>
                             </div>
                         </div>
                     </div>
@@ -150,7 +140,7 @@
                         <h2 class="text-xl font-black text-blue-900 leading-none mb-6">OTHER PROPERTIES</h2>
                         <div class="related-grid">
                             ${others.map(r => `
-                                <div class="related-card" onclick="location.href='details.html?id=${r.ID}'">
+                                <div class="related-card" onclick="location.href='details.html?id=${r.ID}${isStaff}'">
                                     <div class="h-32 w-full bg-cover bg-center relative" style="background-image: url('${fixLink(r.Thumbnail)}')">
                                         <div class="badge-code" style="top: 8px; left: 8px; font-size: 7px; padding: 2px 8px;">Code: ${r.ID}</div>
                                     </div>
