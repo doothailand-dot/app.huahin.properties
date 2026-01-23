@@ -8,53 +8,46 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
-        body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; top: 0 !important; position: static !important; }
+        body { font-family: 'Prompt', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; top: 0 !important; position: static !important; }
         
-        /* ซ่อนแถบเครื่องมือแปลภาษา */
+        /* ซ่อนแถบเครื่องมือแปลภาษามาตรฐาน */
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
         iframe#\3a 1\.container { display: none !important; }
 
+        /* ปุ่มธงชาติแปลภาษา */
         .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; line-height: 1; }
-        .hero-img { width: 100%; height: 450px; background-size: cover; background-position: center; background-color: #eee; }
+        .flag-btn:hover { transform: scale(1.2); }
+
+        .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; background-color: #eee; }
         .badge-mini { padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
         
         .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .info-item { display: flex; align-items: center; gap: 10px; color: #4b5563; font-size: 13px; font-weight: 500; }
         
+        /* แผงแชร์ 8 ปุ่ม */
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
-        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; }
+        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; transition: 0.2s; cursor: pointer; }
         .share-btn span { font-size: 8px; font-weight: 800; color: white; }
 
-        /* === แก้ไขส่วนตารางบ้านด้านล่าง (2 คอลัมน์) === */
-        .related-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* แบ่ง 2 คอลัมน์ */
-            gap: 12px; 
-            padding: 10px 0; 
-        }
-        .related-card { 
-            background: white; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
-            border: 1px solid #f1f5f9;
-            transition: 0.2s;
-        }
-        .related-card:active { transform: scale(0.95); }
+        /* ตารางบ้านหลังอื่นๆ (2 คอลัมน์) */
+        .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 0; }
+        .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
 
-    <div id="loading" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center font-bold text-blue-900">LOADING...</div>
+    <div id="loading" class="fixed inset-0 bg-white z-[9999] flex items-center justify-center font-bold text-blue-900 uppercase tracking-widest">Loading Details...</div>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b shadow-sm">
-        <button onclick="window.location.href='index.html'" class="text-blue-900 font-bold text-xs uppercase"> < BACK</button>
+        <button onclick="window.location.href='index.html'" class="text-blue-900 font-bold text-[10px] uppercase tracking-tighter border border-blue-900 px-3 py-1 rounded-full">< BACK</button>
         <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase leading-tight">HUAHIN<br>PROPERTIES</div>
         <div class="flex gap-1">
             <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span>
             <span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
             <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span>
             <span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
+            <span class="flag-btn" onclick="chgLng('de')">🇩🇪</span>
+            <span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span>
         </div>
     </header>
 
@@ -66,7 +59,8 @@
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec";
         
         function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
-        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru',autoDisplay:false},'google_translate_element');}
+        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
+        
         function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
         
         function getSty(s){ 
@@ -86,16 +80,15 @@
                 const allProps = await r.json();
                 
                 const p = allProps.find(item => item.ID === propertyId);
-                // ดึงบ้านหลังอื่นๆ ทั้งหมด ยกเว้นหลังปัจจุบัน
-                const otherProperties = allProps.filter(item => item.ID !== propertyId);
+                const others = allProps.filter(item => item.ID !== propertyId); // ดึงหลังอื่นที่ไม่ได้คลิก
 
-                if(p) render(p, otherProperties);
+                if(p) render(p, others);
                 else document.body.innerHTML = "<div class='p-10 text-center font-bold'>Property Not Found</div>";
             } catch(e) { console.error(e); }
             document.getElementById('loading').style.display = 'none';
         }
 
-        function render(p, related){
+        function render(p, others){
             const s = getSty(p.Status);
             const u = encodeURIComponent(window.location.href);
             
@@ -135,18 +128,24 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col items-center gap-4 mb-8">
+                        <div class="flex flex-col items-center gap-4 mb-8 text-center">
                             <span class="text-[#06C755] font-black text-4xl">฿${Number(p.Price).toLocaleString()}</span>
                             <button onclick="window.open('${p.FBLink}','_blank')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg">VIEW ALL PHOTOS & VIDEO ></button>
                         </div>
 
                         <div class="border-t pt-6">
-                            <div class="flex justify-center mb-4"><svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></div>
+                            <div class="flex justify-center mb-2">
+                                <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                            </div>
                             <div class="share-grid">
                                 <div onclick="window.open('https://line.me/R/msg/text/?Interested%20${p.Plot}%20${u}')" class="share-btn bg-[#06C755]"><span>LINE</span></div>
                                 <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
                                 <a href="fb-messenger://share?link=${u}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
-                                <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('Link Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
+                                <a href="https://wa.me/?text=${u}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
+                                <a href="https://twitter.com/intent/tweet?url=${u}" target="_blank" class="share-btn bg-black"><span>X</span></a>
+                                <a href="https://t.me/share/url?url=${u}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
+                                <a href="mailto:?body=${u}" class="share-btn bg-gray-600"><span>MAIL</span></a>
+                                <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
                             </div>
                         </div>
                     </div>
@@ -154,14 +153,14 @@
                     <div class="mt-12 mb-10">
                         <div class="flex justify-between items-end mb-5">
                             <h2 class="text-xl font-black text-blue-900 leading-none">OTHER PROPERTIES</h2>
-                            <a href="index.html" class="text-[10px] font-bold text-blue-500 border-b border-blue-500 pb-0.5">VIEW ALL</a>
+                            <a href="index.html" class="text-[10px] font-bold text-blue-500 border-b border-blue-500">VIEW ALL</a>
                         </div>
                         <div class="related-grid">
-                            ${related.map(r => `
+                            ${others.map(r => `
                                 <div class="related-card" onclick="window.location.href='details.html?id=${r.ID}'">
                                     <div class="h-32 w-full bg-cover bg-center" style="background-image: url('${fixLink(r.Thumbnail)}')"></div>
                                     <div class="p-3">
-                                        <p class="text-[11px] font-black text-black leading-tight mb-1 truncate">${r.Plot}</p>
+                                        <p class="text-[11px] font-black text-black mb-1 truncate">${r.Plot}</p>
                                         <p class="text-[11px] font-bold text-[#06C755]">฿${Number(r.Price).toLocaleString()}</p>
                                     </div>
                                 </div>
