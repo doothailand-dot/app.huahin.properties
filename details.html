@@ -10,14 +10,34 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
+        iframe#\3a 1\.container { display: none !important; }
+
         .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; line-height: 1; }
-        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .flag-btn:hover { transform: scale(1.2); }
+
+        .badge-code { 
+            position: absolute; top: 15px; left: 15px; 
+            background-color: #06C755; color: white; 
+            padding: 4px 12px; border-radius: 20px; 
+            font-size: 10px; font-weight: 700; z-index: 10; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
         .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; position: relative; background-color: #eee; z-index: 1; }
+        .badge-mini { padding: 4px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
+        
         .info-grid { display: flex; flex-direction: column; gap: 14px; }
         .info-item { display: flex; align-items: flex-start; gap: 12px; color: #4b5563; font-size: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
         .info-item span { color: #1e293b; font-weight: 700; margin-left: auto; text-align: right; }
+
+        /* ✅ แก้ไข: ปรับโครงสร้างแผงแชร์ 8 ปุ่ม (2 แถว แถวละ 4) */
+        .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
+        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; transition: 0.2s; cursor: pointer; color: white; }
+        .share-btn span { font-size: 8px; font-weight: 800; }
+
         .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 0; }
         .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; cursor: pointer; display: flex; flex-direction: column; }
+        
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 70; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
     </style>
 </head>
@@ -35,12 +55,9 @@
         </button>
         <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase">HUAHIN<br>PROPERTIES</div>
         <div class="flex gap-1.5">
-            <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span>
-            <span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
-            <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span>
-            <span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
-            <span class="flag-btn" onclick="chgLng('de')">🇩🇪</span>
-            <span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span>
+            <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span><span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
+            <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span><span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
+            <span class="flag-btn" onclick="chgLng('de')">🇩🇪</span><span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span>
         </div>
     </header>
 
@@ -67,10 +84,8 @@
         menuBtn.onclick = () => { overlay.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); };
         overlay.onclick = () => { overlay.classList.add('hidden'); drawer.classList.add('-translate-x-full'); };
 
-        // ✅ แก้ไข: รองรับการแปลครบ 6 ภาษา
         function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
         function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
-        
         function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
 
         async function init(){
@@ -114,11 +129,20 @@
                             <button onclick="window.open('${p.FBLink}','_blank')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg uppercase">View All Photos & Video ></button>
                         </div>
 
-                        <div class="border-t pt-6 grid grid-cols-4 gap-2">
-                            <div onclick="window.open('https://line.me/R/msg/text/?Interested%20${p.Plot}%20${u}')" class="share-btn bg-[#06C755] p-3 rounded-xl text-center"><span>LINE</span></div>
-                            <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" class="share-btn bg-[#1877F2] p-3 rounded-xl text-center"><span>FB</span></a>
-                            <a href="fb-messenger://share?link=${u}" class="share-btn bg-[#0084FF] p-3 rounded-xl text-center"><span>MESS</span></a>
-                            <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('Copied!');" class="share-btn bg-orange-500 p-3 rounded-xl text-center"><span>LINK</span></div>
+                        <div class="border-t pt-6">
+                            <div class="flex justify-center mb-4">
+                                <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                            </div>
+                            <div class="share-grid">
+                                <div onclick="window.open('https://line.me/R/msg/text/?Interested%20${p.Plot}%20${u}')" class="share-btn bg-[#06C755]"><span>LINE</span></div>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
+                                <a href="fb-messenger://share?link=${u}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
+                                <a href="https://wa.me/?text=${u}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
+                                <a href="https://twitter.com/intent/tweet?url=${u}" target="_blank" class="share-btn bg-black"><span>X</span></a>
+                                <a href="https://t.me/share/url?url=${u}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
+                                <a href="mailto:?body=${u}" class="share-btn bg-gray-600"><span>MAIL</span></a>
+                                <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('Copied!');" class="share-btn bg-orange-500"><span>LINK</span></div>
+                            </div>
                         </div>
                     </div>
 
@@ -131,7 +155,7 @@
                                         <div class="badge-code" style="top: 8px; left: 8px; font-size: 7px; padding: 2px 8px;">Code: ${r.ID}</div>
                                     </div>
                                     <div class="p-3">
-                                        <div class="flex justify-between items-center mb-1"><p class="text-[11px] font-black text-black">${r.Plot}</p></div>
+                                        <div class="flex justify-between items-center mb-1"><p class="text-[11px] font-black text-black truncate">${r.Plot}</p></div>
                                         <p class="text-[11px] font-black text-[#06C755]">฿${Number(r.Price).toLocaleString()}</p>
                                     </div>
                                 </div>
