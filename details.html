@@ -10,16 +10,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
-        .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; }
-        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; }
+        .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; line-height: 1; }
+        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
         .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; position: relative; background-color: #eee; z-index: 1; }
         .info-grid { display: flex; flex-direction: column; gap: 14px; }
         .info-item { display: flex; align-items: flex-start; gap: 12px; color: #4b5563; font-size: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
         .info-item span { color: #1e293b; font-weight: 700; margin-left: auto; text-align: right; }
         .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 0; }
         .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; cursor: pointer; display: flex; flex-direction: column; }
-        
-        /* ✅ Sidebar 140px */
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 70; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
     </style>
 </head>
@@ -37,8 +35,12 @@
         </button>
         <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase">HUAHIN<br>PROPERTIES</div>
         <div class="flex gap-1.5">
-            <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span><span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
-            <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span><span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
+            <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span>
+            <span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
+            <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span>
+            <span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
+            <span class="flag-btn" onclick="chgLng('de')">🇩🇪</span>
+            <span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span>
         </div>
     </header>
 
@@ -61,13 +63,14 @@
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec";
         
-        // ✅ Sidebar Toggle Logic
         const menuBtn = document.getElementById('menuBtn'), overlay = document.getElementById('sidebarOverlay'), drawer = document.getElementById('sidebarDrawer');
         menuBtn.onclick = () => { overlay.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); };
         overlay.onclick = () => { overlay.classList.add('hidden'); drawer.classList.add('-translate-x-full'); };
 
+        // ✅ แก้ไข: รองรับการแปลครบ 6 ภาษา
         function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
-        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru',autoDisplay:false},'google_translate_element');}
+        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
+        
         function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
 
         async function init(){
@@ -90,9 +93,9 @@
                     <div class="badge-code">Code: ${p.ID}</div>
                 </div>
                 <div class="max-w-xl mx-auto px-5 -mt-12 relative z-10">
-                    <div class="bg-white rounded-[35px] p-6 shadow-2xl border">
+                    <div class="bg-white rounded-[35px] p-6 shadow-2xl border border-white/50">
                         <div class="flex justify-between items-start mb-6">
-                            <div><h1 class="text-4xl font-black text-black leading-none">${p.Plot}</h1><p class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Selected Property</p></div>
+                            <div><h1 class="text-4xl font-black text-black leading-none">${p.Plot}</h1><p class="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-widest">Selected Property</p></div>
                             <div class="flex flex-col items-end gap-2"><span class="bg-[#06C755] text-white badge-mini shadow-sm px-3 py-1 rounded-full">${p.Status}</span></div>
                         </div>
                         <div class="text-blue-900 font-black text-xs mb-4 uppercase">📍 ${p.SubDistrict}, ${p.District}</div>
@@ -108,7 +111,14 @@
 
                         <div class="flex flex-col items-center gap-4 mb-8">
                             <span class="text-[#06C755] font-black text-4xl">฿${Number(p.Price).toLocaleString()}</span>
-                            <button onclick="window.open('${p.FBLink}','_blank')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg">VIEW ALL PHOTOS & VIDEO ></button>
+                            <button onclick="window.open('${p.FBLink}','_blank')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg uppercase">View All Photos & Video ></button>
+                        </div>
+
+                        <div class="border-t pt-6 grid grid-cols-4 gap-2">
+                            <div onclick="window.open('https://line.me/R/msg/text/?Interested%20${p.Plot}%20${u}')" class="share-btn bg-[#06C755] p-3 rounded-xl text-center"><span>LINE</span></div>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" class="share-btn bg-[#1877F2] p-3 rounded-xl text-center"><span>FB</span></a>
+                            <a href="fb-messenger://share?link=${u}" class="share-btn bg-[#0084FF] p-3 rounded-xl text-center"><span>MESS</span></a>
+                            <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('Copied!');" class="share-btn bg-orange-500 p-3 rounded-xl text-center"><span>LINK</span></div>
                         </div>
                     </div>
 
