@@ -14,24 +14,25 @@
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
         
-        /* ✅ แก้ไข: ป้าย CODE ให้เหมือนปุ่ม View Details (Bold, 9px, Padding เท่ากัน) */
+        /* ป้าย CODE ขนาดมาตรฐาน */
         .badge-code { 
             position: absolute; top: 15px; left: 15px; 
             background-color: #06C755; color: white; 
-            padding: 10px 20px; /* เทียบเท่า py-2.5 px-5 */
-            border-radius: 50px; 
-            font-size: 9px; /* ขนาดเดียวกับปุ่ม View Detail */
-            font-weight: 700; /* ตัวหนาเดียวกับปุ่ม View Detail */
-            z-index: 10; 
+            padding: 10px 20px; border-radius: 50px; 
+            font-size: 9px; font-weight: 700; z-index: 10; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            text-transform: uppercase; 
-            letter-spacing: 0.5px;
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
 
         .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 100; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
         
-        /* ปุ่มลอย Admin/Staff */
+        /* แถบตัวกรอง (Filter Bar) */
+        .filter-section { background: white; border-radius: 25px; margin: 15px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .filter-input { width: 100%; padding: 10px 15px; border-radius: 15px; border: 1.5px solid #e2e8f0; font-size: 13px; outline: none; margin-bottom: 10px; }
+        .filter-input:focus { border-color: #1e3a8a; }
+        .select-custom { padding: 8px 12px; border-radius: 12px; border: 1.5px solid #e2e8f0; font-size: 11px; font-weight: 700; color: #1e3a8a; background: #f8fafc; outline: none; width: 100%; }
+
         #staffFloatingBtn, #adminFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 150; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; border: 2px solid white; white-space: nowrap; }
         #staffFloatingBtn { background: #2563eb; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); }
         #adminFloatingBtn { background: #ef4444; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4); }
@@ -44,8 +45,8 @@
         <p class="text-white font-black text-xl tracking-widest uppercase">HUAHIN.PROPERTIES</p>
     </div>
 
-    <button id="staffFloatingBtn" onclick="window.location.href='staff-edit.html'">📝 กลับสู่หน้าแก้ไข (STAFF)</button>
-    <button id="adminFloatingBtn" onclick="window.location.href='admin.html'">⚙️ กลับสู่หน้าจัดการ (ADMIN)</button>
+    <button id="staffFloatingBtn" onclick="window.location.href='staff-edit.html'">📝 กลับหน้าแก้ไข (STAFF)</button>
+    <button id="adminFloatingBtn" onclick="window.location.href='admin.html'">⚙️ กลับหน้าจัดการ (ADMIN)</button>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b shadow-sm">
         <button id="menuBtn" class="flex flex-col items-center justify-center text-blue-900">
@@ -62,6 +63,25 @@
 
     <div id="google_translate_element" style="display:none"></div>
 
+    <div class="max-w-xl mx-auto px-4 mt-4">
+        <div class="filter-section">
+            <input type="text" id="plotSearch" class="filter-input" placeholder="🔍 ค้นหาจากชื่อแปลง (Plot Number)..." oninput="filterAndRender()">
+            <div class="grid grid-cols-2 gap-3">
+                <select id="bedFilter" class="select-custom" onchange="filterAndRender()">
+                    <option value="all">🛏️ ทุกจำนวนห้องนอน</option>
+                    <option value="2">2 ห้องนอน</option>
+                    <option value="3">3 ห้องนอน</option>
+                    <option value="4">4+ ห้องนอน</option>
+                </select>
+                <select id="priceSort" class="select-custom" onchange="filterAndRender()">
+                    <option value="default">↕️ เรียงตามราคา</option>
+                    <option value="asc">ราคา: ต่ำไปสูง</option>
+                    <option value="desc">ราคา: สูงไปต่ำ</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-[90] hidden"></div>
     <div id="sidebarDrawer" class="sidebar-drawer -translate-x-full text-center">
         <div class="p-4 bg-blue-50 border-b">
@@ -74,10 +94,11 @@
         </nav>
     </div>
 
-    <main id="app" class="max-w-xl mx-auto px-4 py-6"></main>
+    <main id="app" class="max-w-xl mx-auto px-4 py-2"></main>
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec";
+        let allProperties = []; // เก็บข้อมูลต้นฉบับ
 
         const menuBtn = document.getElementById('menuBtn'), overlay = document.getElementById('sidebarOverlay'), drawer = document.getElementById('sidebarDrawer');
         menuBtn.onclick = () => { overlay.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); };
@@ -96,22 +117,51 @@
             if(t.includes("ready")) return { bg: "bg-[#06C755] text-white", text: "text-[#06C755]" };
             if(t.includes("construction")) return { bg: "bg-[#9333ea] text-white", text: "text-[#9333ea]" };
             if(t.includes("sold")) return { bg: "bg-[#ef4444] text-white", text: "text-[#ef4444]" };
-            if(t.includes("empty")) return { bg: "bg-white text-black border border-gray-300", text: "text-gray-400" };
-            return { bg: "bg-gray-100 text-gray-600", text: "text-gray-600" };
+            return { bg: "bg-white text-black border border-gray-300", text: "text-gray-400" };
         }
 
         async function init(){
             try {
                 const r = await fetch(GAS_URL, {method:'POST', body:JSON.stringify({action:"getProperties"})});
-                const allProps = await r.json();
-                render(allProps);
+                allProperties = await r.json();
+                filterAndRender(); // เรียกครั้งแรก
             } catch(e) { console.error(e); }
             document.getElementById('loadingScreen').style.display = 'none';
         }
 
+        // ✅ ฟังก์ชันการกรองและการแสดงผล
+        function filterAndRender() {
+            const searchText = document.getElementById('plotSearch').value.toLowerCase();
+            const bedValue = document.getElementById('bedFilter').value;
+            const sortOrder = document.getElementById('priceSort').value;
+
+            let filtered = allProperties.filter(p => {
+                const matchPlot = p.Plot.toLowerCase().includes(searchText);
+                const matchBed = (bedValue === 'all') ? true : 
+                               (bedValue === '4') ? parseInt(p.Bedrooms) >= 4 : 
+                               parseInt(p.Bedrooms) === parseInt(bedValue);
+                return matchPlot && matchBed;
+            });
+
+            if (sortOrder === 'asc') {
+                filtered.sort((a, b) => Number(a.Price) - Number(b.Price));
+            } else if (sortOrder === 'desc') {
+                filtered.sort((a, b) => Number(b.Price) - Number(a.Price));
+            }
+
+            render(filtered);
+        }
+
         function render(properties){
             const isStaff = urlParams.get('admin') === 'true' ? '&admin=true' : (urlParams.get('staff') === 'true' ? '&staff=true' : '');
-            document.getElementById('app').innerHTML = properties.map((p) => {
+            const app = document.getElementById('app');
+            
+            if (properties.length === 0) {
+                app.innerHTML = `<div class="text-center py-20 text-white font-bold uppercase tracking-widest">Property Not Found</div>`;
+                return;
+            }
+
+            app.innerHTML = properties.map((p) => {
                 const color = getStatusInfo(p.Status);
                 return `<div class="property-bubble">
                     <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');">
@@ -119,7 +169,7 @@
                     </div>
                     <div class="p-6">
                         <div class="flex flex-wrap justify-between items-start mb-2">
-                            <div class="text-black font-black text-sm tracking-tighter leading-none">PLOT : ${p.Plot}</div>
+                            <div class="text-black font-black text-sm tracking-tighter leading-none uppercase">PLOT : ${p.Plot}</div>
                             <div class="flex gap-2 items-center">
                                 <span class="${color.bg} badge-mini shadow-sm">${p.Status}</span>
                                 <span class="${color.text} text-[8px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
