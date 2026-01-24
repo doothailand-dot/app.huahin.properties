@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Property Details | Huahin Properties</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
-        iframe#\3a 1\.container { display: none !important; }
         .flag-btn { cursor: pointer; font-size: 20px; transition: 0.2s; line-height: 1; }
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 10px 20px; border-radius: 50px; font-size: 9px; font-weight: 700; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-transform: uppercase; }
         .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; position: relative; background-color: #eee; z-index: 1; }
@@ -18,148 +16,81 @@
         .info-item { display: flex; align-items: flex-start; gap: 12px; color: #4b5563; font-size: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
         .info-item span { color: #1e293b; font-weight: 700; margin-left: auto; text-align: right; }
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
-        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; transition: 0.2s; cursor: pointer; color: white; }
+        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; cursor: pointer; color: white; transition: 0.2s; }
         .share-btn span { font-size: 8px; font-weight: 800; }
-        .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 0; }
-        .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; cursor: pointer; display: flex; flex-direction: column; }
-        .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 100; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
         #staffFloatingBtn, #adminFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 150; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; border: 2px solid white; white-space: nowrap; }
-        #staffFloatingBtn { background: #2563eb; }
-        #adminFloatingBtn { background: #ef4444; }
+        #staffFloatingBtn { background: #2563eb; } #adminFloatingBtn { background: #ef4444; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
-    <div id="loading" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-4 text-center px-6">
-        <div class="flex gap-3 text-5xl animate-bounce"><span>🏠</span><span>✨</span><span>🌴</span></div>
-        <p class="text-white font-black text-xl uppercase">HUAHIN.PROPERTIES</p>
-    </div>
-
-    <button id="staffFloatingBtn" onclick="window.location.href='staff-edit.html'">📝 กลับสู่หน้าแก้ไข (STAFF)</button>
-    <button id="adminFloatingBtn" onclick="window.location.href='admin.html'">⚙️ กลับสู่หน้าจัดการ (ADMIN)</button>
+    <button id="staffFloatingBtn" onclick="window.location.href='staff-edit.html'">📝 กลับหน้าแก้ไข (STAFF)</button>
+    <button id="adminFloatingBtn" onclick="window.location.href='admin.html'">⚙️ กลับหน้าจัดการ (ADMIN)</button>
 
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b shadow-sm">
-        <button id="menuBtn" class="flex flex-col items-center justify-center text-blue-900">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
-            <span class="text-[8px] font-bold uppercase mt-0.5">MENU</span>
-        </button>
-        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase">HUAHIN PROPERTIES</div>
-        <div class="flex gap-1">
-            <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span><span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
-            <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span><span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
-            <span class="flag-btn" onclick="chgLng('de')">🇩🇪</span><span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span>
-        </div>
+        <button onclick="window.location.href='index.html'" class="text-blue-900 font-bold text-[10px] border border-blue-900 px-3 py-1 rounded-full">MENU</button>
+        <div class="text-center font-black text-blue-900 text-[10px] uppercase">HUAHIN PROPERTIES</div>
+        <div class="flex gap-1"><span>🇹🇭</span><span>🇺🇸</span><span>🇨🇳</span><span>🇷🇺</span><span>🇩🇪</span><span>🇫🇷</span></div>
     </header>
-
-    <div id="google_translate_element" style="display:none"></div>
-
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-[90] hidden"></div>
-    <div id="sidebarDrawer" class="sidebar-drawer -translate-x-full text-center">
-        <div class="p-4 bg-blue-50 border-b">
-            <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black mx-auto">HP</div>
-            <span class="font-bold text-blue-900 text-[8px] mt-2 block leading-tight uppercase">Huahin<br>Properties</span>
-        </div>
-        <nav class="py-4">
-            <a href="index.html" class="block py-4 text-gray-500 border-b border-gray-50 text-[10px] font-bold uppercase">Home</a>
-            <a href="#" class="block py-4 text-gray-500 text-[10px] font-bold uppercase">Contact</a>
-        </nav>
-    </div>
 
     <main id="details-app"></main>
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec";
         const urlParams = new URLSearchParams(window.location.search);
-        
-        const menuBtn = document.getElementById('menuBtn'), overlay = document.getElementById('sidebarOverlay'), drawer = document.getElementById('sidebarDrawer');
-        menuBtn.onclick = () => { overlay.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); };
-        overlay.onclick = () => { overlay.classList.add('hidden'); drawer.classList.add('-translate-x-full'); };
-
         if (urlParams.get('staff') === 'true') document.getElementById('staffFloatingBtn').style.display = 'block';
         if (urlParams.get('admin') === 'true') document.getElementById('adminFloatingBtn').style.display = 'block';
 
-        function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
-        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
-        function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
-
-        function getStatusInfo(s) {
-            const t = (s||"").toLowerCase();
-            if(t.includes("ready")) return { bg: "bg-[#06C755] text-white", text: "text-[#06C755]" };
-            if(t.includes("construction")) return { bg: "bg-[#9333ea] text-white", text: "text-[#9333ea]" };
-            if(t.includes("sold")) return { bg: "bg-[#ef4444] text-white", text: "text-[#ef4444]" };
-            return { bg: "bg-white text-black border", text: "text-gray-400" };
-        }
+        function fixLink(u){ if(!u) return ''; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
 
         async function init(){
             const propertyId = urlParams.get('id');
-            try {
-                const r = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:"getProperties"})});
-                const allProps = await r.json();
-                const p = allProps.find(item => String(item.ID).trim() === String(propertyId).trim());
-                const others = allProps.filter(item => String(item.ID).trim() !== String(propertyId).trim());
-                if(p) render(p, others);
-            } catch(e) { console.error(e); }
-            document.getElementById('loading').style.display = 'none';
+            const r = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:"getProperties"})});
+            const allProps = await r.json();
+            const p = allProps.find(item => String(item.ID).trim() === String(propertyId).trim());
+            if(p) render(p);
         }
 
-        function render(p, others){
+        function render(p){
             const u = encodeURIComponent(window.location.href);
-            const modeParam = urlParams.get('admin') === 'true' ? '&admin=true' : (urlParams.get('staff') === 'true' ? '&staff=true' : '');
-            const color = getStatusInfo(p.Status);
             document.getElementById('details-app').innerHTML = `
                 <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"><div class="badge-code">CODE: ${p.ID}</div></div>
                 <div class="max-w-xl mx-auto px-5 -mt-12 relative z-10">
                     <div class="bg-white rounded-[35px] p-6 shadow-2xl border">
-                        <div class="flex justify-between items-start mb-6">
-                            <div><div class="text-black font-black text-sm uppercase tracking-widest">PLOT : ${p.Plot}</div></div>
-                            <div class="flex flex-col items-end gap-2"><span class="${color.bg} px-3 py-1 rounded-full font-bold text-[9px] uppercase shadow-sm">${p.Status}</span><span class="${color.text} text-[9px] font-black uppercase">${p.Badge || ''}</span></div>
-                        </div>
-                        <div class="text-blue-900 font-black text-xs mb-4 uppercase">📍 ${p.SubDistrict}, ${p.District}</div>
-                        <div class="mb-8 text-[14px] text-gray-600 leading-relaxed">${p.Description || '-'}</div>
+                        <div class="text-black font-black text-sm uppercase tracking-widest mb-6">PLOT : ${p.Plot}</div>
                         <div class="bg-gray-50 rounded-3xl p-6 mb-8 border">
                             <div class="info-grid">
                                 <div class="info-item">🛏️ Bedrooms <span>${p.Bedrooms}</span></div><div class="info-item">🚿 Bathrooms <span>${p.Bathrooms}</span></div>
                                 <div class="info-item">🏠 Extras <span>${p.Extras || p.Pavilion || '-'}</span></div><div class="info-item">📐 Land (m²) <span>${p["Land Area (sq.m)"]}</span></div>
-                                <div class="info-item">📏 Land (sq.w) <span>${p["Land Area (sq.w)"]}</span></div><div class="info-item">🏗️ Living Area <span>${p["Living Area"]}</span></div>
-                                <div class="info-item">🏊 Pool Size <span>${p["Pool Size"]}</span></div><div class="info-item">⏬ Pool Depth <span>${p["Pool Depth"]}</span></div>
-                                <div class="info-item">🚗 Parking <span>${p.Parking || '-'}</span></div><div class="info-item">🛋️ Furnishing <span>${p.Furnishing}</span></div>
-                                <div class="info-item">⚡ Electricity <span>${p.Electricity || '-'}</span></div>
+                                <div class="info-item">🏗️ Living Area <span>${p["Living Area"]}</span></div><div class="info-item">🏊 Pool Size <span>${p["Pool Size"]}</span></div>
+                                <div class="info-item">🛋️ Furnishing <span>${p.Furnishing}</span></div>
+                                <div class="info-item border-none">⚡ Electricity <span>${p.Electricity || '-'}</span></div>
                             </div>
                         </div>
+
+                        ${p.FloorPlan ? `
+                        <div class="mb-10">
+                            <h3 class="font-black text-blue-900 text-sm uppercase tracking-widest mb-4">📐 FLOOR PLAN</h3>
+                            <div class="bg-white p-2 rounded-2xl border shadow-sm">
+                                <img src="${fixLink(p.FloorPlan)}" class="w-full rounded-xl" alt="Floor Plan">
+                            </div>
+                        </div>` : ''}
+
                         <div class="flex flex-col items-center gap-4 mb-8">
                             <span class="text-[#06C755] font-black text-4xl">฿${Number(p.Price).toLocaleString()}</span>
-                            <button onclick="window.open('${p.FBLink}','_blank')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg uppercase">View Photos & Video ></button>
+                            <button onclick="window.open('${p.FBLink}','_blank')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase">View Photos & Video ></button>
                         </div>
                         <div class="border-t pt-6">
-                            <div class="flex justify-center mb-4 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></div>
                             <div class="share-grid">
-                                <div onclick="window.open('https://line.me/R/msg/text/?Interested%20${p.Plot}%20${u}')" class="share-btn bg-[#06C755]"><span>LINE</span></div>
+                                <div onclick="window.open('https://line.me/R/msg/text/?${u}')" class="share-btn bg-[#06C755]"><span>LINE</span></div>
                                 <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
                                 <a href="fb-messenger://share?link=${u}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
-                                <a href="https://wa.me/?text=${u}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
-                                <a href="https://twitter.com/intent/tweet?url=${u}" target="_blank" class="share-btn bg-black"><span>X</span></a>
-                                <a href="https://t.me/share/url?url=${u}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
-                                <a href="mailto:?body=${u}" class="share-btn bg-gray-600"><span>MAIL</span></a>
                                 <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('คัดลอกลิงก์แล้ว!');" class="share-btn bg-orange-500"><span>LINK</span></div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="mt-12 mb-10 px-2">
-                        <h2 class="text-xl font-black text-blue-900 leading-none mb-6 uppercase">Other Properties</h2>
-                        <div class="related-grid">${others.map(r => `
-                            <div class="related-card" onclick="location.href='details.html?id=${r.ID}${modeParam}'">
-                                <div class="h-32 w-full bg-cover bg-center relative" style="background-image: url('${fixLink(r.Thumbnail)}')"><div class="badge-code" style="top: 8px; left: 8px; font-size: 7px; padding: 2px 8px;">CODE: ${r.ID}</div></div>
-                                <div class="p-3 flex flex-col gap-1">
-                                    <p class="text-[11px] font-black text-black leading-tight uppercase">${r.Plot} | ${r.SubDistrict}, ${r.District}</p>
-                                    <p class="text-[9px] text-gray-500 font-bold uppercase">${r.Bedrooms} BED | ${r.Bathrooms} BATH | ${r["Land Area (sq.m)"]} m²</p>
-                                    <p class="text-[11px] font-black text-[#06C755]">฿${Number(r.Price).toLocaleString()}</p>
-                                </div>
-                            </div>`).join('')}
                         </div>
                     </div>
                 </div>`;
         }
         init();
     </script>
-    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
