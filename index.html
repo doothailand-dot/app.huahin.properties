@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Huahin Properties | Catalog</title>
+    <title>HUAHIN.PROPERTIES | Catalog</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
@@ -15,15 +15,11 @@
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; background-color: #e2e8f0; }
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 10px 20px; border-radius: 50px; font-size: 9px; font-weight: 700; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-transform: uppercase; }
         .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
-        
-        /* Sidebar 140px (ลบ Admin/Staff ออกแล้ว) */
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 500; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
         .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 499; display: none; }
-
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 600; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: white; width: 100%; max-width: 420px; border-radius: 30px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         .plot-option { padding: 18px 25px; border-bottom: 1px solid #f8fafc; cursor: pointer; transition: 0.2s; }
-        
         .filter-section { background: white; border-radius: 25px; margin: 15px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .filter-trigger { width: 100%; padding: 12px 18px; border-radius: 15px; border: 1.5px solid #e2e8f0; font-size: 13px; text-align: left; color: #1e3a8a; font-weight: 600; background: white; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         #staffFloatingBtn, #adminFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 150; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; border: 2px solid white; white-space: nowrap; }
@@ -35,7 +31,7 @@
     <div id="sideDrawer" class="sidebar-drawer -translate-x-full text-center">
         <div class="p-6 bg-blue-50 border-b">
             <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black mx-auto">HP</div>
-            <span class="font-bold text-blue-900 text-[8px] mt-2 block leading-tight uppercase">Huahin<br>Properties</span>
+            <span class="font-bold text-blue-900 text-[8px] mt-2 block leading-tight uppercase">HUAHIN.<br>PROPERTIES</span>
         </div>
         <nav class="py-4">
             <a href="index.html" class="block py-4 text-blue-900 font-bold text-[10px] uppercase bg-blue-50">Catalog</a>
@@ -45,7 +41,7 @@
 
     <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-5 text-center px-6">
         <div class="flex gap-4 text-5xl animate-bounce"><span>🐚</span><span>🌊</span><span>🌴</span></div>
-        <p class="text-white font-black text-xl uppercase tracking-widest">HUAHIN PROPERTIES</p>
+        <p class="text-white font-black text-xl uppercase tracking-widest">HUAHIN.PROPERTIES</p>
     </div>
 
     <div id="plotModal" class="modal-overlay" onclick="closeModal(event)">
@@ -64,7 +60,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
             <span class="text-[8px] font-bold uppercase mt-0.5">MENU</span>
         </button>
-        <div class="text-center font-black text-blue-900 text-[10px] uppercase leading-tight">HUAHIN PROPERTIES</div>
+        <div class="text-center font-black text-blue-900 text-[11px] uppercase tracking-tighter">HUAHIN.PROPERTIES</div>
         <div class="flex gap-1"><span class="flag-btn" onclick="chgLng('th')">🇹🇭</span><span class="flag-btn" onclick="chgLng('en')">🇺🇸</span><span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span><span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span><span class="flag-btn" onclick="chgLng('de')">🇩🇪</span><span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span></div>
     </header>
 
@@ -103,21 +99,7 @@
         async function init(){ try { const r = await fetch(GAS_URL, {method:'POST', body:JSON.stringify({action:"getProperties"})}); allProperties = await r.json(); renderPlotList(); filterAndRender(); } catch(e) { console.error(e); } document.getElementById('loadingScreen').style.display = 'none'; }
         function openPlotModal(){ document.getElementById('plotModal').style.display = 'flex'; }
         function closeModal(e){ if(e) e.stopPropagation(); document.getElementById('plotModal').style.display = 'none'; }
-        
-        // ✅ Layout: สถานะอยู่แถวแรกด้านขวา
-        function renderPlotList(){
-            document.getElementById('plotList').innerHTML = allProperties.map(p => {
-                const color = getStatusInfo(p.Status);
-                return `<div class="plot-option" onclick="selectPlot('${p.Plot}')">
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="font-black text-blue-900 text-sm uppercase">PLOT : ${p.Plot}</span>
-                        <span class="${color.bg} text-[7px] px-2 py-0.5 rounded-full font-black uppercase shadow-sm">${p.Status}</span>
-                    </div>
-                    <div class="text-[10px] text-gray-400 font-bold uppercase tracking-tight">฿${Number(p.Price).toLocaleString()} | ${p.Bedrooms} BED</div>
-                </div>`;
-            }).join('');
-        }
-
+        function renderPlotList(){ document.getElementById('plotList').innerHTML = allProperties.map(p => { const color = getStatusInfo(p.Status); return `<div class="plot-option" onclick="selectPlot('${p.Plot}')"><div class="flex justify-between items-center mb-1"><span class="font-black text-blue-900 text-sm uppercase">PLOT : ${p.Plot}</span><span class="${color.bg} text-[7px] px-2 py-0.5 rounded-full font-black uppercase shadow-sm">${p.Status}</span></div><div class="text-[10px] text-gray-400 font-bold uppercase tracking-tight">฿${Number(p.Price).toLocaleString()} | ${p.Bedrooms} BED</div></div>`; }).join(''); }
         function selectPlot(p){ selectedPlot = p; document.getElementById('selectedPlotLabel').innerHTML = `📍 แปลง: <span class="font-black text-blue-700">${p}</span>`; closeModal(); filterAndRender(); }
         function clearPlotFilter(){ selectedPlot = ""; document.getElementById('selectedPlotLabel').innerText = "🔍 เลือกจากชื่อแปลง..."; closeModal(); filterAndRender(); }
         function filterAndRender() { const bV = document.getElementById('bedFilter').value, sV = document.getElementById('priceSort').value; let filtered = allProperties.filter(p => { const mP = selectedPlot === "" || p.Plot === selectedPlot; let mB = (bV === 'all'); if(!mB) { if(bV === '6+') mB = parseInt(p.Bedrooms) >= 6; else mB = parseInt(p.Bedrooms) === parseInt(bV); } return mP && mB; }); if (sV === 'asc') filtered.sort((a, b) => Number(a.Price) - Number(b.Price)); else if (sV === 'desc') filtered.sort((a, b) => Number(b.Price) - Number(a.Price)); render(filtered); }
