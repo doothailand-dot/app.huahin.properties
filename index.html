@@ -10,23 +10,16 @@
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap');
         body { font-family: 'Prompt', sans-serif; background-color: #8cabd9; -webkit-tap-highlight-color: transparent; }
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
-        
-        /* ✅ ปรับขนาดธงชาติให้เล็กลงเพื่อแสดงครบ 6 ธง */
         .flag-btn { cursor: pointer; font-size: 16px; transition: 0.2s; line-height: 1; }
-        
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; background-color: #e2e8f0; }
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 10px 20px; border-radius: 50px; font-size: 9px; font-weight: 700; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-transform: uppercase; }
         .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
-        
-        /* Sidebar 140px */
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 500; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
         .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 499; display: none; }
-
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 600; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: white; width: 100%; max-width: 420px; border-radius: 30px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         .plot-option { padding: 18px 25px; border-bottom: 1px solid #f8fafc; cursor: pointer; transition: 0.2s; }
-        
         .filter-section { background: white; border-radius: 25px; margin: 15px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .filter-trigger { width: 100%; padding: 12px 18px; border-radius: 15px; border: 1.5px solid #e2e8f0; font-size: 13px; text-align: left; color: #1e3a8a; font-weight: 600; background: white; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         #staffFloatingBtn, #adminFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 150; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; border: 2px solid white; white-space: nowrap; }
@@ -82,7 +75,7 @@
             <div class="filter-trigger" onclick="openPlotModal()"><span id="selectedPlotLabel">🔍 เลือกจากชื่อแปลง...</span><span>▼</span></div>
             <div class="grid grid-cols-2 gap-3">
                 <select id="bedFilter" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50">
-                    <option value="all">🛏️ ทุกจำนวนห้องนอน</option><option value="1">1 นอน</option><option value="2">2 นอน</option>
+                    <option value="all">🛏️ ทุกห้องนอน</option><option value="1">1 นอน</option><option value="2">2 นอน</option>
                     <option value="3">3 นอน</option><option value="4">4 นอน</option><option value="5">5 นอน</option>
                     <option value="6">6 นอน</option><option value="6+">6+ นอน</option>
                 </select>
@@ -113,16 +106,17 @@
         function renderPlotList(){ document.getElementById('plotList').innerHTML = allProperties.map(p => { const color = getStatusInfo(p.Status); return `<div class="plot-option" onclick="selectPlot('${p.Plot}')"><div class="flex justify-between items-center mb-1"><span class="font-black text-blue-900 text-sm uppercase">PLOT : ${p.Plot}</span><span class="${color.bg} text-[7px] px-2 py-0.5 rounded-full font-black uppercase shadow-sm">${p.Status}</span></div><div class="text-[10px] text-gray-400 font-bold uppercase tracking-tight">฿${Number(p.Price).toLocaleString()} | ${p.Bedrooms} BED</div></div>`; }).join(''); }
         function selectPlot(p){ selectedPlot = p; document.getElementById('selectedPlotLabel').innerHTML = `📍 แปลง: <span class="font-black text-blue-700">${p}</span>`; closeModal(); filterAndRender(); }
         function clearPlotFilter(){ selectedPlot = ""; document.getElementById('selectedPlotLabel').innerText = "🔍 เลือกจากชื่อแปลง..."; closeModal(); filterAndRender(); }
-        function filterAndRender() { 
-            const bV = document.getElementById('bedFilter').value, sV = document.getElementById('priceSort').value; 
-            let filtered = allProperties.filter(p => { 
-                const mP = selectedPlot === "" || p.Plot === selectedPlot; 
-                let mB = (bV === 'all');
-                if(!mB) { if(bV === '6+') mB = parseInt(p.Bedrooms) >= 6; else mB = parseInt(p.Bedrooms) === parseInt(bV); } return mP && mB; 
-            }); 
-            if (sV === 'asc') filtered.sort((a, b) => Number(a.Price) - Number(b.Price)); else if (sV === 'desc') filtered.sort((a, b) => Number(b.Price) - Number(a.Price)); render(filtered); 
+        function filterAndRender() { const bV = document.getElementById('bedFilter').value, sV = document.getElementById('priceSort').value; let filtered = allProperties.filter(p => { const mP = selectedPlot === "" || p.Plot === selectedPlot; let mB = (bV === 'all'); if(!mB) { if(bV === '6+') mB = parseInt(p.Bedrooms) >= 6; else mB = parseInt(p.Bedrooms) === parseInt(bV); } return mP && mB; }); if (sV === 'asc') filtered.sort((a, b) => Number(a.Price) - Number(b.Price)); else if (sV === 'desc') filtered.sort((a, b) => Number(b.Price) - Number(a.Price)); render(filtered); }
+        
+        function render(props){ 
+            const mode = urlParams.get('admin') === 'true' ? '&admin=true' : (urlParams.get('staff') === 'true' ? '&staff=true' : ''); 
+            document.getElementById('app').innerHTML = props.map((p) => { 
+                const color = getStatusInfo(p.Status); 
+                return `<div class="property-bubble"><div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"><div class="badge-code">CODE: ${p.ID}</div></div><div class="p-6"><div class="flex flex-wrap justify-between items-start mb-2"><div class="text-black font-black text-sm uppercase">PLOT : ${p.Plot}</div><div class="flex gap-2 items-center"><span class="${color.bg} badge-mini shadow-sm">${p.Status}</span><span class="text-[#9333ea] text-[8px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span></div></div><div class="text-gray-500 text-[10px] font-bold uppercase mb-2">📍 ${p.SubDistrict}, ${p.District}</div><div class="flex flex-wrap gap-x-4 gap-y-1 text-blue-900 font-bold text-[9px] mb-4 border-t pt-2"><span>🛏️ ${p.Bedrooms} BED</span><span>🚿 ${p.Bathrooms} BATH</span><span>📐 LAND: ${p["Land Area (sq.m)"]} m²</span></div><div class="flex justify-between items-center gap-2">
+                <span class="text-[#06C755] font-black text-lg leading-tight">฿${Number(p.Price).toLocaleString()}</span>
+                <button onclick="window.location.href='details.html?id=${p.ID}${mode}'" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold text-[9px] shadow-lg uppercase">VIEW DETAILS ></button></div></div></div>`; 
+            }).join(''); 
         }
-        function render(props){ const mode = urlParams.get('admin') === 'true' ? '&admin=true' : (urlParams.get('staff') === 'true' ? '&staff=true' : ''); document.getElementById('app').innerHTML = props.map((p) => { const color = getStatusInfo(p.Status); return `<div class="property-bubble"><div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"><div class="badge-code">CODE: ${p.ID}</div></div><div class="p-6"><div class="flex flex-wrap justify-between items-start mb-2"><div class="text-black font-black text-sm uppercase">PLOT : ${p.Plot}</div><div class="flex gap-2 items-center"><span class="${color.bg} badge-mini shadow-sm">${p.Status}</span><span class="text-[#9333ea] text-[8px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span></div></div><div class="text-gray-500 text-[10px] font-bold uppercase mb-2">📍 ${p.SubDistrict}, ${p.District}</div><div class="flex flex-wrap gap-x-4 gap-y-1 text-blue-900 font-bold text-[9px] mb-4 border-t pt-2"><span>🛏️ ${p.Bedrooms} BED</span><span>🚿 ${p.Bathrooms} BATH</span><span>📐 LAND: ${p["Land Area (sq.m)"]} m²</span></div><div class="flex justify-between items-center gap-2"><span class="text-[#06C755] font-black text-xl leading-none">฿${Number(p.Price).toLocaleString()}</span><button onclick="window.location.href='details.html?id=${p.ID}${mode}'" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold text-[9px] shadow-lg uppercase">VIEW DETAILS ></button></div></div></div>`; }).join(''); }
         init();
     </script>
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
