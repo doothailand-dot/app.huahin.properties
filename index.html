@@ -16,15 +16,13 @@
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 10px 20px; border-radius: 50px; font-size: 9px; font-weight: 700; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-transform: uppercase; }
         .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
         
-        /* Sidebar 140px (ไม่มี Admin/Staff) */
+        /* Sidebar 140px (ลบ Admin/Staff ออกแล้ว) */
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 500; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
         .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 499; display: none; }
 
-        /* Modal Filter Popup */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 600; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: white; width: 100%; max-width: 420px; border-radius: 30px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         .plot-option { padding: 18px 25px; border-bottom: 1px solid #f8fafc; cursor: pointer; transition: 0.2s; }
-        .plot-option:active { background: #eff6ff; }
         
         .filter-section { background: white; border-radius: 25px; margin: 15px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .filter-trigger { width: 100%; padding: 12px 18px; border-radius: 15px; border: 1.5px solid #e2e8f0; font-size: 13px; text-align: left; color: #1e3a8a; font-weight: 600; background: white; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
@@ -45,6 +43,11 @@
         </nav>
     </div>
 
+    <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-5 text-center px-6">
+        <div class="flex gap-4 text-5xl animate-bounce"><span>🐚</span><span>🌊</span><span>🌴</span></div>
+        <p class="text-white font-black text-xl uppercase tracking-widest">HUAHIN PROPERTIES</p>
+    </div>
+
     <div id="plotModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="p-5 border-b flex justify-between items-center"><h3 class="font-black text-blue-900 text-sm">🔍 เลือกแปลงที่ต้องการ</h3><button onclick="clearPlotFilter()" class="text-[10px] bg-red-50 text-red-500 px-3 py-1 rounded-full font-bold uppercase">ล้างค่า</button></div>
@@ -52,8 +55,6 @@
             <div class="p-4 bg-gray-50 text-center"><button onclick="closeModal()" class="text-blue-900 font-bold text-sm">ปิดหน้าต่าง</button></div>
         </div>
     </div>
-
-    <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-5 text-center px-6"><p class="text-white font-black text-xl uppercase tracking-widest animate-pulse">HUAHIN PROPERTIES</p></div>
     
     <button id="staffFloatingBtn" onclick="window.location.href='staff-edit.html'" class="bg-blue-600">📝 STAFF EDIT</button>
     <button id="adminFloatingBtn" onclick="window.location.href='admin.html'" class="bg-red-600">⚙️ ADMIN CONSOLE</button>
@@ -74,7 +75,9 @@
             <div class="filter-trigger" onclick="openPlotModal()"><span id="selectedPlotLabel">🔍 เลือกจากชื่อแปลง...</span><span>▼</span></div>
             <div class="grid grid-cols-2 gap-3">
                 <select id="bedFilter" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50">
-                    <option value="all">🛏️ ทุกจำนวนห้องนอน</option><option value="1">1 ห้องนอน</option><option value="2">2 ห้องนอน</option><option value="3">3 ห้องนอน</option><option value="4">4 ห้องนอน</option><option value="5">5 ห้องนอน</option><option value="6">6 ห้องนอน</option><option value="6+">6+ ห้องนอน</option>
+                    <option value="all">🛏️ ทุกจำนวนห้องนอน</option><option value="1">1 ห้องนอน</option><option value="2">2 ห้องนอน</option>
+                    <option value="3">3 ห้องนอน</option><option value="4">4 ห้องนอน</option><option value="5">5 ห้องนอน</option>
+                    <option value="6">6 ห้องนอน</option><option value="6+">6+ ห้องนอน</option>
                 </select>
                 <select id="priceSort" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50"><option value="default">↕️ เรียงราคา</option><option value="asc">ราคาต่ำ-สูง</option><option value="desc">ราคาสูง-ต่ำ</option></select>
             </div>
@@ -101,16 +104,16 @@
         function openPlotModal(){ document.getElementById('plotModal').style.display = 'flex'; }
         function closeModal(e){ if(e) e.stopPropagation(); document.getElementById('plotModal').style.display = 'none'; }
         
-        // ✅ แก้ไข Layout รายการเลือก: สถานะอยู่ขวาแถวแรก
+        // ✅ Layout: สถานะอยู่แถวแรกด้านขวา
         function renderPlotList(){
             document.getElementById('plotList').innerHTML = allProperties.map(p => {
                 const color = getStatusInfo(p.Status);
                 return `<div class="plot-option" onclick="selectPlot('${p.Plot}')">
-                    <div class="flex justify-between items-start mb-1">
+                    <div class="flex justify-between items-center mb-1">
                         <span class="font-black text-blue-900 text-sm uppercase">PLOT : ${p.Plot}</span>
                         <span class="${color.bg} text-[7px] px-2 py-0.5 rounded-full font-black uppercase shadow-sm">${p.Status}</span>
                     </div>
-                    <div class="text-[9px] text-gray-400 font-bold uppercase tracking-tight">฿${Number(p.Price).toLocaleString()} | ${p.Bedrooms} BED</div>
+                    <div class="text-[10px] text-gray-400 font-bold uppercase tracking-tight">฿${Number(p.Price).toLocaleString()} | ${p.Bedrooms} BED</div>
                 </div>`;
             }).join('');
         }
