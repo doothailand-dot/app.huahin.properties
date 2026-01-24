@@ -12,61 +12,34 @@
         .goog-te-banner-frame.skiptranslate, .goog-te-gadget, .skiptranslate { display: none !important; }
         .flag-btn { cursor: pointer; font-size: 18px; transition: 0.2s; line-height: 1; }
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
-        
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; background-color: #e2e8f0; }
-        
-        /* ป้าย CODE ขนาดเท่าปุ่ม View Details */
-        .badge-code { 
-            position: absolute; top: 15px; left: 15px; 
-            background-color: #06C755; color: white; 
-            padding: 10px 20px; border-radius: 50px; 
-            font-size: 9px; font-weight: 700; z-index: 10; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            text-transform: uppercase; letter-spacing: 0.5px;
-        }
-
+        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 10px 20px; border-radius: 50px; font-size: 9px; font-weight: 700; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-transform: uppercase; letter-spacing: 0.5px; }
         .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
-        
-        /* ✅ สไตล์ Pop-up เลือกแปลงแบบใหม่ (Compact & Info-rich) */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; width: 100%; max-width: 420px; border-radius: 30px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-        .modal-header { padding: 18px 25px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
-        .plot-list { overflow-y: auto; flex-grow: 1; }
-        
-        /* รายการใน Pop-up: ตัด ID ออก และจัดระเบียบใหม่ */
-        .plot-option { 
-            padding: 15px 25px; border-bottom: 1px solid #f8fafc; cursor: pointer; 
-            display: flex; justify-content: space-between; align-items: center; transition: 0.2s; 
-        }
-        .plot-option:active { background: #eff6ff; }
-        .plot-info-main { display: flex; flex-direction: column; gap: 2px; }
-        .plot-name-text { font-size: 14px; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
-        .plot-sub-text { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; }
-
+        .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 30px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .plot-option { padding: 15px 25px; border-bottom: 1px solid #f8fafc; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .filter-section { background: white; border-radius: 25px; margin: 15px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .filter-trigger { width: 100%; padding: 12px 18px; border-radius: 15px; border: 1.5px solid #e2e8f0; font-size: 13px; text-align: left; color: #1e3a8a; font-weight: 600; background: white; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        
         #staffFloatingBtn, #adminFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 150; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; border: 2px solid white; white-space: nowrap; }
         #staffFloatingBtn { background: #2563eb; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); }
         #adminFloatingBtn { background: #ef4444; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4); }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
-
     <div id="plotModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <h3 class="font-black text-blue-900 text-sm">🔍 เลือกแปลงที่ต้องการ</h3>
+            <div class="p-5 border-b flex justify-between items-center">
+                <h3 class="font-black text-blue-900">🔍 เลือกแปลงที่ต้องการ</h3>
                 <button onclick="clearPlotFilter()" class="text-[10px] bg-red-50 text-red-500 px-3 py-1 rounded-full font-bold uppercase">ล้างค่า</button>
             </div>
-            <div id="plotList" class="plot-list"></div>
+            <div id="plotList" class="overflow-y-auto flex-grow"></div>
             <div class="p-4 bg-gray-50 text-center"><button onclick="closeModal()" class="text-blue-900 font-bold text-sm">ปิดหน้าต่าง</button></div>
         </div>
     </div>
 
     <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-5 text-center px-6">
         <div class="flex gap-4 text-5xl animate-bounce"><span>🐚</span><span>🌊</span><span>🏖️</span></div>
-        <p class="text-white font-black text-xl tracking-widest uppercase">HUAHIN.PROPERTIES</p>
+        <p class="text-white font-black text-xl uppercase tracking-widest">HUAHIN.PROPERTIES</p>
     </div>
 
     <button id="staffFloatingBtn" onclick="window.location.href='staff-edit.html'">📝 กลับหน้าแก้ไข (STAFF)</button>
@@ -77,7 +50,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
             <span class="text-[8px] font-bold uppercase mt-0.5">MENU</span>
         </button>
-        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase leading-tight">HUAHIN<br>PROPERTIES</div>
+        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase">HUAHIN PROPERTIES</div>
         <div class="flex gap-1">
             <span class="flag-btn" onclick="chgLng('th')">🇹🇭</span><span class="flag-btn" onclick="chgLng('en')">🇺🇸</span>
             <span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span><span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span>
@@ -89,14 +62,10 @@
 
     <div class="max-w-xl mx-auto px-4 mt-4">
         <div class="filter-section">
-            <div id="plotTrigger" class="filter-trigger" onclick="openPlotModal()">
-                <span id="selectedPlotLabel">🔍 เลือกจากชื่อแปลง (Plot Number)...</span>
-                <span class="text-gray-300 text-[10px]">▼</span>
-            </div>
+            <div class="filter-trigger" onclick="openPlotModal()"><span id="selectedPlotLabel">🔍 เลือกจากชื่อแปลง...</span><span>▼</span></div>
             <div class="grid grid-cols-2 gap-3">
                 <select id="bedFilter" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50">
-                    <option value="all">🛏️ ทุกจำนวนห้องนอน</option><option value="2">2 ห้องนอน</option>
-                    <option value="3">3 ห้องนอน</option><option value="4">4+ ห้องนอน</option>
+                    <option value="all">🛏️ ทุกจำนวนห้องนอน</option><option value="2">2 ห้องนอน</option><option value="3">3 ห้องนอน</option><option value="4">4+ ห้องนอน</option>
                 </select>
                 <select id="priceSort" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50">
                     <option value="default">↕️ เรียงตามราคา</option><option value="asc">ราคาต่ำ-สูง</option><option value="desc">ราคาสูง-ต่ำ</option>
@@ -131,8 +100,7 @@
             try {
                 const r = await fetch(GAS_URL, {method:'POST', body:JSON.stringify({action:"getProperties"})});
                 allProperties = await r.json();
-                renderPlotList();
-                filterAndRender();
+                renderPlotList(); filterAndRender();
             } catch(e) { console.error(e); }
             document.getElementById('loadingScreen').style.display = 'none';
         }
@@ -140,34 +108,18 @@
         function openPlotModal(){ document.getElementById('plotModal').style.display = 'flex'; }
         function closeModal(e){ if(e) e.stopPropagation(); document.getElementById('plotModal').style.display = 'none'; }
         
-        // ✅ ปรับปรุงการแสดงผลรายการใน Pop-up (ตัด ID, เพิ่มสเปกและราคา)
         function renderPlotList(){
             document.getElementById('plotList').innerHTML = allProperties.map(p => {
                 const color = getStatusInfo(p.Status);
-                return `
-                <div class="plot-option" onclick="selectPlot('${p.Plot}')">
-                    <div class="plot-info-main">
-                        <span class="plot-name-text">PLOT : ${p.Plot}</span>
-                        <span class="plot-sub-text">🛏️ ${p.Bedrooms} BED | ฿${Number(p.Price).toLocaleString()}</span>
-                    </div>
-                    <span class="${color.bg} text-[7px] px-2 py-0.5 rounded-full font-black uppercase shadow-sm">${p.Status}</span>
+                return `<div class="plot-option" onclick="selectPlot('${p.Plot}')">
+                    <div class="flex flex-col"><span class="font-black text-blue-900 text-sm">PLOT : ${p.Plot}</span><span class="text-[10px] text-gray-400 font-bold uppercase">฿${Number(p.Price).toLocaleString()} | ${p.Bedrooms} BED</span></div>
+                    <span class="${color.bg} text-[7px] px-2 py-0.5 rounded-full font-black uppercase">${p.Status}</span>
                 </div>`;
             }).join('');
         }
 
-        function selectPlot(plotName){
-            selectedPlot = plotName;
-            document.getElementById('selectedPlotLabel').innerHTML = `📍 แปลงที่เลือก: <span class="font-black text-blue-700">${plotName}</span>`;
-            closeModal();
-            filterAndRender();
-        }
-
-        function clearPlotFilter(){
-            selectedPlot = "";
-            document.getElementById('selectedPlotLabel').innerText = "🔍 เลือกจากชื่อแปลง (Plot Number)...";
-            closeModal();
-            filterAndRender();
-        }
+        function selectPlot(plotName){ selectedPlot = plotName; document.getElementById('selectedPlotLabel').innerHTML = `📍 แปลง: <span class="font-black text-blue-700">${plotName}</span>`; closeModal(); filterAndRender(); }
+        function clearPlotFilter(){ selectedPlot = ""; document.getElementById('selectedPlotLabel').innerText = "🔍 เลือกจากชื่อแปลง..."; closeModal(); filterAndRender(); }
 
         function filterAndRender() {
             const bedVal = document.getElementById('bedFilter').value;
@@ -190,8 +142,8 @@
                     <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"><div class="badge-code">CODE: ${p.ID}</div></div>
                     <div class="p-6">
                         <div class="flex flex-wrap justify-between items-start mb-2">
-                            <div class="text-black font-black text-sm tracking-tighter leading-none uppercase">PLOT : ${p.Plot}</div>
-                            <div class="flex gap-2 items-center"><span class="${color.bg} badge-mini shadow-sm">${p.Status}</span><span class="${color.text} text-[8px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span></div>
+                            <div class="text-black font-black text-sm uppercase">PLOT : ${p.Plot}</div>
+                            <div class="flex gap-2 items-center"><span class="${color.bg} badge-mini shadow-sm">${p.Status}</span><span class="${color.text} text-[8px] font-black uppercase">${p.Badge || ''}</span></div>
                         </div>
                         <div class="text-gray-500 text-[10px] font-bold uppercase mb-2">📍 ${p.SubDistrict}, ${p.District}</div>
                         <div class="flex flex-wrap gap-x-4 gap-y-1 text-blue-900 font-bold text-[9px] mb-4 border-t pt-2">
