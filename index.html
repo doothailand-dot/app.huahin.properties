@@ -13,16 +13,9 @@
         .flag-btn { cursor: pointer; font-size: 18px; transition: 0.2s; line-height: 1; }
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
         
-        /* ✅ แก้ไข CSS รูปภาพให้แสดงผลแน่นอน */
-        .hero-img { 
-            width: 100%; height: 350px; 
-            background-size: cover; 
-            background-position: center; 
-            background-repeat: no-repeat;
-            position: relative; 
-            background-color: #e2e8f0; 
-        }
+        .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; background-color: #e2e8f0; }
         
+        /* ป้าย CODE ขนาดเท่าปุ่ม View Details */
         .badge-code { 
             position: absolute; top: 15px; left: 15px; 
             background-color: #06C755; color: white; 
@@ -33,15 +26,22 @@
         }
 
         .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
-        .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 100; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
         
-        /* ✅ สไตล์ Pop-up เลือกแปลง */
+        /* ✅ สไตล์ Pop-up เลือกแปลงแบบใหม่ (Compact & Info-rich) */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 30px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-        .modal-header { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
-        .plot-list { overflow-y: auto; flex-grow: 1; padding: 10px 0; }
-        .plot-option { padding: 15px 25px; border-bottom: 1px solid #f8fafc; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .modal-content { background: white; width: 100%; max-width: 420px; border-radius: 30px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .modal-header { padding: 18px 25px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
+        .plot-list { overflow-y: auto; flex-grow: 1; }
+        
+        /* รายการใน Pop-up: ตัด ID ออก และจัดระเบียบใหม่ */
+        .plot-option { 
+            padding: 15px 25px; border-bottom: 1px solid #f8fafc; cursor: pointer; 
+            display: flex; justify-content: space-between; align-items: center; transition: 0.2s; 
+        }
         .plot-option:active { background: #eff6ff; }
+        .plot-info-main { display: flex; flex-direction: column; gap: 2px; }
+        .plot-name-text { font-size: 14px; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+        .plot-sub-text { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; }
 
         .filter-section { background: white; border-radius: 25px; margin: 15px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .filter-trigger { width: 100%; padding: 12px 18px; border-radius: 15px; border: 1.5px solid #e2e8f0; font-size: 13px; text-align: left; color: #1e3a8a; font-weight: 600; background: white; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
@@ -56,7 +56,7 @@
     <div id="plotModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <h3 class="font-black text-blue-900">🔍 เลือกแปลงที่ต้องการ</h3>
+                <h3 class="font-black text-blue-900 text-sm">🔍 เลือกแปลงที่ต้องการ</h3>
                 <button onclick="clearPlotFilter()" class="text-[10px] bg-red-50 text-red-500 px-3 py-1 rounded-full font-bold uppercase">ล้างค่า</button>
             </div>
             <div id="plotList" class="plot-list"></div>
@@ -91,7 +91,7 @@
         <div class="filter-section">
             <div id="plotTrigger" class="filter-trigger" onclick="openPlotModal()">
                 <span id="selectedPlotLabel">🔍 เลือกจากชื่อแปลง (Plot Number)...</span>
-                <span class="text-gray-300">▼</span>
+                <span class="text-gray-300 text-[10px]">▼</span>
             </div>
             <div class="grid grid-cols-2 gap-3">
                 <select id="bedFilter" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50">
@@ -105,27 +105,11 @@
         </div>
     </div>
 
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-[90] hidden"></div>
-    <div id="sidebarDrawer" class="sidebar-drawer -translate-x-full text-center">
-        <div class="p-4 bg-blue-50 border-b">
-            <div class="w-10 h-10 bg-blue-900 rounded-full flex items-center justify-center text-white font-black mx-auto">HP</div>
-            <span class="font-bold text-blue-900 text-[8px] mt-2 block leading-tight uppercase">Huahin<br>Properties</span>
-        </div>
-        <nav class="py-4">
-            <a href="index.html" class="block py-4 text-blue-900 font-bold text-[10px] uppercase bg-blue-50">Catalog</a>
-            <a href="#" class="block py-4 text-gray-500 text-[10px] font-bold uppercase">Contact</a>
-        </nav>
-    </div>
-
     <main id="app" class="max-w-xl mx-auto px-4 py-2"></main>
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec";
         let allProperties = [], selectedPlot = "";
-
-        const menuBtn = document.getElementById('menuBtn'), overlay = document.getElementById('sidebarOverlay'), drawer = document.getElementById('sidebarDrawer');
-        menuBtn.onclick = () => { overlay.classList.remove('hidden'); drawer.classList.remove('-translate-x-full'); };
-        overlay.onclick = () => { overlay.classList.add('hidden'); drawer.classList.add('-translate-x-full'); };
 
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('staff') === 'true') document.getElementById('staffFloatingBtn').style.display = 'block';
@@ -133,24 +117,14 @@
 
         function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
         function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
-        
-        // ✅ ปรับปรุงการจัดการลิงก์รูปภาพ Google Drive
-        function fixLink(u){ 
-            if(!u) return 'https://via.placeholder.com/800x600?text=No+Image'; 
-            if(u.includes('drive.google.com')){ 
-                const id = u.match(/[-\w]{25,}/); 
-                return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; 
-            } 
-            return u; 
-        }
+        function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600?text=No+Image'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
 
         function getStatusInfo(s) {
             const t = (s||"").toLowerCase();
             if(t.includes("ready")) return { bg: "bg-[#06C755] text-white", text: "text-[#06C755]" };
             if(t.includes("construction")) return { bg: "bg-[#9333ea] text-white", text: "text-[#9333ea]" };
             if(t.includes("sold")) return { bg: "bg-[#ef4444] text-white", text: "text-[#ef4444]" };
-            if(t.includes("empty")) return { bg: "bg-white text-black border", text: "text-gray-400" };
-            return { bg: "bg-gray-100 text-gray-600", text: "text-gray-600" };
+            return { bg: "bg-white text-black border", text: "text-gray-400" };
         }
 
         async function init(){
@@ -163,17 +137,22 @@
             document.getElementById('loadingScreen').style.display = 'none';
         }
 
-        // ✅ ฟังก์ชันจัดการ Modal
         function openPlotModal(){ document.getElementById('plotModal').style.display = 'flex'; }
         function closeModal(e){ if(e) e.stopPropagation(); document.getElementById('plotModal').style.display = 'none'; }
         
+        // ✅ ปรับปรุงการแสดงผลรายการใน Pop-up (ตัด ID, เพิ่มสเปกและราคา)
         function renderPlotList(){
-            document.getElementById('plotList').innerHTML = allProperties.map(p => `
+            document.getElementById('plotList').innerHTML = allProperties.map(p => {
+                const color = getStatusInfo(p.Status);
+                return `
                 <div class="plot-option" onclick="selectPlot('${p.Plot}')">
-                    <span class="font-bold">${p.ID} - ${p.Plot}</span>
-                    <span class="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-full">เลือก</span>
-                </div>
-            `).join('');
+                    <div class="plot-info-main">
+                        <span class="plot-name-text">PLOT : ${p.Plot}</span>
+                        <span class="plot-sub-text">🛏️ ${p.Bedrooms} BED | ฿${Number(p.Price).toLocaleString()}</span>
+                    </div>
+                    <span class="${color.bg} text-[7px] px-2 py-0.5 rounded-full font-black uppercase shadow-sm">${p.Status}</span>
+                </div>`;
+            }).join('');
         }
 
         function selectPlot(plotName){
@@ -205,24 +184,14 @@
 
         function render(properties){
             const isStaff = urlParams.get('admin') === 'true' ? '&admin=true' : (urlParams.get('staff') === 'true' ? '&staff=true' : '');
-            const app = document.getElementById('app');
-            if(properties.length === 0) {
-                app.innerHTML = `<div class="py-20 text-center text-white font-bold uppercase tracking-widest">Property Not Found</div>`;
-                return;
-            }
-            app.innerHTML = properties.map((p) => {
+            document.getElementById('app').innerHTML = properties.map((p) => {
                 const color = getStatusInfo(p.Status);
                 return `<div class="property-bubble">
-                    <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');">
-                        <div class="badge-code">CODE: ${p.ID}</div>
-                    </div>
+                    <div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"><div class="badge-code">CODE: ${p.ID}</div></div>
                     <div class="p-6">
                         <div class="flex flex-wrap justify-between items-start mb-2">
                             <div class="text-black font-black text-sm tracking-tighter leading-none uppercase">PLOT : ${p.Plot}</div>
-                            <div class="flex gap-2 items-center">
-                                <span class="${color.bg} badge-mini shadow-sm">${p.Status}</span>
-                                <span class="${color.text} text-[8px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
-                            </div>
+                            <div class="flex gap-2 items-center"><span class="${color.bg} badge-mini shadow-sm">${p.Status}</span><span class="${color.text} text-[8px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span></div>
                         </div>
                         <div class="text-gray-500 text-[10px] font-bold uppercase mb-2">📍 ${p.SubDistrict}, ${p.District}</div>
                         <div class="flex flex-wrap gap-x-4 gap-y-1 text-blue-900 font-bold text-[9px] mb-4 border-t pt-2">
