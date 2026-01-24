@@ -16,15 +16,13 @@
         .info-item { display: flex; align-items: flex-start; gap: 12px; color: #4b5563; font-size: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
         .info-item span { color: #1e293b; font-weight: 700; margin-left: auto; text-align: right; }
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
-        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; cursor: pointer; color: white; transition: 0.2s; }
+        .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; cursor: pointer; color: white; }
         .share-btn span { font-size: 8px; font-weight: 800; }
         .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px 0; }
-        #staffFloatingBtn, #adminFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 150; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; border: 2px solid white; white-space: nowrap; }
+        .related-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; cursor: pointer; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
-    <button id="staffFloatingBtn" onclick="window.location.href='staff-edit.html'" class="bg-blue-600">📝 กลับหน้าแก้ไข (STAFF)</button>
-    <button id="adminFloatingBtn" onclick="window.location.href='admin.html'" class="bg-red-600">⚙️ กลับหน้าจัดการ (ADMIN)</button>
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b">
         <button onclick="window.location.href='index.html'" class="text-blue-900 font-bold text-[10px] border border-blue-900 px-3 py-1 rounded-full uppercase">MENU</button>
         <div class="text-center font-black text-blue-900 text-[10px] uppercase leading-tight">HUAHIN PROPERTIES</div>
@@ -34,13 +32,9 @@
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbySAdfx_Exm6QHYJRcgSAYBWqWFk3l4ldj4pI6Uc2eAkhkpD_SvE0UDwBSfOPWgAxY1/exec";
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('staff') === 'true') document.getElementById('staffFloatingBtn').style.display = 'block';
-        if (urlParams.get('admin') === 'true') document.getElementById('adminFloatingBtn').style.display = 'block';
         function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
-        function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
         function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
-        
-        // ✅ แก้ไข Logic สีม่วงสำหรับสถานะ Construction
+        // ✅ แก้ไข: สีม่วงสำหรับสถานะ Under Construction
         function getStatusInfo(s) { const t = (s||"").toLowerCase(); if(t.includes("ready")) return { bg: "bg-[#06C755] text-white", text: "text-[#06C755]" }; if(t.includes("construction")) return { bg: "bg-[#9333ea] text-white", text: "text-[#9333ea]" }; return { bg: "bg-[#ef4444] text-white", text: "text-[#ef4444]" }; }
 
         async function init(){ const pId = urlParams.get('id'); try { const r = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:"getProperties"})}); const props = await r.json(); const p = props.find(x => String(x.ID).trim() === String(pId).trim()); const others = props.filter(x => String(x.ID).trim() !== String(pId).trim()); if(p) render(p, others); } catch(e) { console.error(e); } }
@@ -53,12 +47,11 @@
                 <div class="max-w-xl mx-auto px-5 -mt-12 relative z-10">
                     <div class="bg-white rounded-[35px] p-6 shadow-2xl border">
                         <div class="flex justify-between items-start mb-6">
-                            <div><div class="text-black font-black text-sm uppercase">PLOT : ${p.Plot}</div><div class="text-[9px] text-blue-800 font-bold uppercase mt-1">Type: ${p.Type || '-'}</div></div>
+                            <div><div class="text-black font-black text-sm uppercase tracking-widest">PLOT : ${p.Plot}</div><div class="text-[9px] text-blue-800 font-bold uppercase mt-1">Type: ${p.Type || '-'}</div></div>
                             <div class="flex flex-col items-end gap-1"><span class="${color.bg} px-3 py-1 rounded-full font-bold text-[9px] uppercase">${p.Status}</span><span class="${color.text} text-[9px] font-black uppercase">${p.Badge || ''}</span></div>
                         </div>
                         <div class="text-gray-500 font-bold text-xs mb-4 uppercase">📍 ${p.SubDistrict}, ${p.District}</div>
                         <div class="mb-6 text-[13px] text-gray-600 leading-relaxed">${p.Description || '-'}</div>
-                        
                         <div class="bg-gray-50 rounded-3xl p-6 mb-8 border">
                             <div class="info-grid">
                                 <div class="info-item">🛏️ Bedrooms <span>${p.Bedrooms || '-'}</span></div><div class="info-item">🚿 Bathrooms <span>${p.Bathrooms || '-'}</span></div>
@@ -69,28 +62,21 @@
                                 <div class="info-item border-none">⚡ Electricity <span>${p.Electricity || '-'}</span></div>
                             </div>
                         </div>
-                        ${p.FloorPlan ? `<div class="mb-10"><h3 class="font-black text-blue-900 text-sm uppercase tracking-widest mb-4">📐 FLOOR PLAN</h3><div class="bg-white p-2 rounded-2xl border shadow-sm flex flex-col items-center"><img src="${fixLink(p.FloorPlan)}" class="w-full rounded-xl mb-4"><a href="${fixLink(p.FloorPlan)}" target="_blank" download class="bg-blue-900 text-white px-6 py-2.5 rounded-full font-black text-[10px] uppercase shadow-md flex items-center gap-2"><span>📥 DOWNLOAD FLOOR PLAN</span></a></div></div>` : ''}
+                        ${p.FloorPlan ? `<div class="mb-10"><h3 class="font-black text-blue-900 text-sm uppercase tracking-widest mb-4">📐 FLOOR PLAN</h3><div class="bg-white p-2 rounded-2xl border shadow-sm flex flex-col items-center"><img src="${fixLink(p.FloorPlan)}" class="w-full rounded-xl mb-4"><a href="${fixLink(p.FloorPlan)}" target="_blank" download class="bg-blue-900 text-white px-6 py-2.5 rounded-full font-black text-[10px] uppercase shadow-md">📥 DOWNLOAD FLOOR PLAN</a></div></div>` : ''}
                         <div class="flex flex-col items-center gap-4 mb-8"><span class="text-[#06C755] font-black text-4xl">฿${Number(p.Price).toLocaleString()}</span><button onclick="window.open('${p.FBLink}','_blank')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg uppercase">View Photos & Video ></button></div>
-                        
                         <div class="border-t pt-6">
-                            <div class="flex justify-center mb-4 text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></div>
                             <div class="share-grid">
                                 <div onclick="window.open('https://line.me/R/msg/text/?Interested%20${p.Plot}%20${u}')" class="share-btn bg-[#06C755]"><span>LINE</span></div>
                                 <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" class="share-btn bg-[#1877F2]"><span>FB</span></a>
                                 <a href="fb-messenger://share?link=${u}" class="share-btn bg-[#0084FF]"><span>MESS</span></a>
-                                <a href="https://wa.me/?text=${u}" target="_blank" class="share-btn bg-[#25D366]"><span>WA</span></a>
-                                <a href="https://twitter.com/intent/tweet?url=${u}" target="_blank" class="share-btn bg-black"><span>X</span></a>
-                                <a href="https://t.me/share/url?url=${u}" target="_blank" class="share-btn bg-[#0088cc]"><span>TELE</span></a>
                                 <a href="mailto:?body=${u}" class="share-btn bg-gray-600"><span>MAIL</span></a>
-                                <div onclick="navigator.clipboard.writeText(decodeURIComponent('${u}'));alert('คัดลอกลิงก์แล้ว!');" class="share-btn bg-orange-500"><span>LINK</span></div>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-12 mb-10 px-2"><h2 class="text-xl font-black text-blue-900 leading-none mb-6 uppercase tracking-widest">Other Properties</h2><div class="related-grid">${others.slice(0,4).map(r => `<div class="related-card bg-white p-2 rounded-2xl shadow-sm border" onclick="location.href='details.html?id=${r.ID}${mode}'"><div class="h-32 w-full bg-cover bg-center rounded-xl mb-2" style="background-image: url('${fixLink(r.Thumbnail)}')"></div><p class="text-[11px] font-black text-black uppercase leading-tight">${r.Plot}</p><p class="text-[11px] font-black text-[#06C755]">฿${Number(r.Price).toLocaleString()}</p></div>`).join('')}</div></div>
+                    <div class="mt-12 mb-10 px-2"><h2 class="text-xl font-black text-blue-900 leading-none mb-6 uppercase tracking-widest">Other Properties</h2><div class="related-grid">${others.slice(0,10).map(r => `<div class="related-card bg-white p-2 rounded-2xl shadow-sm border" onclick="location.href='details.html?id=${r.ID}${mode}'"><div class="h-32 w-full bg-cover bg-center rounded-xl mb-2" style="background-image: url('${fixLink(r.Thumbnail)}')"></div><p class="text-[11px] font-black text-black uppercase leading-tight">${r.Plot}</p><p class="text-[11px] font-black text-[#06C755]">฿${Number(r.Price).toLocaleString()}</p></div>`).join('')}</div></div>
                 </div>`;
         }
         init();
     </script>
-    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
