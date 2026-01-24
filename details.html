@@ -25,12 +25,11 @@
         .hero-img { width: 100%; height: 400px; background-size: cover; background-position: center; position: relative; background-color: #eee; z-index: 1; }
         .badge-mini { padding: 4px 12px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; }
         
-        /* ข้อมูลคอลัมน์เดี่ยวตามสั่ง */
+        /* ข้อมูลคอลัมน์เดี่ยว */
         .info-grid { display: flex; flex-direction: column; gap: 14px; }
         .info-item { display: flex; align-items: flex-start; gap: 12px; color: #4b5563; font-size: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
         .info-item span { color: #1e293b; font-weight: 700; margin-left: auto; text-align: right; }
         
-        /* แผงแชร์ 8 ปุ่ม */
         .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
         .share-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; border-radius: 12px; transition: 0.2s; cursor: pointer; color: white; }
         .share-btn span { font-size: 8px; font-weight: 800; }
@@ -41,9 +40,10 @@
         /* Sidebar 140px */
         .sidebar-drawer { position: fixed; top: 0; left: 0; bottom: 0; width: 140px; background-color: white; z-index: 100; transition: transform 0.3s ease; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
         
-        /* ปุ่มลอยสีน้ำเงินและแดงสลับโหมด */
-        #staffFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 150; background: #2563eb; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); border: 2px solid white; white-space: nowrap; }
-        #adminFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 150; background: #ef4444; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4); border: 2px solid white; white-space: nowrap; }
+        /* ปุ่มลอย Admin/Staff */
+        #staffFloatingBtn, #adminFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 150; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; border: 2px solid white; white-space: nowrap; }
+        #staffFloatingBtn { background: #2563eb; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); }
+        #adminFloatingBtn { background: #ef4444; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4); }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
@@ -165,7 +165,7 @@
 
                         <div class="border-t pt-6">
                             <div class="flex justify-center mb-4 text-gray-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
                             </div>
                             <div class="share-grid">
                                 <div onclick="window.open('https://line.me/R/msg/text/?Interested%20${p.Plot}%20${u}')" class="share-btn bg-[#06C755]"><span>LINE</span></div>
@@ -188,8 +188,9 @@
                                     <div class="h-32 w-full bg-cover bg-center relative" style="background-image: url('${fixLink(r.Thumbnail)}')">
                                         <div class="badge-code" style="top: 8px; left: 8px; font-size: 7px; padding: 2px 8px;">Code: ${r.ID}</div>
                                     </div>
-                                    <div class="p-3">
-                                        <div class="flex justify-between items-center mb-1"><p class="text-[11px] font-black text-black truncate">${r.Plot}</p></div>
+                                    <div class="p-3 flex flex-col gap-1">
+                                        <p class="text-[11px] font-black text-black leading-tight uppercase">${r.Plot} | ${r.SubDistrict}, ${r.District}</p>
+                                        <p class="text-[9px] text-gray-500 font-bold uppercase">${r.Bedrooms} BED | ${r.Bathrooms} BATH | ${r["Land Area (sq.m)"]} m²</p>
                                         <p class="text-[11px] font-black text-[#06C755]">฿${Number(r.Price).toLocaleString()}</p>
                                     </div>
                                 </div>
