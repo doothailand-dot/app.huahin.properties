@@ -16,40 +16,48 @@
         .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 10px 20px; border-radius: 50px; font-size: 9px; font-weight: 700; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-transform: uppercase; letter-spacing: 0.5px; }
         .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 30px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-        .plot-option { padding: 15px 25px; border-bottom: 1px solid #f8fafc; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .modal-content { background: white; width: 100%; max-width: 420px; border-radius: 30px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .modal-header { padding: 18px 25px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
+        .plot-list { overflow-y: auto; flex-grow: 1; }
+        .plot-option { padding: 15px 25px; border-bottom: 1px solid #f8fafc; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .plot-option:active { background: #eff6ff; }
+        .plot-info-main { display: flex; flex-direction: column; gap: 2px; }
+        .plot-name-text { font-size: 14px; font-weight: 900; color: #1e3a8a; text-transform: uppercase; }
+        .plot-sub-text { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; }
         .filter-section { background: white; border-radius: 25px; margin: 15px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .filter-trigger { width: 100%; padding: 12px 18px; border-radius: 15px; border: 1.5px solid #e2e8f0; font-size: 13px; text-align: left; color: #1e3a8a; font-weight: 600; background: white; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         #staffFloatingBtn, #adminFloatingBtn { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 150; color: white; padding: 18px 32px; border-radius: 50px; font-weight: 800; font-size: 16px; border: 2px solid white; white-space: nowrap; }
-        #staffFloatingBtn { background: #2563eb; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); }
-        #adminFloatingBtn { background: #ef4444; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4); }
+        #staffFloatingBtn { background: #2563eb; } #adminFloatingBtn { background: #ef4444; }
     </style>
 </head>
 <body class="pb-10 overflow-x-hidden">
     <div id="plotModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="p-5 border-b flex justify-between items-center"><h3 class="font-black text-blue-900 text-sm">🔍 เลือกแปลงที่ต้องการ</h3><button onclick="clearPlotFilter()" class="text-[10px] bg-red-50 text-red-500 px-3 py-1 rounded-full font-bold uppercase">ล้างค่า</button></div>
-            <div id="plotList" class="overflow-y-auto flex-grow"></div>
+            <div class="modal-header">
+                <h3 class="font-black text-blue-900 text-sm">🔍 เลือกแปลงที่ต้องการ</h3>
+                <button onclick="clearPlotFilter()" class="text-[10px] bg-red-50 text-red-500 px-3 py-1 rounded-full font-bold uppercase">ล้างค่า</button>
+            </div>
+            <div id="plotList" class="plot-list"></div>
             <div class="p-4 bg-gray-50 text-center"><button onclick="closeModal()" class="text-blue-900 font-bold text-sm">ปิดหน้าต่าง</button></div>
         </div>
     </div>
     <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-5 text-center px-6">
         <div class="flex gap-4 text-5xl animate-bounce"><span>🐚</span><span>🌊</span><span>🏖️</span></div>
-        <p class="text-white font-black text-xl uppercase tracking-widest">HUAHIN.PROPERTIES</p>
+        <p class="text-white font-black text-xl tracking-widest uppercase">HUAHIN.PROPERTIES</p>
     </div>
     <button id="staffFloatingBtn" onclick="window.location.href='staff-edit.html'">📝 กลับหน้าแก้ไข (STAFF)</button>
     <button id="adminFloatingBtn" onclick="window.location.href='admin.html'">⚙️ กลับหน้าจัดการ (ADMIN)</button>
     <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b shadow-sm">
         <button id="menuBtn" class="flex flex-col items-center justify-center text-blue-900"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg><span class="text-[8px] font-bold uppercase mt-0.5">MENU</span></button>
-        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase leading-tight">HUAHIN PROPERTIES</div>
+        <div class="text-center font-black text-blue-900 text-[10px] tracking-widest uppercase">HUAHIN PROPERTIES</div>
         <div class="flex gap-1"><span class="flag-btn" onclick="chgLng('th')">🇹🇭</span><span class="flag-btn" onclick="chgLng('en')">🇺🇸</span><span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span><span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span><span class="flag-btn" onclick="chgLng('de')">🇩🇪</span><span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span></div>
     </header>
     <div id="google_translate_element" style="display:none"></div>
     <div class="max-w-xl mx-auto px-4 mt-4">
         <div class="filter-section">
-            <div class="filter-trigger" onclick="openPlotModal()"><span id="selectedPlotLabel">🔍 เลือกจากชื่อแปลง (Plot Number)...</span><span>▼</span></div>
+            <div id="plotTrigger" class="filter-trigger" onclick="openPlotModal()"><span id="selectedPlotLabel">🔍 เลือกจากชื่อแปลง (Plot Number)...</span><span>▼</span></div>
             <div class="grid grid-cols-2 gap-3">
-                <select id="bedFilter" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50"><option value="all">🛏️ ทุกห้องนอน</option><option value="2">2 ห้องนอน</option><option value="3">3 ห้องนอน</option><option value="4">4+ ห้องนอน</option></select>
+                <select id="bedFilter" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50"><option value="all">🛏️ ทุกจำนวนห้องนอน</option><option value="2">2 ห้องนอน</option><option value="3">3 ห้องนอน</option><option value="4">4+ ห้องนอน</option></select>
                 <select id="priceSort" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50"><option value="default">↕️ เรียงราคา</option><option value="asc">ราคาต่ำ-สูง</option><option value="desc">ราคาสูง-ต่ำ</option></select>
             </div>
         </div>
@@ -63,12 +71,25 @@
         if (urlParams.get('admin') === 'true') document.getElementById('adminFloatingBtn').style.display = 'block';
         function chgLng(l){ const s = document.querySelector('select.goog-te-combo'); if(s){ s.value=l; s.dispatchEvent(new Event('change')); } }
         function googleTranslateElementInit(){ new google.translate.TranslateElement({pageLanguage:'th',includedLanguages:'th,en,zh-CN,ru,de,fr',autoDisplay:false},'google_translate_element');}
-        function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600?text=No+Image'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
+        function fixLink(u){ if(!u) return 'https://via.placeholder.com/800x600'; if(u.includes('drive.google.com')){ const id = u.match(/[-\w]{25,}/); return id ? `https://drive.google.com/thumbnail?id=${id[0]}&sz=w1000` : u; } return u; }
         function getStatusInfo(s) { const t = (s||"").toLowerCase(); if(t.includes("ready")) return { bg: "bg-[#06C755] text-white" }; if(t.includes("construction")) return { bg: "bg-[#9333ea] text-white" }; if(t.includes("sold")) return { bg: "bg-[#ef4444] text-white" }; return { bg: "bg-white text-black border" }; }
         async function init(){ try { const r = await fetch(GAS_URL, {method:'POST', body:JSON.stringify({action:"getProperties"})}); allProperties = await r.json(); renderPlotList(); filterAndRender(); } catch(e) { console.error(e); } document.getElementById('loadingScreen').style.display = 'none'; }
         function openPlotModal(){ document.getElementById('plotModal').style.display = 'flex'; }
         function closeModal(e){ if(e) e.stopPropagation(); document.getElementById('plotModal').style.display = 'none'; }
-        function renderPlotList(){ document.getElementById('plotList').innerHTML = allProperties.map(p => `<div class="plot-option" onclick="selectPlot('${p.Plot}')"><div><span class="font-black text-blue-900 text-sm">PLOT : ${p.Plot}</span><br><span class="text-[9px] text-gray-400 font-bold uppercase">฿${Number(p.Price).toLocaleString()} | ${p.Bedrooms} BED</span></div><span class="text-[10px] bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-bold">เลือก ></span></div>`).join(''); }
+        
+        // ✅ ดึงราคาและสถานะกลับมาโชว์ในรายการเลือก
+        function renderPlotList(){
+            document.getElementById('plotList').innerHTML = allProperties.map(p => {
+                const color = getStatusInfo(p.Status);
+                return `<div class="plot-option" onclick="selectPlot('${p.Plot}')">
+                    <div class="plot-info-main">
+                        <span class="plot-name-text">PLOT : ${p.Plot}</span>
+                        <span class="plot-sub-text">฿${Number(p.Price).toLocaleString()} | ${p.Bedrooms} BED</span>
+                    </div>
+                    <span class="${color.bg} text-[7px] px-2 py-0.5 rounded-full font-black uppercase shadow-sm">${p.Status}</span>
+                </div>`;
+            }).join('');
+        }
         function selectPlot(p){ selectedPlot = p; document.getElementById('selectedPlotLabel').innerHTML = `📍 แปลง: <span class="font-black text-blue-700">${p}</span>`; closeModal(); filterAndRender(); }
         function clearPlotFilter(){ selectedPlot = ""; document.getElementById('selectedPlotLabel').innerText = "🔍 เลือกจากชื่อแปลง (Plot Number)..."; closeModal(); filterAndRender(); }
         function filterAndRender() { const bedVal = document.getElementById('bedFilter').value, sortVal = document.getElementById('priceSort').value; let filtered = allProperties.filter(p => { const matchPlot = selectedPlot === "" || p.Plot === selectedPlot; const matchBed = (bedVal === 'all') ? true : (bedVal === '4') ? parseInt(p.Bedrooms) >= 4 : parseInt(p.Bedrooms) === parseInt(bedVal); return matchPlot && matchBed; }); if (sortVal === 'asc') filtered.sort((a, b) => Number(a.Price) - Number(b.Price)); else if (sortVal === 'desc') filtered.sort((a, b) => Number(b.Price) - Number(a.Price)); render(filtered); }
