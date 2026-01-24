@@ -14,14 +14,18 @@
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; position: relative; background-color: #eee; }
         
-        /* ✅ แก้ไข: ป้าย CODE ขนาดเท่าปุ่ม View Details */
+        /* ✅ แก้ไข: ป้าย CODE ให้เหมือนปุ่ม View Details (Bold, 9px, Padding เท่ากัน) */
         .badge-code { 
             position: absolute; top: 15px; left: 15px; 
             background-color: #06C755; color: white; 
-            padding: 10px 20px; border-radius: 50px; 
-            font-size: 9px; font-weight: 800; z-index: 10; 
+            padding: 10px 20px; /* เทียบเท่า py-2.5 px-5 */
+            border-radius: 50px; 
+            font-size: 9px; /* ขนาดเดียวกับปุ่ม View Detail */
+            font-weight: 700; /* ตัวหนาเดียวกับปุ่ม View Detail */
+            z-index: 10; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            text-transform: uppercase; letter-spacing: 0.5px;
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
         }
 
         .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
@@ -115,7 +119,7 @@
                     </div>
                     <div class="p-6">
                         <div class="flex flex-wrap justify-between items-start mb-2">
-                            <div class="text-black font-black text-lg tracking-tighter leading-none">PLOT : ${p.Plot}</div>
+                            <div class="text-black font-black text-sm tracking-tighter leading-none">PLOT : ${p.Plot}</div>
                             <div class="flex gap-2 items-center">
                                 <span class="${color.bg} badge-mini shadow-sm">${p.Status}</span>
                                 <span class="${color.text} text-[8px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span>
