@@ -13,7 +13,7 @@
         .flag-btn { cursor: pointer; font-size: 18px; transition: 0.2s; line-height: 1; }
         .property-bubble { background-color: #ffffff; border-radius: 35px; overflow: hidden; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.12); position: relative; }
         .hero-img { width: 100%; height: 350px; background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; background-color: #e2e8f0; }
-        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 10px 20px; border-radius: 50px; font-size: 9px; font-weight: 700; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-transform: uppercase; }
+        .badge-code { position: absolute; top: 15px; left: 15px; background-color: #06C755; color: white; padding: 10px 20px; border-radius: 50px; font-size: 9px; font-weight: 700; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-transform: uppercase; letter-spacing: 0.5px; }
         .badge-mini { padding: 3px 10px; border-radius: 20px; font-size: 8px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: white; width: 100%; max-width: 420px; border-radius: 30px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
@@ -34,7 +34,7 @@
     <div id="loadingScreen" class="fixed inset-0 bg-[#8cabd9] z-[9999] flex flex-col items-center justify-center gap-5 text-center px-6"><p class="text-white font-black text-xl uppercase tracking-widest animate-pulse">HUAHIN PROPERTIES</p></div>
     <button id="staffFloatingBtn" onclick="window.location.href='staff-edit.html'" class="bg-blue-600">📝 กลับหน้าแก้ไข (STAFF)</button>
     <button id="adminFloatingBtn" onclick="window.location.href='admin.html'" class="bg-red-600">⚙️ กลับหน้าจัดการ (ADMIN)</button>
-    <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b">
+    <header class="bg-white/90 backdrop-blur-md px-4 py-2 flex items-center justify-between sticky top-0 z-50 border-b shadow-sm">
         <button onclick="location.reload()" class="text-blue-900 font-black text-[10px] uppercase">MENU</button>
         <div class="text-center font-black text-blue-900 text-[10px] uppercase">HUAHIN PROPERTIES</div>
         <div class="flex gap-1"><span class="flag-btn" onclick="chgLng('th')">🇹🇭</span><span class="flag-btn" onclick="chgLng('en')">🇺🇸</span><span class="flag-btn" onclick="chgLng('zh-CN')">🇨🇳</span><span class="flag-btn" onclick="chgLng('ru')">🇷🇺</span><span class="flag-btn" onclick="chgLng('de')">🇩🇪</span><span class="flag-btn" onclick="chgLng('fr')">🇫🇷</span></div>
@@ -42,9 +42,11 @@
     <div id="google_translate_element" style="display:none"></div>
     <div class="max-w-xl mx-auto px-4 mt-4">
         <div class="filter-section">
-            <div class="filter-trigger" onclick="openPlotModal()"><span id="selectedPlotLabel">🔍 เลือกจากชื่อแปลง (Plot Number)...</span><span>▼</span></div>
+            <div class="filter-trigger" onclick="openPlotModal()"><span id="selectedPlotLabel">🔍 เลือกจากชื่อแปลง...</span><span>▼</span></div>
             <div class="grid grid-cols-2 gap-3">
-                <select id="bedFilter" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50"><option value="all">🛏️ ทุกห้องนอน</option><option value="2">2 ห้องนอน</option><option value="3">3 ห้องนอน</option><option value="4">4+ ห้องนอน</option></select>
+                <select id="bedFilter" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50">
+                    <option value="all">🛏️ ทุกจำนวนห้องนอน</option><option value="1">1 ห้องนอน</option><option value="2">2 ห้องนอน</option><option value="3">3 ห้องนอน</option><option value="4">4 ห้องนอน</option><option value="5">5 ห้องนอน</option><option value="6">6 ห้องนอน</option><option value="6+">6+ ห้องนอน</option>
+                </select>
                 <select id="priceSort" onchange="filterAndRender()" class="p-3 rounded-xl border font-bold text-[11px] text-blue-900 outline-none bg-gray-50"><option value="default">↕️ เรียงราคา</option><option value="asc">ราคาต่ำ-สูง</option><option value="desc">ราคาสูง-ต่ำ</option></select>
             </div>
         </div>
@@ -63,21 +65,23 @@
         async function init(){ try { const r = await fetch(GAS_URL, {method:'POST', body:JSON.stringify({action:"getProperties"})}); allProperties = await r.json(); renderPlotList(); filterAndRender(); } catch(e) { console.error(e); } document.getElementById('loadingScreen').style.display = 'none'; }
         function openPlotModal(){ document.getElementById('plotModal').style.display = 'flex'; }
         function closeModal(e){ if(e) e.stopPropagation(); document.getElementById('plotModal').style.display = 'none'; }
-        
-        // ✅ กู้คืน ราคา (Price) และ สถานะ (Status) กลับมาใน Pop-up
-        function renderPlotList(){
-            document.getElementById('plotList').innerHTML = allProperties.map(p => {
-                const color = getStatusInfo(p.Status);
-                return `<div class="plot-option" onclick="selectPlot('${p.Plot}')">
-                    <div><span class="font-black text-blue-900 text-sm">PLOT : ${p.Plot}</span><br><span class="text-[9px] text-gray-400 font-bold uppercase">฿${Number(p.Price).toLocaleString()} | ${p.Bedrooms} BED</span></div>
-                    <span class="${color.bg} text-[7px] px-2 py-0.5 rounded-full font-black uppercase shadow-sm">${p.Status}</span>
-                </div>`;
-            }).join('');
-        }
+        function renderPlotList(){ document.getElementById('plotList').innerHTML = allProperties.map(p => { const color = getStatusInfo(p.Status); return `<div class="plot-option" onclick="selectPlot('${p.Plot}')"><div><span class="font-black text-blue-900 text-sm">PLOT : ${p.Plot}</span><br><span class="text-[9px] text-gray-400 font-bold uppercase">฿${Number(p.Price).toLocaleString()} | ${p.Bedrooms} BED</span></div><span class="${color.bg} text-[7px] px-2 py-0.5 rounded-full font-black uppercase shadow-sm">${p.Status}</span></div>`; }).join(''); }
         function selectPlot(p){ selectedPlot = p; document.getElementById('selectedPlotLabel').innerHTML = `📍 แปลง: <span class="font-black text-blue-700">${p}</span>`; closeModal(); filterAndRender(); }
-        function clearPlotFilter(){ selectedPlot = ""; document.getElementById('selectedPlotLabel').innerText = "🔍 เลือกจากชื่อแปลง (Plot Number)..."; closeModal(); filterAndRender(); }
-        function filterAndRender() { const bedVal = document.getElementById('bedFilter').value, sortVal = document.getElementById('priceSort').value; let filtered = allProperties.filter(p => { const matchPlot = selectedPlot === "" || p.Plot === selectedPlot; const matchBed = (bedVal === 'all') ? true : (bedVal === '4') ? parseInt(p.Bedrooms) >= 4 : parseInt(p.Bedrooms) === parseInt(bedVal); return matchPlot && matchBed; }); if (sortVal === 'asc') filtered.sort((a, b) => Number(a.Price) - Number(b.Price)); else if (sortVal === 'desc') filtered.sort((a, b) => Number(b.Price) - Number(a.Price)); render(filtered); }
-        function render(props){ const mode = urlParams.get('admin') === 'true' ? '&admin=true' : (urlParams.get('staff') === 'true' ? '&staff=true' : ''); document.getElementById('app').innerHTML = props.map((p) => { const color = getStatusInfo(p.Status); return `<div class="property-bubble"><div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"><div class="badge-code">CODE: ${p.ID}</div></div><div class="p-6"><div class="flex flex-wrap justify-between items-start mb-2"><div class="text-black font-black text-sm uppercase">PLOT : ${p.Plot}</div><div class="flex gap-2 items-center"><span class="${color.bg} badge-mini shadow-sm">${p.Status}</span><span class="text-[#9333ea] text-[8px] font-black uppercase whitespace-nowrap">${p.Badge || ''}</span></div></div><div class="text-gray-500 text-[10px] font-bold uppercase mb-2">📍 ${p.SubDistrict}, ${p.District}</div><div class="flex flex-wrap gap-x-4 gap-y-1 text-blue-900 font-bold text-[9px] mb-4 border-t pt-2"><span>🛏️ ${p.Bedrooms} BED</span><span>🚿 ${p.Bathrooms} BATH</span><span>📐 LAND: ${p["Land Area (sq.m)"]} m²</span><span>🏗️ LIVING: ${p["Living Area"]} m²</span></div><div class="flex justify-between items-center gap-2"><span class="text-[#06C755] font-black text-xl leading-none">฿${Number(p.Price).toLocaleString()}</span><button onclick="window.location.href='details.html?id=${p.ID}${mode}'" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold text-[9px] shadow-lg uppercase">VIEW DETAILS ></button></div></div></div>`; }).join(''); }
+        function clearPlotFilter(){ selectedPlot = ""; document.getElementById('selectedPlotLabel').innerText = "🔍 เลือกจากชื่อแปลง..."; closeModal(); filterAndRender(); }
+        function filterAndRender() { 
+            const bedVal = document.getElementById('bedFilter').value, sortVal = document.getElementById('priceSort').value; 
+            let filtered = allProperties.filter(p => { 
+                const matchPlot = selectedPlot === "" || p.Plot === selectedPlot; 
+                let matchBed = (bedVal === 'all');
+                if(!matchBed) {
+                    if(bedVal === '6+') matchBed = parseInt(p.Bedrooms) >= 6;
+                    else matchBed = parseInt(p.Bedrooms) === parseInt(bedVal);
+                }
+                return matchPlot && matchBed; 
+            }); 
+            if (sortVal === 'asc') filtered.sort((a, b) => Number(a.Price) - Number(b.Price)); else if (sortVal === 'desc') filtered.sort((a, b) => Number(b.Price) - Number(a.Price)); render(filtered); 
+        }
+        function render(props){ const mode = urlParams.get('admin') === 'true' ? '&admin=true' : (urlParams.get('staff') === 'true' ? '&staff=true' : ''); document.getElementById('app').innerHTML = props.map((p) => { const color = getStatusInfo(p.Status); return `<div class="property-bubble"><div class="hero-img" style="background-image: url('${fixLink(p.Thumbnail)}');"><div class="badge-code">CODE: ${p.ID}</div></div><div class="p-6"><div class="flex flex-wrap justify-between items-start mb-2"><div class="text-black font-black text-sm uppercase">PLOT : ${p.Plot}</div><div class="flex gap-2 items-center"><span class="${color.bg} badge-mini shadow-sm">${p.Status}</span><span class="text-[#9333ea] text-[8px] font-black uppercase">${p.Badge || ''}</span></div></div><div class="text-gray-500 text-[10px] font-bold uppercase mb-2">📍 ${p.SubDistrict}, ${p.District}</div><div class="flex flex-wrap gap-x-4 gap-y-1 text-blue-900 font-bold text-[9px] mb-4 border-t pt-2"><span>🛏️ ${p.Bedrooms} BED</span><span>🚿 ${p.Bathrooms} BATH</span><span>📐 LAND: ${p["Land Area (sq.m)"]} m²</span></div><div class="flex justify-between items-center gap-2"><span class="text-[#06C755] font-black text-xl leading-none">฿${Number(p.Price).toLocaleString()}</span><button onclick="window.location.href='details.html?id=${p.ID}${mode}'" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold text-[9px] shadow-lg uppercase">VIEW DETAILS ></button></div></div></div>`; }).join(''); }
         init();
     </script>
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
